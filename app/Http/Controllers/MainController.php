@@ -24,8 +24,6 @@ class MainController extends Controller
      */
     public function index()
     {
-        $branches = DB::select('select * from branches');
-        $models = DB::select('select * from models');
-        return view('display', compact('branches','models'));
+
     }
 }
