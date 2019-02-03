@@ -26,9 +26,9 @@
                     <label for="branch">Select branch</label>
                     <select name="branch" id="branch" class="form-control">
                         <option hidden selected value="null">Select...</option>
-                        <option value="">Branch #1</option>
-                        <option value="">Branch #2</option>
-                        <option value="">Branch #3</option>
+                        @foreach($branches as $branch)
+                            <option value="{{$branch->id}}">{{$branch->name}}</option>
+                        @endforeach
                     </select>
                 </div>
                 <table class="table table-striped" style="table-layout: fixed">
@@ -42,21 +42,23 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td scope="row">Model name</td>
-                        <td>
-                            <input type="number" min=0 max=999 name="display-qty" class="form-control" style="width: 100%">
-                        </td>
-                        <td>
-                            <input type="number" min=0 max=999 name="talker" class="form-control" style="width: 100%">
-                        </td>
-                        <td>
-                            <input type="number" min=0 max=999 name="flyer" class="form-control" style="width: 100%">
-                        </td>
-                        <td>
-                            <input type="number" min=0 max=999 name="streamer" class="form-control" style="width: 100%">
-                        </td>
-                    </tr>
+                    @foreach($models as $model)
+                        <tr>
+                            <td scope="row">{{$model->name}}</td>
+                            <td>
+                                <input type="number" min=0 max=999 name="display-qty{{$model->id}}" class="form-control" style="width: 100%">
+                            </td>
+                            <td>
+                                <input type="number" min=0 max=999 name="talker{{$model->id}}" class="form-control" style="width: 100%">
+                            </td>
+                            <td>
+                                <input type="number" min=0 max=999 name="flyer{{$model->id}}" class="form-control" style="width: 100%">
+                            </td>
+                            <td>
+                                <input type="number" min=0 max=999 name="streamer{{$model->id}}" class="form-control" style="width: 100%">
+                            </td>
+                        </tr>
+                    @endforeach
                     </tbody>
                 </table>
                 <div class="text-right">
@@ -65,4 +67,8 @@
             </form>
         </div>
     </div>
+@endsection
+
+@section('script')
+
 @endsection

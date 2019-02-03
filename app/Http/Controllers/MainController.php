@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MainController extends Controller
 {
@@ -23,6 +24,8 @@ class MainController extends Controller
      */
     public function index()
     {
-        return view('display');
+        $branches = DB::select('select * from branches');
+        $models = DB::select('select * from models');
+        return view('display', compact('branches','models'));
     }
 }
