@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Branch;
+use App\BikeModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+
 
 class ReportController extends Controller
 {
@@ -21,8 +24,9 @@ class ReportController extends Controller
     public function index()
     {
         //
-        $branches = DB::select('select * from branches');
-        $models = DB::select('select * from models');
+//        $branches = DB::select('select * from branches');
+        $branches = Branch::all();
+        $models = BikeModel::all();
         return view('display', compact('branches','models'));
     }
 
