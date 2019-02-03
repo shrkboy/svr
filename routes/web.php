@@ -12,9 +12,9 @@
 */
 
 Route::get('/', function () {
-    return redirect()->route('home');
+    return redirect()->route('display');
 });
 
 Auth::routes();
 
-Route::get('/display', 'MainController@index')->name('dislpay');
+Route::get('/display', 'MainController@index')->name('display');
