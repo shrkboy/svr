@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<<<<<<< HEAD
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -15,7 +14,6 @@
                     @endif
                     You are logged in!
                 </div>
-=======
     <div class="container">
         <form class="p-3">
             <div class="form-group" style="width: 30%">
@@ -26,7 +24,6 @@
                     <option value="">Branch #2</option>
                     <option value="">Branch #3</option>
                 </select>
->>>>>>> 30f9d14736039f88d282c8698fc535e7265392d1
             </div>
 
             <table class="table">
