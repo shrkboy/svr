@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Branch;
 use App\BikeModel;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -48,7 +49,7 @@ class ReportController extends Controller
     public function store(Request $request)
     {
         //
-        return $request->all();
+        return User::all();
     }
 
     /**
