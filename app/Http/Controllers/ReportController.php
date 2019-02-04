@@ -24,7 +24,6 @@ class ReportController extends Controller
     public function index()
     {
         //
-//        $branches = DB::select('select * from branches');
         $branches = Branch::all();
         $models = BikeModel::all();
         return view('display', compact('branches','models'));
