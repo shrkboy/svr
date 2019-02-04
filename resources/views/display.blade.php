@@ -20,9 +20,6 @@
         <li class="nav-item">
             <a class="nav-link" href="{{url('/display')}}">Calendar</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{url('/admin')}}">Admin</a>
-        </li>
     </ul>
 @stop
 

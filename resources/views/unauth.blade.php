@@ -6,8 +6,8 @@
         <li class="nav-item">
             <a class="nav-link" href="{{url('/display')}}">Home</a>
         </li>
-        <li class="nav-item active">
-            <a class="nav-link" href="{{url('/display')}}">User</a>
+        <li class="nav-item">
+            <a class="nav-link" href="{{url('/display')}}">Display</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{{url('/display')}}">Retail</a>
