@@ -19,3 +19,4 @@ Auth::routes();
 
 $routes = ['except' => ['register']];
 Route::resource('display','ReportController');
+Route::resource('admin','AdminController');
