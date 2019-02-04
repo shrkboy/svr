@@ -61,7 +61,7 @@
                         <tr>
                             <td scope="row">{{$model->name}}</td>
                             <td>
-                                <input type="text" name="{{ $model->id }}" value="{{ $model->id }}" readonly hidden>
+                                <input type="text" name="id[]" value="{{ $model->id }}" readonly hidden>
                                 <input type="number" min=0 max=999 name="display-qty_{{$model->id}}" class="form-control"
                                        style="width: 100%">
                             </td>
