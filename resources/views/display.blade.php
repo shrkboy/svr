@@ -55,19 +55,19 @@
                         <tr>
                             <td scope="row">{{$model->name}}</td>
                             <td>
-                                <input type="number" min=0 max=999 name="display-qty{{$model->id}}" class="form-control"
+                                <input type="number" min=0 max=999 name="display-qty_{{$model->id}}" class="form-control"
                                        style="width: 100%">
                             </td>
                             <td>
-                                <input type="number" min=0 max=999 name="talker{{$model->id}}" class="form-control"
+                                <input type="number" min=0 max=999 name="talker_{{$model->id}}" class="form-control"
                                        style="width: 100%">
                             </td>
                             <td>
-                                <input type="number" min=0 max=999 name="flyer{{$model->id}}" class="form-control"
+                                <input type="number" min=0 max=999 name="flyer_{{$model->id}}" class="form-control"
                                        style="width: 100%">
                             </td>
                             <td>
-                                <input type="number" min=0 max=999 name="streamer{{$model->id}}" class="form-control"
+                                <input type="number" min=0 max=999 name="streamer_{{$model->id}}" class="form-control"
                                        style="width: 100%">
                             </td>
                         </tr>
