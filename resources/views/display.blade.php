@@ -27,12 +27,12 @@
     <div class="container-fluid">
         <div class="col-md-auto">
             <h4>Display</h4>
-            <h6 id="logs">Log here:</h6>
-            <form>
+            {{--<h6 id="logs">Log here:</h6>--}}
+            <form method="post" action="">
                 <div class="form-group">
                     <label for="branch">Select branch</label>
                     <br>
-                    <select name="branch" id="branch" class="form-control" style="width: 30%">
+                    <select name="branch" id="branch" class="form-control">
                         <option></option>
                         @foreach($branches as $branch)
                             <option value="{{$branch->id}}">{{$branch->name}}</option>
