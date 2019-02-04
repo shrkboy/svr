@@ -48,8 +48,20 @@ class ReportController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        return $request;
+
+        //return $request;
+
+        foreach($request->input('id') as $i){
+            $qty = $request->input('display-qty_'.$i);
+            $talker = $request->input('talker_'.$i);
+            $flyer = $request->input('flyer_'.$i);
+            $streamer = $request->input('streamer_'.$i);
+
+            $data=array("id_user"=> 1, "id_branch"=> 1, "id_model"=> 1,"dsp_qty"=>$qty,"talker"=>$talker,"flayer"=>$flyer,"streamer"=>$streamer);
+            DB::table('reports')->insert($data);
+
+        }
+
 //        return User::all();
     }
 
