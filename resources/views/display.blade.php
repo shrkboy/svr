@@ -74,6 +74,8 @@
                     @endforeach
                     </tbody>
                 </table>
+                <label for="photo">Photo</label>
+                <input type="file" accept="image/*" name="photo" id="photo" class="form-control-file">
                 <div class="text-right">
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
