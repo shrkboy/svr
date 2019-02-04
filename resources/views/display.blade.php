@@ -1,5 +1,11 @@
 @extends('layouts.app')
 
+@section('head-script')
+    <!-- Select2 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+@endsection
+
 @section('navmenu')
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">
@@ -21,11 +27,13 @@
     <div class="container-fluid">
         <div class="col-md-auto">
             <h4>Display</h4>
+            <h6 id="logs">Log here:</h6>
             <form>
                 <div class="form-group">
                     <label for="branch">Select branch</label>
-                    <select name="branch" id="branch" class="form-control">
-                        <option hidden selected value="null">Select...</option>
+                    <br>
+                    <select name="branch" id="branch" class="form-control" style="width: 30%">
+                        <option></option>
                         @foreach($branches as $branch)
                             <option value="{{$branch->id}}">{{$branch->name}}</option>
                         @endforeach
@@ -46,16 +54,20 @@
                         <tr>
                             <td scope="row">{{$model->name}}</td>
                             <td>
-                                <input type="number" min=0 max=999 name="display-qty{{$model->id}}" class="form-control" style="width: 100%">
+                                <input type="number" min=0 max=999 name="display-qty{{$model->id}}" class="form-control"
+                                       style="width: 100%">
                             </td>
                             <td>
-                                <input type="number" min=0 max=999 name="talker{{$model->id}}" class="form-control" style="width: 100%">
+                                <input type="number" min=0 max=999 name="talker{{$model->id}}" class="form-control"
+                                       style="width: 100%">
                             </td>
                             <td>
-                                <input type="number" min=0 max=999 name="flyer{{$model->id}}" class="form-control" style="width: 100%">
+                                <input type="number" min=0 max=999 name="flyer{{$model->id}}" class="form-control"
+                                       style="width: 100%">
                             </td>
                             <td>
-                                <input type="number" min=0 max=999 name="streamer{{$model->id}}" class="form-control" style="width: 100%">
+                                <input type="number" min=0 max=999 name="streamer{{$model->id}}" class="form-control"
+                                       style="width: 100%">
                             </td>
                         </tr>
                     @endforeach
@@ -70,5 +82,11 @@
 @endsection
 
 @section('script')
-
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#branch').select2({
+                placeholder: 'Select',
+            });
+        })
+    </script>
 @endsection
