@@ -33,10 +33,11 @@
     <div class="container-fluid">
         <div class="col-md-auto">
             <h4>Users</h4>
+            <a class="btn btn-primary" role="button" href="{{url('/register')}}">Add User</a>
             {{--<h6 id="logs">Log here:</h6>--}}
             <form method="post" action="{{ url('/display') }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
-                <table class="table table-striped" style="table-layout: fixed">
+                <table class="table table-striped">
                     <thead>
                     <tr>
                         <th scope="col">Name</th>
