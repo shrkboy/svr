@@ -6,10 +6,33 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 @endsection
 
+@section('navmenu')
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="{{url('/display')}}">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{url('/display')}}">Display</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{url('/display')}}">Retail</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{url('/display')}}">Calendar</a>
+        </li>
+        @if(\Illuminate\Support\Facades\Auth::user()->is_admin)
+            <li class="nav-item active">
+                <a class="nav-link" href="{{url('/admin')}}">Users</a>
+            </li>
+        @endif
+
+    </ul>
+@stop
+
 @section('content')
     <div class="container-fluid">
         <div class="col-md-auto">
-            <h4>Display</h4>
+            <h4>Users</h4>
             {{--<h6 id="logs">Log here:</h6>--}}
             <form method="post" action="{{ url('/display') }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
