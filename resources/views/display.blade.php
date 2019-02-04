@@ -28,7 +28,8 @@
         <div class="col-md-auto">
             <h4>Display</h4>
             {{--<h6 id="logs">Log here:</h6>--}}
-            <form method="post" action="">
+            <form method="post" action="{{ url('/display') }}" enctype="multipart/form-data">
+                {{ csrf_field() }}
                 <div class="form-group">
                     <label for="branch">Select branch</label>
                     <br>
