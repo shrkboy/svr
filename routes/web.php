@@ -17,4 +17,5 @@ Route::get('/', function () {
 
 Auth::routes();
 
+$routes = ['except' => ['register']];
 Route::resource('display','ReportController');
