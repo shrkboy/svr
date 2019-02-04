@@ -32,6 +32,5 @@ $this->post('password/reset', 'Auth\ResetPasswordController@reset');
 
 //Auth::routes();
 
-$routes = ['except' => ['register']];
 Route::resource('display','ReportController');
-Route::resource('admin','AdminController');
+Route::resource('admin','AdminController')->middleware('is_admin');
