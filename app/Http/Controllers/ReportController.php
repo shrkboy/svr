@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Branch;
 use App\BikeModel;
+use App\Report;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -50,6 +52,16 @@ class ReportController extends Controller
     {
 
         //return $request;
+        $last = Report::all()->last();
+        if ($last === null){
+            $last = new Report();
+            $last->id_report = '1';
+        }
+        if ($file = $request->file('photo'))
+        {
+            $name = 'REPORT'.$last->id_report.'.'.$file->extension();
+            $file->move('images',$name);
+        }
 
         foreach($request->input('id') as $i){
             $qty = $request->input('display-qty_'.$i);
@@ -57,12 +69,14 @@ class ReportController extends Controller
             $flyer = $request->input('flyer_'.$i);
             $streamer = $request->input('streamer_'.$i);
 
-            $data=array("id_user"=> 1, "id_branch"=> 1, "id_model"=> 1,"dsp_qty"=>$qty,"talker"=>$talker,"flayer"=>$flyer,"streamer"=>$streamer);
+            $current_time = Carbon::now()->toDateTimeString();
+            $data=array("id_user"=> auth()->user()->id, "id_branch"=> 1, "id_model"=> $i,"dsp_qty"=>$qty,"talker"=>$talker,"flayer"=>$flyer,
+                "streamer"=>$streamer, 'record_date'=>$current_time, 'pic_path' => $name);
             DB::table('reports')->insert($data);
-
         }
 
-//        return User::all();
+        return redirect('/display');
+
     }
 
     /**

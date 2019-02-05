@@ -39,7 +39,7 @@
                 <div class="form-group">
                     <label for="branch">Select branch</label>
                     <br>
-                    <select name="branch" id="branch" class="form-control">
+                    <select name="branch" id="branch" class="form-control" style="width: 100%;">
                         <option></option>
                         @foreach($branches as $branch)
                             <option value="{{$branch->id}}">{{$branch->name}}</option>
