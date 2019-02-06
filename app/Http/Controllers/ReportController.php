@@ -8,6 +8,7 @@ use App\Report;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\DetailReport;
 use Illuminate\Support\Facades\DB;
 
 
@@ -63,16 +64,38 @@ class ReportController extends Controller
             $file->move('images',$name);
         }
 
+        $current_time = Carbon::now()->toDateTimeString();
+
+        $report = new Report;
+        $report->id_user =  auth()->user()->id;
+        $report->id_branch = 1;
+        $report->record_date = $current_time;
+
+        $report->save();
+
         foreach($request->input('id') as $i){
+
+            $report_detail = new DetailReport;
+
             $qty = $request->input('display-qty_'.$i);
             $talker = $request->input('talker_'.$i);
             $flyer = $request->input('flyer_'.$i);
             $streamer = $request->input('streamer_'.$i);
 
-            $current_time = Carbon::now()->toDateTimeString();
-            $data=array("id_user"=> auth()->user()->id, "id_branch"=> 1, "id_model"=> $i,"dsp_qty"=>$qty,"talker"=>$talker,"flayer"=>$flyer,
-                "streamer"=>$streamer, 'record_date'=>$current_time, 'pic_path' => $name);
-            DB::table('reports')->insert($data);
+            $report_detail->id_model = $i;
+            $report_detail->dsp_qty = $qty;
+            $report_detail->talker = $talker;
+            $report_detail->flayer = $flyer;
+            $report_detail->streamer = $streamer;
+            $report_detail->id_report = $report->id;
+
+            $report_detail->save();
+
+//            $data=array("id_user"=> auth()->user()->id, "id_branch"=> 1, "id_model"=> $i,"dsp_qty"=>$qty,"talker"=>$talker,"flayer"=>$flyer,
+//                "streamer"=>$streamer, 'record_date'=>$current_time, 'pic_path' => $name);
+//            DB::table('reports')->insert($data);
+
+
         }
 
         return redirect('/display');
