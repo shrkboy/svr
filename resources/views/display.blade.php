@@ -88,7 +88,7 @@
                     </tbody>
                 </table>
                 <label class="h5" for="document">Documents</label>
-                <input type="file" name="document[]" accept="application/pdf, image/*" id="document-input" class="form-control" multiple>
+                <input type="file" name="document[]" accept="image/*" id="document-input" class="form-control" multiple>
                 <div id="file-list"></div>
                 {{--TODO: Find alternative for Dropzone--}}
                 {{--<div class="dropzone" hidden>--}}
