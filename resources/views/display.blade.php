@@ -87,18 +87,18 @@
                     @endforeach
                     </tbody>
                 </table>
-                <label for="photo">Photo</label>
-                <div class="dropzone">
-                    <button type="reset" id="clear-dropzone" class="btn btn-danger float-right">Clear</button>
-                    <div class="fallback">
-                        <input type="file">
-                    </div>
-                </div>
-                {{--<div id="document-input-root">--}}
-                {{--<input type="file" accept="image/*" name="document[]" id="document" class="form-control-file">--}}
+                <label class="h5" for="document">Documents</label>
+                <input type="file" name="document[]" accept="application/pdf, image/*" id="document-input" class="form-control" multiple>
+                <div id="file-list"></div>
+                {{--TODO: Find alternative for Dropzone--}}
+                {{--<div class="dropzone" hidden>--}}
+                    {{--<button type="reset" id="clear-dropzone" class="btn btn-danger float-right">Clear</button>--}}
+                    {{--<div class="fallback">--}}
+                        {{--<input type="file">--}}
+                    {{--</div>--}}
                 {{--</div>--}}
                 <div class="text-right mt-3">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" id="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
         </div>
@@ -111,31 +111,55 @@
             $('#branch').select2({
                 placeholder: 'Select',
             });
+
+            $('#document-input').change(function() {
+                let fileList = $('#file-list');
+                let input = $('#document-input');
+                fileList.innerHTML = '<ul>';
+                for (let i = 0; i < input.files.length; ++i) {
+                    fileList.innerHTML += '<li>' + input.files.item(i).name + '</li>';
+                }
+                fileList.innerHTML += '</ul>';
+            });
         });
-        Dropzone.autoDiscover = false;
-        $('.dropzone').dropzone({
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            init: function () {
-                let $this = this;
-                $("button#clear-dropzone").click(function () {
-                    $this.removeAllFiles(true);
-                });
-            },
-            renameFile: function (file) {
-                let dt = new Date();
-                let time = dt.getTime();
-                return time + file.name;
-            },
-            url: "{{ url('/display') }}",
-            maxFiles: 20,
-            uploadMultiple: true,
-            paramName: 'document',
-            addRemoveLinks: true,
-            timeout: 180000,
-            autoProcessQueue: false,
-            dictDefaultMessage: "Drag images here or click to select files",
-            dictRemoveFile: "Remove",
-            acceptedFiles: 'image/*,application/pdf'
-        });
+
+        {{--Dropzone.autoDiscover = false;--}}
+        {{--$('.dropzone').dropzone({--}}
+            {{--url: "{{ url('/display') }}",--}}
+            {{--headers: {--}}
+                {{--'X-CSRF-Token': $('meta[name="token"]').attr('content')--}}
+            {{--},--}}
+            {{--init: function () {--}}
+                {{--let $this = this;--}}
+                {{--$("button#clear-dropzone").click(function () {--}}
+                    {{--$this.removeAllFiles(true);--}}
+                {{--});--}}
+            {{--},--}}
+            {{--renameFile: function (file) {--}}
+                {{--let dt = new Date();--}}
+                {{--let time = dt.getTime();--}}
+                {{--return time + file.name;--}}
+            {{--},--}}
+            {{--maxFiles: 20,--}}
+            {{--uploadMultiple: true,--}}
+            {{--paramName: 'document',--}}
+            {{--addRemoveLinks: true,--}}
+            {{--timeout: 180000,--}}
+            {{--dictDefaultMessage: "<span class='text-primary h5'>Drag images here or click to select files</span> ",--}}
+            {{--dictRemoveFile: 'Remove',--}}
+            {{--autoProcessQueue: false,--}}
+            {{--dictResponseError: 'Error uploading file!',--}}
+            {{--acceptedFiles: 'image/*,application/pdf',--}}
+            {{--accept: function (file, done) {--}}
+                {{--done();--}}
+            {{--},--}}
+            {{--sending: function (file, xhr, formData) {--}}
+                {{--// Pass token. You can use the same method to pass any other values as well such as a id to associate the image with for example.--}}
+                {{--formData.append("_token", $('[name=_token]').val()); // Laravel expect the token post value to be named _token by default--}}
+            {{--},--}}
+            {{--beforeSend: function (request) {--}}
+                {{--return request.setRequestHeader('X-CSRF-Token', $("meta[name='token']").attr('content'));--}}
+            {{--},--}}
+        {{--});--}}
     </script>
 @endsection

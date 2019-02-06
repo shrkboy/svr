@@ -52,7 +52,7 @@ class ReportController extends Controller
     public function store(Request $request)
     {
 
-        //return $request;
+//        return $request;
         $last = Report::all()->last();
         if ($last === null){
             $last = new Report();
