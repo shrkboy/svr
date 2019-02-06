@@ -7,4 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class BikeModel extends Model
 {
     //
+    public $timestamps = false;
 }

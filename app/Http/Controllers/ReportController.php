@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Branch;
 use App\BikeModel;
+use App\Document;
 use App\Report;
 use App\User;
 use Carbon\Carbon;
@@ -51,18 +52,8 @@ class ReportController extends Controller
      */
     public function store(Request $request)
     {
-
-//        return $request;
-        $last = Report::all()->last();
-        if ($last === null){
-            $last = new Report();
-            $last->id_report = '1';
-        }
-        if ($file = $request->file('photo'))
-        {
-            $name = 'REPORT'.$last->id_report.'.'.$file->extension();
-            $file->move('images',$name);
-        }
+//
+////        return $request;
 
         $current_time = Carbon::now()->toDateTimeString();
 
@@ -72,6 +63,32 @@ class ReportController extends Controller
         $report->record_date = $current_time;
 
         $report->save();
+
+//      Upload File to document
+        if ($file = $request->file('document'))
+        {
+            foreach ($file as $document)
+            {
+                $last = Document::latest('id')->first();
+                if ($last == null)
+                {
+                    $id = '1';
+                }
+                else
+                {
+                    $id = $last->id + 1;
+                }
+                $name = 'REPORT'.$id.'.'.$document->extension();
+                $document->move('images', $name);
+
+                $newDocument = new Document;
+                $newDocument->id_report = $report->id;
+                $newDocument->pic_path = $name;
+
+                $newDocument->save();
+            }
+
+        }
 
         foreach($request->input('id') as $i){
 
@@ -99,7 +116,6 @@ class ReportController extends Controller
         }
 
         return redirect('/display');
-
     }
 
     /**
