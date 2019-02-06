@@ -2,8 +2,14 @@
 
 @section('head-script')
     <!-- Select2 -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script src="{{ asset('js/dropzone.js') }}"></script>
+    <script src="{{ asset('js/custom.js') }}"></script>
+@endsection
+
+@section('head-styles')
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet"/>
+    <link href="{{ asset('css/dropzone.css') }}" rel="stylesheet"/>
 @endsection
 
 @section('navmenu')
@@ -21,9 +27,9 @@
             <a class="nav-link" href="{{url('/display')}}">Calendar</a>
         </li>
         @if(\Illuminate\Support\Facades\Auth::user()->is_admin)
-        <li class="nav-item">
-            <a class="nav-link" href="{{url('/admin')}}">Users</a>
-        </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{url('/admin')}}">Users</a>
+            </li>
         @endif
 
     </ul>
@@ -33,7 +39,6 @@
     <div class="container-fluid">
         <div class="col-md-auto">
             <h4>Display</h4>
-            {{--<h6 id="logs">Log here:</h6>--}}
             <form method="post" action="{{ url('/display') }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <div class="form-group">
@@ -62,7 +67,8 @@
                             <td scope="row">{{$model->name}}</td>
                             <td>
                                 <input type="text" name="id[]" value="{{ $model->id }}" readonly hidden>
-                                <input type="number" min=0 max=999 name="display-qty_{{$model->id}}" class="form-control"
+                                <input type="number" min=0 max=999 name="display-qty_{{$model->id}}"
+                                       class="form-control"
                                        style="width: 100%">
                             </td>
                             <td>
@@ -82,8 +88,16 @@
                     </tbody>
                 </table>
                 <label for="photo">Photo</label>
-                <input type="file" accept="image/*" name="photo" id="photo" class="form-control-file">
-                <div class="text-right">
+                <div class="dropzone">
+                    <button type="reset" id="clear-dropzone" class="btn btn-danger float-right">Clear</button>
+                    <div class="fallback">
+                        <input type="file">
+                    </div>
+                </div>
+                {{--<div id="document-input-root">--}}
+                {{--<input type="file" accept="image/*" name="document[]" id="document" class="form-control-file">--}}
+                {{--</div>--}}
+                <div class="text-right mt-3">
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
@@ -97,6 +111,31 @@
             $('#branch').select2({
                 placeholder: 'Select',
             });
-        })
+        });
+        Dropzone.autoDiscover = false;
+        $('.dropzone').dropzone({
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            init: function () {
+                let $this = this;
+                $("button#clear-dropzone").click(function () {
+                    $this.removeAllFiles(true);
+                });
+            },
+            renameFile: function (file) {
+                let dt = new Date();
+                let time = dt.getTime();
+                return time + file.name;
+            },
+            url: "{{ url('/display') }}",
+            maxFiles: 20,
+            uploadMultiple: true,
+            paramName: 'document',
+            addRemoveLinks: true,
+            timeout: 180000,
+            autoProcessQueue: false,
+            dictDefaultMessage: "Drag images here or click to select files",
+            dictRemoveFile: "Remove",
+            acceptedFiles: 'image/*,application/pdf'
+        });
     </script>
 @endsection
