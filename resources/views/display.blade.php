@@ -3,7 +3,6 @@
 @section('head-script')
     <!-- Select2 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
-    <script src="{{ asset('js/dropzone.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
 @endsection
 
@@ -39,14 +38,14 @@
     <div class="container-fluid">
         <div class="col-md-auto">
             @if(Session::has('success'))
-                <div class="alert alert-success m-auto" role="alert">
+                <div class="alert alert-success mx-auto" role="alert">
                     {{ Session::get('success') }}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
             @elseif (Session::has('failed'))
-                <div class="alert alert-danger m-auto" role="alert">
+                <div class="alert alert-danger mx-auto" role="alert">
                     {{ Session::get('failed') }}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -61,9 +60,6 @@
                     <br>
                     <select name="branch" id="branch" class="form-control" style="width: 100%;">
                         <option></option>
-                        @foreach($branches as $branch)
-                            <option value="{{$branch->id}}">{{$branch->name}}</option>
-                        @endforeach
                     </select>
                 </div>
                 <table class="table table-striped" style="table-layout: fixed">
@@ -107,13 +103,6 @@
                 <input type="file" name="document[]" accept="image/*" id="document-input" class="form-control"
                        multiple>
                 <div id="file-list"></div>
-                {{--TODO: Find alternative for Dropzone--}}
-                {{--<div class="dropzone" hidden>--}}
-                {{--<button type="reset" id="clear-dropzone" class="btn btn-danger float-right">Clear</button>--}}
-                {{--<div class="fallback">--}}
-                {{--<input type="file">--}}
-                {{--</div>--}}
-                {{--</div>--}}
                 <div class="text-right mt-3">
                     <button type="submit" id="submit" class="btn btn-primary">Submit</button>
                 </div>
@@ -127,6 +116,23 @@
         $(document).ready(function () {
             $('#branch').select2({
                 placeholder: 'Select',
+                minimumInputLength: 1,
+                ajax: {
+                    url: function (params) {
+                        return '{{ url('/branch') }}' + '/' + params.term;
+                    },
+                    dataType: 'json',
+                    type: 'GET',
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data, function (item) {
+                                return {
+                                    text: item.name,
+                                    id: item.id
+                                }
+                            })
+                        };
+                    }                },
             });
 
             $('#document-input').change(function () {
@@ -139,44 +145,5 @@
                 fileList.innerHTML += '</ul>';
             });
         });
-
-        {{--Dropzone.autoDiscover = false;--}}
-        {{--$('.dropzone').dropzone({--}}
-        {{--url: "{{ url('/display') }}",--}}
-        {{--headers: {--}}
-        {{--'X-CSRF-Token': $('meta[name="token"]').attr('content')--}}
-        {{--},--}}
-        {{--init: function () {--}}
-        {{--let $this = this;--}}
-        {{--$("button#clear-dropzone").click(function () {--}}
-        {{--$this.removeAllFiles(true);--}}
-        {{--});--}}
-        {{--},--}}
-        {{--renameFile: function (file) {--}}
-        {{--let dt = new Date();--}}
-        {{--let time = dt.getTime();--}}
-        {{--return time + file.name;--}}
-        {{--},--}}
-        {{--maxFiles: 20,--}}
-        {{--uploadMultiple: true,--}}
-        {{--paramName: 'document',--}}
-        {{--addRemoveLinks: true,--}}
-        {{--timeout: 180000,--}}
-        {{--dictDefaultMessage: "<span class='text-primary h5'>Drag images here or click to select files</span> ",--}}
-        {{--dictRemoveFile: 'Remove',--}}
-        {{--autoProcessQueue: false,--}}
-        {{--dictResponseError: 'Error uploading file!',--}}
-        {{--acceptedFiles: 'image/*,application/pdf',--}}
-        {{--accept: function (file, done) {--}}
-        {{--done();--}}
-        {{--},--}}
-        {{--sending: function (file, xhr, formData) {--}}
-        {{--// Pass token. You can use the same method to pass any other values as well such as a id to associate the image with for example.--}}
-        {{--formData.append("_token", $('[name=_token]').val()); // Laravel expect the token post value to be named _token by default--}}
-        {{--},--}}
-        {{--beforeSend: function (request) {--}}
-        {{--return request.setRequestHeader('X-CSRF-Token', $("meta[name='token']").attr('content'));--}}
-        {{--},--}}
-        {{--});--}}
     </script>
 @endsection
