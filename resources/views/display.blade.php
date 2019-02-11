@@ -59,7 +59,6 @@
                     <label for="branch">Select branch</label>
                     <br>
                     <select name="branch" id="branch" class="form-control" style="width: 100%;">
-                        <option></option>
                     </select>
                 </div>
                 <table class="table table-striped" style="table-layout: fixed">
