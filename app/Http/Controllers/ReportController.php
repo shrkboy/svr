@@ -60,7 +60,7 @@ class ReportController extends Controller
 
             $report = new Report;
             $report->id_user = auth()->user()->id;
-            $report->id_branch = 1;
+            $report->id_branch = $request->input('id_branch');
             $report->record_date = $current_time;
 
             $report->save();
