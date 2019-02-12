@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('head-styles')
+    <link rel="stylesheet" href="{{ asset('css/lightbox.min.css') }}">
+@stop
+
 @section('navmenu')
     <ul class="navbar-nav mr-auto">
         @if(\Illuminate\Support\Facades\Auth::user()->is_admin)
@@ -27,7 +31,7 @@
             <h6>Submitted by: {{ $reports->users->name }}</h6>
             <h6>On: {{ \Carbon\Carbon::parse($reports->record_date)->format('M d, Y H:i:s') }}</h6>
             <div class="table-responsive">
-                <table class="table table-striped" style="table-layout: fixed">
+                <table class="table table-sm table-striped">
                     <thead>
                     <tr>
                         <th scope="col">Models</th>
@@ -50,28 +54,19 @@
                     </tbody>
                 </table>
             </div>
-            <div id="documentCarousel" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner">
-                    @foreach($reports->documents as $document)
-                        {{ asset('/images/'.$document->pic_path) }}
-                        <div class="carousel-item">
-                            <img src="" class="d-block w-100" alt="file {{ $document->pic_path }}">
-                            <div class="carousel-caption d-none d-md-block">
-                                <h5>{{ $document->pic_path }}</h5>
-                            </div>
-                        </div>
-                    @endforeach
-                    <a class="carousel-control-prev" href="#documentCarousel" role="button"
-                       data-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#documentCarousel" role="button"
-                       data-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                    </a>
-                </div>
+            <h4 class="mt-3">Document Photos</h4>
+            <div class="row">
+                @foreach($reports->documents as $document)
+                    <div class="col-md-3">
+                        <a href="{{ asset('/images/'.$document->pic_path) }}"
+                           data-lightbox="document">
+                            <img class="img-thumbnail"
+                                 src="{{ asset('/images/'.$document->pic_path) }}"
+                                 alt="File {{ asset('/images/'.$document->pic_path) }}">
+                        </a>
+                    </div>
+                @endforeach
             </div>
         </div>
+        <script src="{{ asset('js/lightbox.min.js') }}"></script>
 @endsection
