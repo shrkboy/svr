@@ -47,6 +47,27 @@
                 @endforeach
                 </tbody>
             </table>
+            <div id="documentCarousel" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    @foreach($reports->documents as $document)
+                        <div class="carousel-item">
+                            <img src="{{ Storage::disk('local')->get($document->pic_path) }}" class="d-block w-100" alt="file {{ $document->pic_path }}">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{{ $document->pic_path }}</h5>
+                            </div>
+                        </div>
+                    @endforeach
+                    <a class="carousel-control-prev" href="#documentCarousel" role="button"
+                       data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#documentCarousel" role="button"
+                       data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
         </div>
-    </div>
 @endsection
