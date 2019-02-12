@@ -53,8 +53,9 @@
             <div id="documentCarousel" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
                     @foreach($reports->documents as $document)
+                        {{ asset('/images/'.$document->pic_path) }}
                         <div class="carousel-item">
-                            <img src="{{ asset('/images/'.$document->pic_path) }}" class="d-block w-100" alt="file {{ $document->pic_path }}">
+                            <img src="" class="d-block w-100" alt="file {{ $document->pic_path }}">
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{{ $document->pic_path }}</h5>
                             </div>
