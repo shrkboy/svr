@@ -25,7 +25,7 @@
             <h4>Report Detail</h4>
             <h6>Branch: {{ $reports->branches->name }}</h6>
             <h6>Submitted by: {{ $reports->users->name }}</h6>
-            <h6>On: {{ \Carbon\Carbon::parse($record_date)->format('M d, Y H:i:s') }}</h6>
+            <h6>On: {{ \Carbon\Carbon::parse($reports->record_date)->format('M d, Y H:i:s') }}</h6>
             <div class="table-responsive">
                 <table class="table table-striped" style="table-layout: fixed">
                     <thead>
@@ -54,7 +54,7 @@
                 <div class="carousel-inner">
                     @foreach($reports->documents as $document)
                         <div class="carousel-item">
-                            <img src="{{ Storage::disk('local')->get($document->pic_path) }}" class="d-block w-100" alt="file {{ $document->pic_path }}">
+                            <img src="{{ asset('/images/'.$document->pic_path) }}" class="d-block w-100" alt="file {{ $document->pic_path }}">
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{{ $document->pic_path }}</h5>
                             </div>

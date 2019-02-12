@@ -40,7 +40,7 @@ class LoginController extends Controller
     //redirect after login
     protected function authenticated($request,$user){
         if($user->is_admin){
-            return redirect('user'); //redirect to admin panel
+            return redirect('users'); //redirect to admin panel
         }
         return redirect('display'); //redirect to standard user homepage
     }

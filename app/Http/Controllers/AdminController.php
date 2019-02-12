@@ -36,8 +36,8 @@ class AdminController extends Controller
     public function detail_report($id)
     {
         $reports = Report::where('id',$id)->with(['users','branches','documents','details'])->first();
-//        return view('admin.report_detail', compact('reports'));
-        return $reports;
+        return view('admin.report_detail', compact('reports'));
+//        return $reports;
     }
 
     public function model()
