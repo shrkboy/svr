@@ -22,7 +22,7 @@ class AdminController extends Controller
     {
         //
         $users = User::all();
-        return view('user', compact('users'));
+        return view('admin.user', compact('users'));
     }
 
     /**
