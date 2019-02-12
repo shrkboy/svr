@@ -10,7 +10,7 @@
                 <a class="nav-link" href="{{url('/reports')}}">Reports</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="{{url('/bike_models')}}">Bike Models</a>
+                <a class="nav-link" href="{{url('/models')}}">Bike Models</a>
             </li>
         @endif
         <li class="nav-item">

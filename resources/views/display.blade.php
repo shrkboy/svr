@@ -25,7 +25,7 @@
         <li class="nav-item">
             <a class="nav-link" href="{{url('/display')}}">Calendar</a>
         </li>
-        @if(\Illuminate\Support\Facades\Auth::user()->is_admin)
+        @if(auth()->user()->is_admin)
             <li class="nav-item">
                 <a class="nav-link" href="{{url('/users')}}">Users</a>
             </li>
