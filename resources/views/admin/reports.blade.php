@@ -27,7 +27,7 @@
                         <th scope="col">Branch</th>
                         <th scope="col">Name</th>
                         <th scope="col">Username</th>
-                        <th scope="col">Record Date and Time</th>
+                        <th scope="col">Date and Time</th>
                         <th scope="col">Files Count</th>
                         <th scope="col">Actions</th>
                     </tr>
