@@ -23,8 +23,9 @@
     <div class="container-fluid">
         <div class="col-md-auto">
             <h4>Report Detail</h4>
-            <h6>Branch:</h6>
-            <h6>{{ $reports->branches->name }}</h6>
+            <h6>Branch: {{ $reports->branches->name }}</h6>
+            <h6>Submitted by: {{ $reports->users->name }}</h6>
+            <h6>On: {{ \Carbon\Carbon::parse($record_date)->format('H:i d M Y') }}</h6>
             <table class="table table-striped" style="table-layout: fixed">
                 <thead>
                 <tr>
