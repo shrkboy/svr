@@ -8,21 +8,20 @@
 
 @section('navmenu')
     <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-            <a class="nav-link" href="{{url('/display')}}">Home</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{url('/display')}}">Reports</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{url('/display')}}">Models</a>
-        </li>
         @if(\Illuminate\Support\Facades\Auth::user()->is_admin)
             <li class="nav-item active">
-                <a class="nav-link" href="{{url('/user')}}">Users</a>
+                <a class="nav-link" href="{{url('/users')}}">Users</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{{url('/reports')}}">Reports</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{{url('/models')}}">Bike Models</a>
             </li>
         @endif
-
+        <li class="nav-item">
+            <a class="nav-link" href="{{url('/display')}}">Display</a>
+        </li>
     </ul>
 @stop
 
