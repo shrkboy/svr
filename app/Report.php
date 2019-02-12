@@ -20,4 +20,8 @@ class Report extends Model
     public function documents(){
         return $this->hasMany('App\Document','id_report');
     }
+
+    public function details(){
+        return $this->hasMany('App\DetailReport','id_report');
+    }
 }

@@ -8,4 +8,8 @@ class DetailReport extends Model
 {
     //
     public $timestamps = false;
+
+    public function reports(){
+        return $this->belongsTo('App\Report','id_report');
+    }
 }

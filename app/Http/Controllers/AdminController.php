@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DetailReport;
 use App\Report;
 use App\User;
 use Illuminate\Http\Request;
@@ -30,6 +31,13 @@ class AdminController extends Controller
     {
         $reports = Report::with(['users','branches','documents'])->get();
         return view('admin.reports', compact('reports'));
+    }
+
+    public function detail_report($id)
+    {
+        $reports = Report::where('id',$id)->with(['users','branches','documents','details'])->first();
+//        return view('admin.report_detail', compact('reports'));
+        return $reports;
     }
 
     public function model()

@@ -24,7 +24,7 @@
         <div class="col-md-auto">
             <h4>Report Detail</h4>
             <h6>Branch:</h6>
-            <h6>{{ $branch_name }}</h6>
+            <h6>{{ $reports->branches->name }}</h6>
             <table class="table table-striped" style="table-layout: fixed">
                 <thead>
                 <tr>
@@ -36,9 +36,9 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($report_detail as $detail)
+                @foreach($reports->details as $detail)
                     <tr>
-                        <td scope="row">{{$model->name}}</td>
+                        <td scope="row">{{$detail->code_model}}</td>
                         <td>{{ $detail->dsp_qty }}</td>
                         <td>{{ $detail->talker }}</td>
                         <td>{{ $detail->flayer }}</td>
