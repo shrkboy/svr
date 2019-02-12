@@ -27,7 +27,7 @@
         </li>
         @if(\Illuminate\Support\Facades\Auth::user()->is_admin)
             <li class="nav-item">
-                <a class="nav-link" href="{{url('/admin')}}">Users</a>
+                <a class="nav-link" href="{{url('/users')}}">Users</a>
             </li>
         @endif
 

@@ -37,13 +37,15 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    //redirect after login
     protected function authenticated($request,$user){
         if($user->is_admin){
-            return redirect('admin'); //redirect to admin panel
+            return redirect('user'); //redirect to admin panel
         }
         return redirect('display'); //redirect to standard user homepage
     }
 
+    //column that used for login
     public function username()
     {
         return 'username';

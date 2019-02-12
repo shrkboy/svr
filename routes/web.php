@@ -12,6 +12,12 @@
 */
 
 Route::get('/', function () {
+    if ($user = auth()->user()){
+        if ($user->is_admin)
+        {
+            return redirect()->route('users');
+        }
+    }
     return redirect()->route('display.index');
 });
 
@@ -32,7 +38,13 @@ $this->post('password/reset', 'Auth\ResetPasswordController@reset');
 
 //Auth::routes();
 
+//Display Route
 Route::resource('display','ReportController');
-Route::resource('admin','AdminController')->middleware('is_admin');
-
 Route::resource('branch','BranchController');
+
+//Admin Route
+Route::get('users','AdminController@user')->name('users')->middleware('is_admin');
+Route::get('reports','AdminController@report')->name('reports')->middleware('is_admin');
+Route::get('models','AdminController@model')->name('models')->middleware('is_admin');
+
+

@@ -28,6 +28,7 @@
                 <tr>
                     <th scope="col">Name</th>
                     <th scope="col">Username</th>
+                    <th scope="col">Branch</th>
                     <th scope="col">Record Date</th>
                     <th scope="col">Files Count</th>
                     <th scope="col">Actions</th>
@@ -36,10 +37,11 @@
                 <tbody>
                 @foreach($reports as $report)
                     <tr>
-                        <td scope="row">{{$report->user_name }}</td>
-                        <td>{{ $report->branch_name }}</td>
+                        <td scope="row">{{$report->users->name }}</td>
+                        <td>{{ $report->users->username }}</td>
+                        <td>{{ $report->branches->name }}</td>
                         <td>{{ $report->record_date }}</td>
-                        <td>{{ $report->files_count }}</td>
+                        <td>{{ $report->documents->count() }}</td>
                         <td>
                             <a href="{{ url('/reports/detail/' . $report->id) }}"
                                class="btn btn-default">Details</a>

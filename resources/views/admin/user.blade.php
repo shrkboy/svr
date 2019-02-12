@@ -19,7 +19,7 @@
         </li>
         @if(\Illuminate\Support\Facades\Auth::user()->is_admin)
             <li class="nav-item active">
-                <a class="nav-link" href="{{url('/admin')}}">Users</a>
+                <a class="nav-link" href="{{url('/user')}}">Users</a>
             </li>
         @endif
 
@@ -40,6 +40,7 @@
                         <th scope="col">Name</th>
                         <th scope="col">Email</th>
                         <th scope="col">Username</th>
+                        <th scope="col">Role</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -48,7 +49,11 @@
                             <td scope="row">{{$user->name}}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->username }}</td>
-
+                            @if($user->is_admin)
+                                <td>{{'Aadmin'}}</td>
+                            @else
+                                <td>{{'User'}}</td>
+                            @endif
                         </tr>
                     @endforeach
                     </tbody>
