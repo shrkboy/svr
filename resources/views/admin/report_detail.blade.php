@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('head-script')
+    <script src="{{ asset('js/lightbox.min.js') }}"></script>
+@stop
+
 @section('head-styles')
     <link rel="stylesheet" href="{{ asset('css/lightbox.min.css') }}">
 @stop
@@ -11,7 +15,7 @@
                 <a class="nav-link" href="{{url('/users')}}">Users</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{url('/reports')}}">Reports</a>
+                <a class="nav-link active" href="{{url('/reports')}}">Reports</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{url('/models')}}">Bike Models</a>
@@ -27,9 +31,12 @@
     <div class="container-fluid">
         <div class="col-md-auto">
             <h4>Report Detail</h4>
-            <h6>Branch: {{ $reports->branches->name }}</h6>
-            <h6>Submitted by: {{ $reports->users->name }}</h6>
-            <h6>On: {{ \Carbon\Carbon::parse($reports->record_date)->format('M d, Y H:i:s') }}</h6>
+            <h5>INFO</h5>
+            <ul>
+                <li class="h6">Branch: {{ $reports->branches->name }}</li>
+                <li class="h6">Submitted by: {{ $reports->users->name }}</li>
+                <li class="h6">On: {{ \Carbon\Carbon::parse($reports->record_date)->format('M d, Y H:i:s') }}</li>
+            </ul>
             <div class="table-responsive">
                 <table class="table table-sm table-striped">
                     <thead>
@@ -59,6 +66,7 @@
                 @foreach($reports->documents as $document)
                     <div class="col-md-3">
                         <a href="{{ asset('/images/'.$document->pic_path) }}"
+                           data-title="{{ $document->pic_path }}"
                            data-lightbox="document">
                             <img class="img-thumbnail"
                                  src="{{ asset('/images/'.$document->pic_path) }}"
@@ -68,5 +76,15 @@
                 @endforeach
             </div>
         </div>
-        <script src="{{ asset('js/lightbox.min.js') }}"></script>
+    </div>
+@endsection
+
+@section('script')
+    <script>
+        lightbox.option({
+            alwaysShowNavOnTouchDevices: true,
+            showImageNumberLabel: true,
+            albumLabel: 'Document %1 of %2'
+        })
+    </script>
 @endsection

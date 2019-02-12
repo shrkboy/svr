@@ -24,7 +24,7 @@
         <div class="col-md-auto">
             <h4>Reports</h4>
             <div class="table-responsive">
-                <table class="table table-striped">
+                <table class="table table-sm table-striped">
                     <thead>
                     <tr>
                         <th scope="col">Branch</th>
@@ -45,7 +45,7 @@
                             <td>{{ $report->documents->count() }}</td>
                             <td>
                                 <a href="{{ url('/reports/detail/' . $report->id) }}"
-                                   class="btn btn-info">See details</a>
+                                   class="btn btn-link">See details</a>
                             </td>
                         </tr>
                     @endforeach
