@@ -10,7 +10,7 @@
                 <a class="nav-link" href="{{url('/reports')}}">Reports</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="{{url('/models')}}">Models</a>
+                <a class="nav-link" href="{{url('/bike_models')}}">Bike Models</a>
             </li>
         @endif
         <li class="nav-item">
@@ -22,23 +22,28 @@
 @section('content')
     <div class="container-fluid">
         <div class="col-md-auto">
-            <h4>Users</h4>
-            <a class="btn btn-primary" role="button" href="{{url('/register')}}">Add User</a>
+            <h4>Reports</h4>
             <table class="table table-striped">
                 <thead>
                 <tr>
                     <th scope="col">Name</th>
-                    <th scope="col">Email</th>
                     <th scope="col">Username</th>
+                    <th scope="col">Record Date</th>
+                    <th scope="col">Files Count</th>
+                    <th scope="col">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($users as $user)
+                @foreach($reports as $report)
                     <tr>
-                        <td scope="row">{{$user->name}}</td>
-                        <td>{{ $user->email }}</td>
-                        <td>{{ $user->username }}</td>
-
+                        <td scope="row">{{$report->user_name }}</td>
+                        <td>{{ $report->branch_name }}</td>
+                        <td>{{ $report->record_date }}</td>
+                        <td>{{ $report->files_count }}</td>
+                        <td>
+                            <a href="{{ url('/reports/detail/' . $report->id) }}"
+                               class="btn btn-default">Details</a>
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>

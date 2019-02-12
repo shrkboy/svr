@@ -10,7 +10,7 @@
                 <a class="nav-link" href="{{url('/reports')}}">Reports</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="{{url('/models')}}">Models</a>
+                <a class="nav-link" href="{{url('/bike_models')}}">Bike Models</a>
             </li>
         @endif
         <li class="nav-item">
@@ -22,23 +22,24 @@
 @section('content')
     <div class="container-fluid">
         <div class="col-md-auto">
-            <h4>Users</h4>
-            <a class="btn btn-primary" role="button" href="{{url('/register')}}">Add User</a>
+            <h4>Bike Models</h4>
+            <a class="btn btn-primary" role="button" href="#">Add Model</a>
             <table class="table table-striped">
                 <thead>
                 <tr>
                     <th scope="col">Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Username</th>
+                    <th scope="col">Code</th>
+                    <th scope="col">Color</th>
+                    <th scope="col">Specification</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($users as $user)
+                @foreach($bike_models as $bike_model)
                     <tr>
-                        <td scope="row">{{$user->name}}</td>
-                        <td>{{ $user->email }}</td>
-                        <td>{{ $user->username }}</td>
-
+                        <td scope="row">{{ $bike_model->user_name }}</td>
+                        <td scope="row">{{ $bike_model->code }}</td>
+                        <td scope="row">{{ $bike_model->color }}</td>
+                        <td scope="row">{{ $bike_model->spec }}</td>
                     </tr>
                 @endforeach
                 </tbody>
