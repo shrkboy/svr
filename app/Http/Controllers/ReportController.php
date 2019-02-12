@@ -75,7 +75,7 @@ class ReportController extends Controller
                         $id = $last->id + 1;
                     }
                     $name = 'REPORT' . $id . '.' . $document->extension();
-                    $document->move('images', $name);
+                    $document->move('images/reports', $name);
 
                     $newDocument = new Document;
                     $newDocument->id_report = $report->id;

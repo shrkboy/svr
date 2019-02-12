@@ -32,9 +32,9 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($bike_models as $bike_model)
+                    @foreach($models as $bike_model)
                         <tr>
-                            <td scope="row">{{ $bike_model->user_name }}</td>
+                            <td scope="row">{{ $bike_model->name }}</td>
                             <td scope="row">{{ $bike_model->code }}</td>
                             <td scope="row">{{ $bike_model->color }}</td>
                             <td scope="row">{{ $bike_model->spec }}</td>

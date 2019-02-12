@@ -49,4 +49,5 @@ Route::get('reports','AdminController@report')->name('reports')->middleware('is_
 Route::get('reports/detail/{id}','AdminController@detail_report')->name('reports')->middleware('is_admin');
 
 Route::get('models','AdminController@model')->name('models')->middleware('is_admin');
+Route::get('models','AdminController@model')->name('models')->middleware('is_admin');
 

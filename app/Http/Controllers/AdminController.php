@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\BikeModel;
 use App\DetailReport;
 use App\Report;
 use App\User;
@@ -42,7 +43,14 @@ class AdminController extends Controller
 
     public function model()
     {
+        $models = BikeModel::all();
+        return view('admin.models', compact('models'));
+    }
 
+    public function insert_model()
+    {
+        $models = BikeModel::all();
+        return view('admin.models', compact('models'));
     }
 
 

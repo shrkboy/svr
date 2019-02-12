@@ -28,8 +28,8 @@
     <div class="container-fluid">
         <div class="col-md-auto">
             <h4>Report Detail</h4>
-            <h5>INFO</h5>
             <ul>
+                <li class="h6">ID Report: {{ $reports->id }}</li>
                 <li class="h6">Branch: {{ $reports->branches->name }}</li>
                 <li class="h6">Submitted by: {{ $reports->users->name }}</li>
                 <li class="h6">On: {{ \Carbon\Carbon::parse($reports->record_date)->format('M d, Y H:i:s') }}</li>
@@ -62,12 +62,12 @@
             <div class="row">
                 @foreach($reports->documents as $document)
                     <div class="col-md-3">
-                        <a href="{{ asset('/images/'.$document->pic_path) }}"
+                        <a href="{{ asset('/images/reports/'.$document->pic_path) }}"
                            data-title="{{ $document->pic_path }}"
                            data-lightbox="document">
                             <img class="img-thumbnail"
-                                 src="{{ asset('/images/'.$document->pic_path) }}"
-                                 alt="File {{ asset('/images/'.$document->pic_path) }}">
+                                 src="{{ asset('/images/reports/'.$document->pic_path) }}"
+                                 alt="File {{ asset('/images/reports/'.$document->pic_path) }}">
                         </a>
                     </div>
                 @endforeach
