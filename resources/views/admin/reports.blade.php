@@ -42,7 +42,7 @@
                             <td>{{ $report->documents->count() }}</td>
                             <td>
                                 <a href="{{ url('/reports/detail/' . $report->id) }}"
-                                   class="btn btn-link">See details</a>
+                                   class="btn btn-outline-primary">See details</a>
                             </td>
                         </tr>
                     @endforeach

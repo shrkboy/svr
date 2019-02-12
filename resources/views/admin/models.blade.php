@@ -19,10 +19,16 @@
 @section('content')
     <div class="container-fluid">
         <div class="col-md-auto">
-            <h4>Bike Models</h4>
-            <a class="btn btn-primary" role="button" href="#">Add Model</a>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <h4>Bike Models</h4>
+                </div>
+                <div class="col-md-6">
+                    <a class="btn btn-primary float-right" role="button" href="{{url('/register')}}">Add Model</a>
+                </div>
+            </div>
             <div class="table-responsive">
-                <table class="table table-striped">
+                <table class="table table-sm table-striped">
                     <thead>
                     <tr>
                         <th scope="col">Name</th>
@@ -43,6 +49,7 @@
                     </tbody>
                 </table>
             </div>
+
         </div>
     </div>
 @endsection
