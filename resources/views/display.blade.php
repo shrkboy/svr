@@ -30,7 +30,6 @@
                 <a class="nav-link" href="{{url('/users')}}">Users</a>
             </li>
         @endif
-
     </ul>
 @stop
 

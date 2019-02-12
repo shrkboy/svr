@@ -2,7 +2,7 @@
 
 @section('navmenu')
     <ul class="navbar-nav mr-auto">
-        @if(\Illuminate\Support\Facades\Auth::user()->is_admin)
+        @if(auth()->user()->is_admin)
             <li class="nav-item">
                 <a class="nav-link" href="{{url('/users')}}">Users</a>
             </li>
@@ -13,9 +13,6 @@
                 <a class="nav-link" href="{{url('/models')}}">Bike Models</a>
             </li>
         @endif
-        <li class="nav-item">
-            <a class="nav-link" href="{{url('/display')}}">Display</a>
-        </li>
     </ul>
 @stop
 
