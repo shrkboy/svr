@@ -23,33 +23,35 @@
     <div class="container-fluid">
         <div class="col-md-auto">
             <h4>Reports</h4>
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Username</th>
-                    <th scope="col">Branch</th>
-                    <th scope="col">Record Date</th>
-                    <th scope="col">Files Count</th>
-                    <th scope="col">Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach($reports as $report)
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
                     <tr>
-                        <td scope="row">{{$report->users->name }}</td>
-                        <td>{{ $report->users->username }}</td>
-                        <td>{{ $report->branches->name }}</td>
-                        <td>{{ $report->record_date }}</td>
-                        <td>{{ $report->documents->count() }}</td>
-                        <td>
-                            <a href="{{ url('/reports/detail/' . $report->id) }}"
-                               class="btn btn-default">Details</a>
-                        </td>
+                        <th scope="col">Branch</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Record Date and Time</th>
+                        <th scope="col">Files Count</th>
+                        <th scope="col">Actions</th>
                     </tr>
-                @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    @foreach($reports as $report)
+                        <tr>
+                            <td scope="row">{{ $report->branches->name }}</td>
+                            <td>{{$report->users->name }}</td>
+                            <td>{{ $report->users->username }}</td>
+                            <td>{{ \Carbon\Carbon::parse($report->record_date)->format('M d, Y H:i:s') }}</td>
+                            <td>{{ $report->documents->count() }}</td>
+                            <td>
+                                <a href="{{ url('/reports/detail/' . $report->id) }}"
+                                   class="btn btn-info">See details</a>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 @endsection

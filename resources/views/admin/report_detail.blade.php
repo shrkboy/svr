@@ -25,29 +25,31 @@
             <h4>Report Detail</h4>
             <h6>Branch: {{ $reports->branches->name }}</h6>
             <h6>Submitted by: {{ $reports->users->name }}</h6>
-            <h6>On: {{ \Carbon\Carbon::parse($record_date)->format('H:i d M Y') }}</h6>
-            <table class="table table-striped" style="table-layout: fixed">
-                <thead>
-                <tr>
-                    <th scope="col">Models</th>
-                    <th scope="col">Display Qty</th>
-                    <th scope="col">Talker</th>
-                    <th scope="col">Flayer</th>
-                    <th scope="col">Streamer</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach($reports->details as $detail)
+            <h6>On: {{ \Carbon\Carbon::parse($record_date)->format('M d, Y H:i:s') }}</h6>
+            <div class="table-responsive">
+                <table class="table table-striped" style="table-layout: fixed">
+                    <thead>
                     <tr>
-                        <td scope="row">{{$detail->code_model}}</td>
-                        <td>{{ $detail->dsp_qty }}</td>
-                        <td>{{ $detail->talker }}</td>
-                        <td>{{ $detail->flayer }}</td>
-                        <td>{{ $detail->streamer }}</td>
+                        <th scope="col">Models</th>
+                        <th scope="col">Display Qty</th>
+                        <th scope="col">Talker</th>
+                        <th scope="col">Flayer</th>
+                        <th scope="col">Streamer</th>
                     </tr>
-                @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    @foreach($reports->details as $detail)
+                        <tr>
+                            <td scope="row">{{$detail->code_model}}</td>
+                            <td>{{ $detail->dsp_qty }}</td>
+                            <td>{{ $detail->talker }}</td>
+                            <td>{{ $detail->flayer }}</td>
+                            <td>{{ $detail->streamer }}</td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
             <div id="documentCarousel" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
                     @foreach($reports->documents as $document)

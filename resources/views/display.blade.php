@@ -61,43 +61,47 @@
                     <select name="branch" id="branch" class="form-control" style="width: 100%;">
                     </select>
                 </div>
-                <table class="table table-striped" style="table-layout: fixed">
-                    <thead>
-                    <tr>
-                        <th scope="col">Models</th>
-                        <th scope="col">Display Qty</th>
-                        <th scope="col">Talker</th>
-                        <th scope="col">Flyer</th>
-                        <th scope="col">Streamer</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($models as $model)
+                <div class="table-responsive">
+                    <table class="table table-striped" style="table-layout: fixed">
+                        <thead>
                         <tr>
-                            <td scope="row">{{$model->code}}</td>
-                            <td>
-                                <input type="text" name="code[]" value="{{ $model->code }}" readonly hidden>
-                                <input type="number" min=0 max=999 name="display-qty_{{$model->code}}"
-                                       class="form-control"
-                                       style="width: 100%">
-                            </td>
-                            <td>
-                                <input type="number" min=0 max=999 name="talker_{{$model->code}}" class="form-control"
-                                       style="width: 100%">
-                            </td>
-                            <td>
-                                <input type="number" min=0 max=999 name="flyer_{{$model->code}}" class="form-control"
-                                       style="width: 100%">
-                            </td>
-                            <td>
-                                <input type="number" min=0 max=999 name="streamer_{{$model->code}}"
-                                       class="form-control"
-                                       style="width: 100%">
-                            </td>
+                            <th scope="col">Models</th>
+                            <th scope="col">Display Qty</th>
+                            <th scope="col">Talker</th>
+                            <th scope="col">Flyer</th>
+                            <th scope="col">Streamer</th>
                         </tr>
-                    @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        @foreach($models as $model)
+                            <tr>
+                                <td scope="row">{{$model->code}}</td>
+                                <td>
+                                    <input type="text" name="code[]" value="{{ $model->code }}" readonly hidden>
+                                    <input type="number" min=0 max=999 name="display-qty_{{$model->code}}"
+                                           class="form-control"
+                                           style="width: 100%">
+                                </td>
+                                <td>
+                                    <input type="number" min=0 max=999 name="talker_{{$model->code}}"
+                                           class="form-control"
+                                           style="width: 100%">
+                                </td>
+                                <td>
+                                    <input type="number" min=0 max=999 name="flyer_{{$model->code}}"
+                                           class="form-control"
+                                           style="width: 100%">
+                                </td>
+                                <td>
+                                    <input type="number" min=0 max=999 name="streamer_{{$model->code}}"
+                                           class="form-control"
+                                           style="width: 100%">
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
                 <label class="h5" for="document">Documents</label>
                 <input type="file" name="document[]" accept="image/*" id="document-input" class="form-control"
                        multiple>

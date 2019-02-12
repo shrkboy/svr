@@ -24,26 +24,28 @@
         <div class="col-md-auto">
             <h4>Bike Models</h4>
             <a class="btn btn-primary" role="button" href="#">Add Model</a>
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Code</th>
-                    <th scope="col">Color</th>
-                    <th scope="col">Specification</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach($bike_models as $bike_model)
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
                     <tr>
-                        <td scope="row">{{ $bike_model->user_name }}</td>
-                        <td scope="row">{{ $bike_model->code }}</td>
-                        <td scope="row">{{ $bike_model->color }}</td>
-                        <td scope="row">{{ $bike_model->spec }}</td>
+                        <th scope="col">Name</th>
+                        <th scope="col">Code</th>
+                        <th scope="col">Color</th>
+                        <th scope="col">Specification</th>
                     </tr>
-                @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    @foreach($bike_models as $bike_model)
+                        <tr>
+                            <td scope="row">{{ $bike_model->user_name }}</td>
+                            <td scope="row">{{ $bike_model->code }}</td>
+                            <td scope="row">{{ $bike_model->color }}</td>
+                            <td scope="row">{{ $bike_model->spec }}</td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 @endsection

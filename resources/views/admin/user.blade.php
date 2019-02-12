@@ -2,7 +2,7 @@
 
 @section('head-script')
     <!-- Select2 -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 @endsection
 
@@ -31,9 +31,7 @@
         <div class="col-md-auto">
             <h4>Users</h4>
             <a class="btn btn-primary" role="button" href="{{url('/register')}}">Add User</a>
-            {{--<h6 id="logs">Log here:</h6>--}}
-            <form method="post" action="{{ url('/display') }}" enctype="multipart/form-data">
-                {{ csrf_field() }}
+            <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
                     <tr>
@@ -58,7 +56,7 @@
                     @endforeach
                     </tbody>
                 </table>
-            </form>
+            </div>
         </div>
     </div>
 @endsection
