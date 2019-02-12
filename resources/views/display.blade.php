@@ -75,23 +75,23 @@
                     <tbody>
                     @foreach($models as $model)
                         <tr>
-                            <td scope="row">{{$model->name}}</td>
+                            <td scope="row">{{$model->code}}</td>
                             <td>
-                                <input type="text" name="id[]" value="{{ $model->id }}" readonly hidden>
-                                <input type="number" min=0 max=999 name="display-qty_{{$model->id}}"
+                                <input type="text" name="code[]" value="{{ $model->code }}" readonly hidden>
+                                <input type="number" min=0 max=999 name="display-qty_{{$model->code}}"
                                        class="form-control"
                                        style="width: 100%">
                             </td>
                             <td>
-                                <input type="number" min=0 max=999 name="talker_{{$model->id}}" class="form-control"
+                                <input type="number" min=0 max=999 name="talker_{{$model->code}}" class="form-control"
                                        style="width: 100%">
                             </td>
                             <td>
-                                <input type="number" min=0 max=999 name="flyer_{{$model->id}}" class="form-control"
+                                <input type="number" min=0 max=999 name="flyer_{{$model->code}}" class="form-control"
                                        style="width: 100%">
                             </td>
                             <td>
-                                <input type="number" min=0 max=999 name="streamer_{{$model->id}}"
+                                <input type="number" min=0 max=999 name="streamer_{{$model->code}}"
                                        class="form-control"
                                        style="width: 100%">
                             </td>

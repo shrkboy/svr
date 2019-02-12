@@ -12,13 +12,10 @@
             <a class="nav-link" href="{{url('/display')}}">Home</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{url('/display')}}">Display</a>
+            <a class="nav-link" href="{{url('/display')}}">Reports</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{url('/display')}}">Retail</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{url('/display')}}">Calendar</a>
+            <a class="nav-link" href="{{url('/display')}}">Models</a>
         </li>
         @if(\Illuminate\Support\Facades\Auth::user()->is_admin)
             <li class="nav-item active">
