@@ -30,7 +30,7 @@ class ReportController extends Controller
     {
         //
         $branches = Branch::all();
-        $models = BikeModel::all();
+        $models = BikeModel::distinct()->get(['code']);
         return view('display', compact('branches','models'));
     }
 
@@ -86,7 +86,7 @@ class ReportController extends Controller
 
             }
 
-            foreach ($request->input('id') as $i) {
+            foreach ($request->input('code') as $i) {
 
                 $report_detail = new DetailReport;
 
@@ -95,7 +95,7 @@ class ReportController extends Controller
                 $flyer = $request->input('flyer_' . $i);
                 $streamer = $request->input('streamer_' . $i);
 
-                $report_detail->id_model = $i;
+                $report_detail->code_model = $i;
                 $report_detail->dsp_qty = $qty;
                 $report_detail->talker = $talker;
                 $report_detail->flayer = $flyer;

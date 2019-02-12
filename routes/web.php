@@ -22,7 +22,7 @@ $this->post('logout', 'Auth\LoginController@logout')->name('logout');
 
 // Registration Routes...
 $this->get('register', 'Auth\RegisterController@showRegistrationForm')->name('register')->middleware('is_admin');
-$this->post('register', 'Auth\RegisterController@register');
+$this->post('register', 'Auth\RegisterController@register')->middleware('is_admin');
 
 // Password Reset Routes...
 $this->get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
@@ -35,4 +35,4 @@ $this->post('password/reset', 'Auth\ResetPasswordController@reset');
 Route::resource('display','ReportController');
 Route::resource('admin','AdminController')->middleware('is_admin');
 
-Route::resource('branch','BranchController')->middleware('auth');
+Route::resource('branch','BranchController');
