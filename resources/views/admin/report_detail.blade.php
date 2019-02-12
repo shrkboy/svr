@@ -3,13 +3,13 @@
 @section('navmenu')
     <ul class="navbar-nav mr-auto">
         @if(\Illuminate\Support\Facades\Auth::user()->is_admin)
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="{{url('/users')}}">Users</a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="{{url('/reports')}}">Reports</a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="{{url('/models')}}">Bike Models</a>
             </li>
         @endif
