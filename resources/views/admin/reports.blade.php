@@ -20,6 +20,14 @@
     <div class="container-fluid">
         <div class="col-md-auto">
             <h4>Reports</h4>
+            <div class="col-md-4 mb-3">
+                <label for="month">Filter by Month</label>
+                <form action="{{ url('/reports') }}" method="get" class="form-inline">
+                    <input id="month" name="month" type="month" class="form-control mr-2"
+                           value="{{ $month }}">
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                </form>
+            </div>
             <div class="table-responsive">
                 <table class="table table-sm table-striped">
                     <thead>
