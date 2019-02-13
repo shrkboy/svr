@@ -6,7 +6,9 @@ use App\BikeModel;
 use App\DetailReport;
 use App\Report;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 
 class AdminController extends Controller
 {
@@ -30,8 +32,19 @@ class AdminController extends Controller
 
     public function report()
     {
-        $reports = Report::with(['users','branches','documents'])->get();
-        return view('admin.reports', compact('reports'));
+        if ( $filter = Input::get('month'))
+        {
+            $year = new Carbon($filter);
+            $month = new Carbon($filter);
+            $reports = Report::with(['users','branches','documents'])->whereMonth('record_date','=',$month->format('m'))->whereYear('record_date','=',$year->format('Y'))->get();
+            return view('admin.reports', compact('reports','filter'));
+        }
+        $year = Carbon::now()->format('Y');
+        $month = Carbon::now()->format('m');
+        $reports = Report::with(['users','branches','documents'])->whereMonth('record_date','=',$month)->whereYear('record_date','=',$year)->get();
+
+        $filter = Carbon::now()->format('Y-m');
+        return view('admin.reports', compact('reports','filter'));
     }
 
     public function detail_report($id)

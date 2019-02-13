@@ -24,7 +24,7 @@
                 <label for="month">Filter by Month</label>
                 <form action="{{ url('/reports') }}" method="get" class="form-inline">
                     <input id="month" name="month" type="month" class="form-control mr-2"
-                           value="{{ $month }}">
+                           value="{{ $filter }}">
                     <button type="submit" class="btn btn-primary">Filter</button>
                 </form>
             </div>
