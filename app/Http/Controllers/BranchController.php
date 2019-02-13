@@ -53,7 +53,7 @@ class BranchController extends Controller
     public function show($name)
     {
         //
-        return Branch::where('name','like',$name.'%')->take(10)->get();
+        return Branch::where('dlname','like',$name.'%')->take(10)->get();
     }
 
     /**

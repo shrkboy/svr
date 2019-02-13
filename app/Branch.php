@@ -8,4 +8,5 @@ class Branch extends Model
 {
     //
     public $timestamps = false;
+    protected $table = 'TS_DEALERLIST';
 }

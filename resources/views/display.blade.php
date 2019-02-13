@@ -129,7 +129,7 @@
                         return {
                             results: $.map(data, function (item) {
                                 return {
-                                    text: item.name,
+                                    text: item.dlname,
                                     id: item.id
                                 }
                             })
