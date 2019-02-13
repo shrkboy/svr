@@ -19,12 +19,27 @@
 @section('content')
     <div class="container-fluid">
         <div class="col-md-auto">
+            @if(Session::has('success'))
+                <div class="alert alert-success mx-auto" role="alert">
+                    {{ Session::get('success') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @elseif (Session::has('failed'))
+                <div class="alert alert-danger mx-auto" role="alert">
+                    {{ Session::get('failed') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
             <div class="row mb-3">
                 <div class="col-md-6">
                     <h4>Bike Models</h4>
                 </div>
                 <div class="col-md-6">
-                    <a class="btn btn-primary float-right" role="button" href="{{url('/register')}}">Add Model</a>
+                    <a class="btn btn-primary float-right" role="button" href="{{url('/models/add')}}">Add Model</a>
                 </div>
             </div>
             <div class="table-responsive">

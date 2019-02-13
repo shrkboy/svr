@@ -38,7 +38,6 @@ class AdminController extends Controller
     {
         $reports = Report::where('id',$id)->with(['users','branches','documents','details'])->first();
         return view('admin.report_detail', compact('reports'));
-//        return $reports;
     }
 
     public function model()
@@ -47,11 +46,26 @@ class AdminController extends Controller
         return view('admin.models', compact('models'));
     }
 
-    public function insert_model()
+    public function showInsertModel()
     {
-        $models = BikeModel::all();
-        return view('admin.models', compact('models'));
+        return view('admin.add_model');
     }
 
+    public function InsertModel(Request $request)
+    {
+        try{
+            $newModel = new BikeModel;
+            $newModel->name = $request->name;
+            $newModel->code = $request->code;
+            $newModel->color = $request->color;
+            $newModel->spec = $request->specification;
+
+            $newModel->save();
+            return redirect('/models')->with('success', 'New model inserted successfully');
+        }
+        catch (Exception $e){
+            return redirect('/models')->with('failed', 'Woops, something is wrong!');
+        }
+    }
 
 }

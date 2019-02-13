@@ -8,7 +8,7 @@
                     <div class="card-header">Add New Bike Model</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('model/insert') }}">
+                        <form method="POST" action="{{ route('models') }}">
                             @csrf
 
                             <div class="form-group row">
@@ -29,9 +29,8 @@
 
                             <div class="form-group row">
                                 <label for="color" class="col-md-4 col-form-label text-md-right">Color</label>
-
                                 <div class="col-md-6">
-                                    <input id="color" type="color" class="form-control" name="color" required>
+                                    <input id="code" type="text" class="form-control" name="color" required>
                                 </div>
                             </div>
 
