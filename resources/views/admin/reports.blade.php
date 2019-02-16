@@ -43,7 +43,7 @@
                     <tbody>
                     @foreach($reports as $report)
                         <tr>
-                            <td scope="row">{{ $report->branches->name }}</td>
+                            <td scope="row">{{ $report->branches->dlname }}</td>
                             <td>{{$report->users->name }}</td>
                             <td>{{ $report->users->username }}</td>
                             <td>{{ \Carbon\Carbon::parse($report->record_date)->format('M d, Y H:i:s') }}</td>

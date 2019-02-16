@@ -30,7 +30,7 @@
             <h4>Report Detail</h4>
             <ul>
                 <li class="h6">ID Report: {{ $reports->id }}</li>
-                <li class="h6">Branch: {{ $reports->branches->name }}</li>
+                <li class="h6">Branch: {{ $reports->branches->dlname }}</li>
                 <li class="h6">Submitted by: {{ $reports->users->name }}</li>
                 <li class="h6">On: {{ \Carbon\Carbon::parse($reports->record_date)->format('M d, Y H:i:s') }}</li>
             </ul>
