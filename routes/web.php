@@ -31,10 +31,10 @@ $this->get('register', 'Auth\RegisterController@showRegistrationForm')->name('re
 $this->post('register', 'Auth\RegisterController@register')->middleware('is_admin');
 
 // Password Reset Routes...
-$this->get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
-$this->post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-$this->get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
-$this->post('password/reset', 'Auth\ResetPasswordController@reset');
+$this->get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request')->middleware('is_admin');
+$this->post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email')->middleware('is_admin');
+$this->get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset')->middleware('is_admin');
+$this->post('password/reset', 'Auth\ResetPasswordController@reset')->middleware('is_admin');
 
 //Auth::routes();
 

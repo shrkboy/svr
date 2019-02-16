@@ -18,7 +18,10 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next, $guard = null)
     {
         if (Auth::guard($guard)->check()) {
-            return redirect('/display');
+            if(Auth::user()->is_admin){
+                return redirect('users'); //redirect to admin panel
+            }
+            return redirect('display'); //redirect to standard user homepage
         }
         return $next($request);
     }
