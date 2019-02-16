@@ -18,7 +18,7 @@
                 <a class="nav-link active" href="{{url('/reports')}}">Reports</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{url('/models')}}">Bike Models</a>
+                <a class="nav-link" href="{{url('/models')}}">MC Models</a>
             </li>
         @endif
     </ul>
@@ -38,7 +38,7 @@
                 <table class="table table-sm table-striped">
                     <thead>
                     <tr>
-                        <th scope="col">Models</th>
+                        <th scope="col">MC Models</th>
                         <th scope="col">Display Qty</th>
                         <th scope="col">Talker</th>
                         <th scope="col">Flayer</th>

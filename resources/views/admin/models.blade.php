@@ -10,7 +10,7 @@
                 <a class="nav-link" href="{{url('/reports')}}">Reports</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="{{url('/models')}}">Bike Models</a>
+                <a class="nav-link" href="{{url('/models')}}">MC Models</a>
             </li>
         @endif
     </ul>
@@ -36,7 +36,7 @@
             @endif
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <h4>Bike Models</h4>
+                    <h4>MC Models</h4>
                 </div>
                 <div class="col-md-6">
                     <a class="btn btn-primary float-right" role="button" href="{{url('/models/add')}}">Add Model</a>
@@ -50,6 +50,7 @@
                         <th scope="col">Code</th>
                         <th scope="col">Color</th>
                         <th scope="col">Specification</th>
+                        <th scope="col">Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -59,6 +60,10 @@
                             <td scope="row">{{ $bike_model->code }}</td>
                             <td scope="row">{{ $bike_model->color }}</td>
                             <td scope="row">{{ $bike_model->spec }}</td>
+                            {{-- TODO: Add EDIT Url --}}
+                            <td scope="row">
+                                <a href="#" class="btn btn-outline-primary">Edit</a>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>

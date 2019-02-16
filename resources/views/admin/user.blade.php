@@ -16,7 +16,7 @@
                 <a class="nav-link" href="{{url('/reports')}}">Reports</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{url('/models')}}">Bike Models</a>
+                <a class="nav-link" href="{{url('/models')}}">MC Models</a>
             </li>
         @endif
     </ul>
@@ -41,6 +41,7 @@
                         <th scope="col">Email</th>
                         <th scope="col">Username</th>
                         <th scope="col">Role</th>
+                        <th scope="col">Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -54,6 +55,11 @@
                             @else
                                 <td>{{'User'}}</td>
                             @endif
+                            {{-- TODO: Add EDIT Url --}}
+                            <td>
+                                <a href="#" class="btn btn-outline-primary">Edit</a>
+                                <a href="#" class="btn btn-outline-primary">Change Password</a>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
