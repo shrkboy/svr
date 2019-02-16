@@ -81,4 +81,31 @@ class AdminController extends Controller
         }
     }
 
+
+    /* Update Model Methode */
+
+    public function showUpdateModelForm($id){
+        $models = BikeModel::find($id);
+
+        return view('admin.update_model', compact('models'));
+    }
+
+    public function UpdateModel(Request $request){
+
+        try{
+            $model = BikeModel::find($request->id);
+
+            $model->name = $request->name;
+            $model->code = $request->code;
+            $model->color = $request->color;
+            $model->spec = $request->specification;
+
+            $model->save();
+            return redirect('/models')->with('success', 'Model updated successfully');
+        }
+        catch (Exception $e){
+            return redirect('/models')->with('failed', 'Woops, something is wrong!');
+        }
+    }
+
 }

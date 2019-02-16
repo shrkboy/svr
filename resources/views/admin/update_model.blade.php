@@ -8,16 +8,16 @@
                     <div class="card-header">Update MC Model</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('models') }}">
+                        <form method="POST" action="{{ route('models.update') }}">
                             @csrf
 
-                            <input id="id" type="text" name="id" hidden>
+                            <input id="id" type="text" name="id" value="{{$models->id}}" hidden>
 
                             <div class="form-group row">
                                 <label for="name" class="col-md-4 col-form-label text-md-right">Name</label>
 
                                 <div class="col-md-6">
-                                    <input id="name" type="text" class="form-control" name="name" value="{{ $model[0]->name }}" required autofocus>
+                                    <input id="name" type="text" class="form-control" name="name" value="{{ $models->name }}" required autofocus>
                                 </div>
                             </div>
 
@@ -25,14 +25,14 @@
                                 <label for="code" class="col-md-4 col-form-label text-md-right">Code</label>
 
                                 <div class="col-md-6">
-                                    <input id="code" type="text" class="form-control" name="code" value="{{ $model[0]->code }}" required>
+                                    <input id="code" type="text" class="form-control" name="code" value="{{ $models->code }}" required>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label for="color" class="col-md-4 col-form-label text-md-right">Color</label>
                                 <div class="col-md-6">
-                                    <input id="code" type="text" class="form-control" name="color" value="{{ $model[0]->color }}" required>
+                                    <input id="code" type="text" class="form-control" name="color" value="{{ $models->color }}" required>
                                 </div>
                             </div>
 
@@ -43,7 +43,7 @@
                                 <div class="col-md-6">
                                     <textarea id="specification" class="form-control" name="specification"
                                               required>
-                                        {{ $model[0]->specification }}
+                                        {{ $models->spec }}
                                     </textarea>
                                 </div>
                             </div>

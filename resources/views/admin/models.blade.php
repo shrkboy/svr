@@ -62,7 +62,7 @@
                             <td scope="row">{{ $bike_model->spec }}</td>
                             {{-- TODO: Add EDIT Url --}}
                             <td scope="row">
-                                <a href="#" class="btn btn-outline-primary">Edit</a>
+                                <a href="{{url('/models/edit/'. $bike_model->id)}}" class="btn btn-outline-primary">Edit</a>
                             </td>
                         </tr>
                     @endforeach
