@@ -41,7 +41,6 @@
                         <th scope="col">Email</th>
                         <th scope="col">Username</th>
                         <th scope="col">Role</th>
-                        <th scope="col">Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -55,11 +54,6 @@
                             @else
                                 <td>{{'User'}}</td>
                             @endif
-                            {{-- TODO: Add EDIT Url --}}
-                            <td>
-                                <a href="#" class="btn btn-outline-primary">Edit</a>
-                                <a href="#" class="btn btn-outline-primary">Change Password</a>
-                            </td>
                         </tr>
                     @endforeach
                     </tbody>
