@@ -8,7 +8,7 @@
                     <div class="card-header">Add New MC Model</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('models') }}">
+                        <form method="POST" action="{{ route('models.add') }}">
                             @csrf
 
                             <div class="form-group row">

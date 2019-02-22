@@ -51,7 +51,7 @@ Route::get('reports/detail/{id}','AdminController@detail_report')->name('reports
 //Admin Model Route
 Route::get('models','AdminController@model')->name('models')->middleware('is_admin');
 Route::get('models/add','AdminController@showInsertModel')->name('models')->middleware('is_admin');
-Route::post('models/add','AdminController@InsertModel')->name('models')->middleware('is_admin');
+Route::post('models/add','AdminController@InsertModel')->name('models.add')->middleware('is_admin');
 Route::get('models/edit/{id}','AdminController@showUpdateModelForm')->name('models')->middleware('is_admin');
 Route::post('models/edit','AdminController@UpdateModel')->name('models.update')->middleware('is_admin');
 
