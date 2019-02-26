@@ -25,54 +25,76 @@ class AdminController extends Controller
 
     public function user()
     {
-        //
+        /*
+         * Method for getting all user from database and display it in user view inside admin folder
+         * */
         $users = User::all();
         return view('admin.user', compact('users'));
     }
 
     public function report()
     {
+        /*
+         * Method for displaying all records from table reports
+         * */
+
+        /*Checking if there is alredy filter for the reports table*/
         if ( $filter = Input::get('month'))
         {
+            /*sub setting filter to year and month variable*/
             $year = new Carbon($filter);
             $month = new Carbon($filter);
-            $reports = Report::with(['users','branches','documents'])->whereMonth('record_date','=',$month->format('m'))->whereYear('record_date','=',$year->format('Y'))->get();
+
+            /*Get reports data filtered by month*/
+            $reports = Report::with(['users','branches','documents'])->whereMonth('record_date','=',
+                $month->format('m'))->whereYear('record_date','=',$year->format('Y'))->get();
             return view('admin.reports', compact('reports','filter'));
         }
+        /*if there isn't any filter variable yet*/
         $year = Carbon::now()->format('Y');
         $month = Carbon::now()->format('m');
-        $reports = Report::with(['users','branches','documents'])->whereMonth('record_date','=',$month)->whereYear('record_date','=',$year)->get();
 
+        /*Get reports data filtered by this month*/
+        $reports = Report::with(['users','branches','documents'])->whereMonth('record_date',
+            '=',$month)->whereYear('record_date','=',$year)->get();
         $filter = Carbon::now()->format('Y-m');
         return view('admin.reports', compact('reports','filter'));
     }
 
     public function detail_report($id)
     {
+        /*Getting the detail for selected reports*/
         $reports = Report::where('id',$id)->with(['users','branches','documents','details'])->first();
         return view('admin.report_detail', compact('reports'));
     }
 
     public function model()
     {
+        /*Getting all models then show it in models view insode admin folder*/
         $models = BikeModel::all();
         return view('admin.models', compact('models'));
     }
 
     public function showInsertModel()
     {
+        /*Method for showing add model view*/
         return view('admin.add_model');
     }
 
     public function InsertModel(Request $request)
     {
+        /*
+         * Inserting new records to model table
+         * */
         try{
+            /*Getting data from posted value*/
             $newModel = new BikeModel;
             $newModel->name = $request->name;
             $newModel->code = $request->code;
             $newModel->color = $request->color;
             $newModel->spec = $request->specification;
 
+            /*save to db*/
             $newModel->save();
             return redirect('/models')->with('success', 'New model inserted successfully');
         }
@@ -83,10 +105,8 @@ class AdminController extends Controller
 
 
     /* Update Model Methode */
-
     public function showUpdateModelForm($id){
         $models = BikeModel::find($id);
-
         return view('admin.update_model', compact('models'));
     }
 

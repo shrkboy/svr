@@ -28,7 +28,7 @@ class ReportController extends Controller
 
     public function index()
     {
-        //
+        /*Showing table model and getting all branch for display view*/
         $branches = Branch::all();
         $models = BikeModel::distinct()->get(['code']);
         return view('display', compact('branches','models'));
@@ -52,9 +52,9 @@ class ReportController extends Controller
      */
     public function store(Request $request)
     {
-//
-////        return $request;
-
+        /*
+         * Method for saving reports to db
+         * */
         try {
             $current_time = Carbon::now()->toDateTimeString();
 
@@ -65,7 +65,6 @@ class ReportController extends Controller
 
             $report->save();
 
-//      Upload File to document
             if ($file = $request->file('document')) {
                 foreach ($file as $document) {
                     $last = Document::latest('id')->first();
@@ -103,12 +102,6 @@ class ReportController extends Controller
                 $report_detail->id_report = $report->id;
 
                 $report_detail->save();
-
-//            $data=array("id_user"=> auth()->user()->id, "id_branch"=> 1, "id_model"=> $i,"dsp_qty"=>$qty,"talker"=>$talker,"flayer"=>$flyer,
-//                "streamer"=>$streamer, 'record_date'=>$current_time, 'pic_path' => $name);
-//            DB::table('reports')->insert($data);
-
-
             }
 
             return redirect('/display')->with('success', 'Report inserted successfully');
