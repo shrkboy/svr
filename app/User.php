@@ -27,4 +27,9 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function warehouse()
+    {
+        return $this->hasOne('App/Warehouse','warehouse_id');
+    }
 }
