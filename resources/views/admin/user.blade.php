@@ -8,7 +8,7 @@
 
 @section('navmenu')
     <ul class="navbar-nav mr-auto">
-        @if(auth()->user()->is_admin)
+        @if(auth()->user()->id_role == 2)
             <li class="nav-item active">
                 <a class="nav-link" href="{{url('/users')}}">Users</a>
             </li>

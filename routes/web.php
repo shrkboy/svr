@@ -13,7 +13,7 @@
 
 Route::get('/', function () {
     if ($user = auth()->user()){
-        if ($user->is_admin)
+        if ($user->id_role == 2)
         {
             return redirect()->route('users');
         }
