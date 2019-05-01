@@ -16,7 +16,7 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if ($request->user() && $request->user()->role != 'svrmanager')
+        if ($request->user() && $request->user()->id_role != '2')
         {
             return new Response(view('unauth'));
         }
