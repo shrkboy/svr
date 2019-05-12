@@ -4,17 +4,17 @@
     <ul class="navbar-nav mr-auto">
         @if(auth()->user()->id_role == 4)
             <li class="nav-item">
-                <a href="shipments.html" class="nav-link">Shipments</a>
+                <a href="{{ url('/shipments') }}" class="nav-link disabled">Shipments</a>
             </li>
             <li class="nav-item">
-                <a href="returned-items.html" class="nav-link">Returned Items</a>
+                <a href="#" class="nav-link">Returned Items</a>
             </li>
         @endif
     </ul>
     <div class="form-inline my-2 my-lg-0">
         <a class="btn btn-link my-2 my-sm-0" href="#">Logout</a>
     </div>
-@stop
+@endsection
 
 @section('content')
     <div class="container-fluid">
@@ -25,7 +25,7 @@
                 <h3 id="clock">Loading clock</h3>
             </div>
             <div class="col-md text-right m-auto">
-                <a name="new-shipment" id="new-shipment" class="btn btn-primary" href="#" role="button">New shipment</a>
+                <a name="new-shipment" id="new-shipment" class="btn btn-primary" href="{{ url('/shipments/new') }}" role="button">New shipment</a>
                 <a name="return-items" id="return-items" class="btn btn-primary" href="#" role="button">Return items</a>
             </div>
         </div>
@@ -84,4 +84,3 @@
 @section('script')
     <script src="{{ asset('js/clock-and-date.js') }}"></script>
 @endsection
-

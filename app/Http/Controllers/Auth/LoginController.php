@@ -38,7 +38,7 @@ class LoginController extends Controller
     }
 
     //redirect after login
-    protected function authenticated($request,$user){
+    protected function authenticated($request, $user){
         if($user->id_role == 2){
             return redirect('users'); //redirect to admin panel
         }

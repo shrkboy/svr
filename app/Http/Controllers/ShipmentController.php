@@ -21,7 +21,7 @@ class ShipmentController extends Controller
     public function index()
     {
         $warehouse = session('warehouse_id', null);
-        $shipments = Shipment::where('warehouse_id', $warehouse)->get();
+        $shipments = Shipment::where('warehouse_id', $warehouse)->paginate(50);
         return view('shipment.shipments', compact('shipments','shipments'));
     }
 
