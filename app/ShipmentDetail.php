@@ -8,11 +8,11 @@ class ShipmentDetail extends Model
 {
     public function shipment()
     {
-        $this->belongsTo('App/Shipment','shipment_id');
+        return $this->belongsTo('App/Shipment','shipment_id');
     }
 
-    public function bike_model()
+    public function inventory()
     {
-        $this->belongsTo('App/BikeModel','bike_model_id');
+        return $this->belongsTo('App/WarehouseInventory','inventory_id');
     }
 }

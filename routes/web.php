@@ -55,3 +55,6 @@ Route::post('models/add','AdminController@InsertModel')->name('models.add')->mid
 Route::get('models/edit/{id}','AdminController@showUpdateModelForm')->name('models')->middleware('is_admin');
 Route::post('models/edit','AdminController@UpdateModel')->name('models.update')->middleware('is_admin');
 
+//Shipments
+Route::get('shipments', 'ShipmentController@index')->middleware('is_warehouse_operator');
+Route::get('shipments/new', 'ShipmentController@create')->middleware('is_warehouse_operator');

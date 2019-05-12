@@ -30,6 +30,6 @@ class User extends Authenticatable
 
     public function warehouse()
     {
-        return $this->hasOne('App/Warehouse','warehouse_id');
+        return $this->belongsTo('App/Warehouse','warehouse_id');
     }
 }
