@@ -2,9 +2,8 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -16,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'username','is_admin'
+        'name', 'email', 'password', 'username', 'role_id'
     ];
 
     /**
@@ -30,6 +29,11 @@ class User extends Authenticatable
 
     public function warehouse()
     {
-        return $this->belongsTo('App/Warehouse','warehouse_id');
+        return $this->belongsTo('App/Warehouse', 'warehouse_id');
+    }
+
+    public function role()
+    {
+        return $this->hasOne('App/UserRole', 'role_id');
     }
 }

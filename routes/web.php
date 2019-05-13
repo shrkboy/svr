@@ -41,6 +41,7 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset')->middleware(
 //Display Route
 Route::resource('display','ReportController');
 Route::resource('branch','BranchController');
+Route::resource('role','UserRoleController');
 
 //Admin Route
 Route::get('users','AdminController@user')->name('users')->middleware('is_admin');

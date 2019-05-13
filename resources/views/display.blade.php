@@ -1,13 +1,8 @@
 @extends('layouts.app')
 
-@section('head-script')
-    <!-- Select2 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
-    <script src="{{ asset('js/custom.js') }}"></script>
-@endsection
-
 @section('head-styles')
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet"/>
+    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet"/>
+    <link href="{{ asset('css/select2-bootstrap4.min.css') }}" rel="stylesheet"/>
     <link href="{{ asset('css/dropzone.css') }}" rel="stylesheet"/>
 @endsection
 
@@ -57,7 +52,7 @@
                 <div class="form-group">
                     <label for="branch">Select branch</label>
                     <br>
-                    <select name="branch" id="branch" class="form-control" style="width: 100%;">
+                    <select name="branch" id="branch" class="form-control">
                     </select>
                 </div>
                 <div class="table-responsive">
@@ -114,9 +109,14 @@
 @endsection
 
 @section('script')
+    <!-- Select2 -->
+    <script src="{{ asset('js/select2.min.js') }}"></script>
+    <script src="{{ asset('js/custom.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $('#branch').select2({
+                width: '100%',
+                theme: 'bootstrap4',
                 placeholder: 'Select',
                 minimumInputLength: 1,
                 ajax: {
