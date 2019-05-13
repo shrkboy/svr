@@ -43,6 +43,12 @@ Route::resource('display','ReportController');
 Route::resource('branch','BranchController');
 Route::resource('role','UserRoleController');
 
+//Retail Route
+Route::resource('model','BikeModelController');
+Route::resource('retail','RetailReportController');
+Route::get('retailreport','RetailReportController@retail_report');
+Route::get('addretailreport','RetailReportController@add_retail_report');
+
 //Admin Route
 Route::get('users','AdminController@user')->name('users')->middleware('is_admin');
 
