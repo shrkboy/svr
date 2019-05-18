@@ -5,19 +5,16 @@
     <link rel="stylesheet" href="{{ asset('css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/select2-bootstrap4.min.css') }}">
 
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
     <!-- Bootstrap Date Time Picker -->
     <link rel="stylesheet" href="{{ asset('css/bootstrap-datetimepicker.min.css') }}">
 @endsection
 
 @section('content')
     <div class="container-fluid">
-
-        <div class="mt-3 card p-3">
-            <form method="POST" action="#">
-                <h3>New shipment</h3>
+        <div class="card p-3">
+            <form method="POST" action="{{ url('/shipment') }}" enctype="multipart/form-data">
+                {{ csrf_field() }}
+                <h3 class="mmc-title">New shipment</h3>
 
                 <div class="p-2">
                     <div class="form-group row">
@@ -25,9 +22,6 @@
                         <div class="col-lg-4">
                             <select class="form-control" name="destination" id="destination" required>
                                 <option></option>
-                                <option value="1">Calamba</option>
-                                <option value="2">Manila</option>
-                                <option value="3">Nuvali</option>
                             </select>
                         </div>
                     </div>
@@ -63,7 +57,7 @@
                         </div>
                     </div>
 
-                    <div id="detail" class="container-fluid mt-3">
+                    <div id="detail" class="mt-3">
                         <div id="detail-form">
                             <hr>
                             <div id="detail-1">
@@ -75,9 +69,6 @@
                                             <select class="form-control detail-input" type="select" name="bike-model-1"
                                                     id="bike-model-1">
                                                 <option></option>
-                                                <option value="1">Type 1</option>
-                                                <option value="2">Type 2</option>
-                                                <option value="3">Type 3</option>
                                             </select>
                                         </div>
                                         <div class="form-group col-lg-2">
@@ -87,7 +78,7 @@
                                         </div>
                                         <div id="input-vin" class="col-lg-12 row">
                                             <h6 class="col-lg-1">VINs</h6>
-                                            <div id="input-vin-1" class="col-lg row"></div>
+                                            <div id="input-vin-1" class="col-lg"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -105,6 +96,8 @@
                         </div>
                     </div>
 
+                    <input type="text" name="counter" id="counter" readonly hidden>
+
                     <div class="text-right mt-3">
                         <button type="submit" class="btn btn-lg btn-success">Submit</button>
                     </div>
@@ -118,29 +111,96 @@
     <!-- Custom -->
     <script src="{{ asset('js/clock-and-date.js') }}"></script>
     <!-- Select2 -->
-    <script src="{{ asset('js/select2.min.js') }}"></script>
+    <script src="{{ asset('js/select2.full.min.js') }}"></script>
     <!-- Moment -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js" type="text/javascript"></script>
+    <!--FontAwesome-->
+    <script src="https://use.fontawesome.com/094c71b384.js"></script>
+    {{--<script defer src="https://use.fontawesome.com/releases/v5.8.2/js/all.js"--}}
+            {{--integrity="sha384-DJ25uNYET2XCl5ZF++U8eNxPWqcKohUUBUpKGlNLMchM7q4Wjg2CUpjHLaL8yYPH"--}}
+            {{--crossorigin="anonymous"></script>--}}
     <!-- Bootstrap Date Time Picker -->
     <!-- https://www.jqueryscript.net/time-clock/Date-Time-Picker-Bootstrap-4.html -->
     <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}"></script>
+    <!-- Inline -->
     <script>
         $(document).ready(function () {
-            $("#destination").select2({
-                placeholder: 'Select branch destination',
+            // activate select2 to pick shipment destination
+            $('#destination').select2({
                 width: '100%',
-                theme: 'bootstrap4'
+                theme: 'bootstrap4',
+                placeholder: 'Select',
+                minimumInputLength: 1,
+                ajax: {
+                    url: function (params) {
+                        return '{{ url('/branch') }}' + '/' + params.term;
+                    },
+                    delay: 250,
+                    cache: true,
+                    results: function (data) {
+                        return {results: data};
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data, function (item) {
+                                return {
+                                    text: item.dlname,
+                                    id: item.id
+                                }
+                            })
+                        };
+                    },
+                },
             });
 
-            $("#bike-model-1").select2({
-                placeholder: 'Select bike model',
-                width: '100%',
-                theme: 'bootstrap4'
-            });
+            function setBikeModelDropdown(counter) {
+                $("#bike-model-" + counter).select2({
+                    {{--data: '{{ $bike_models }}',--}}
+                    width: '100%',
+                    theme: 'bootstrap4',
+                    placeholder: 'Select bike model',
+                    minimumInputLength: 1,
+                    ajax: {
+                        url: function (params) {
+                            return '{{ url('/bike_model') }}' + '/' + params.term;
+                        },
+                        delay: 250,
+                        cache: true,
+                        results: function (data) {
+                            return {results: data};
+                        },
+                        processResults: function (data) {
+                            return {
+                                results: $.map(data, function (item) {
+                                    return {
+                                        id: item.id,
+                                        text: item.name,
+                                        code: item.code,
+                                        color: item.color,
+                                        spec: item.spec
+                                    }
+                                })
+                            };
+                        },
+                    },
+                    escapeMarkup: function (markup) {
+                        return markup
+                    },
+                    templateResult: function (data) {
+                        console.log(data);
+                        if (!data.id) {
+                            return data.text;
+                        }
+                        return $('<h5>' + data.text + '</h5>' +
+                            '<p>' + data.code +
+                            ' || ' + data.color +
+                            ' || ' + data.spec + '</p>');
+                    },
+                });
+            }
 
             $("#departure").datetimepicker();
             $("#spreadsheet-upload").hide();
-
             $("#use-spreadsheet").change(function () {
                 if (this.checked) {
                     $("#spreadsheet-upload").show();
@@ -151,8 +211,6 @@
                 }
             });
 
-            var counter = 1;
-
             function detailInputHTML(counter) {
                 return '<div id="detail-' + counter + '">' +
                     '<div class="row">' +
@@ -161,7 +219,7 @@
                     '<div class="form-group col-lg-3">' +
                     '<label for="bike-model-' + counter + '">Bike model</label>' +
                     '<select class="form-control detail-input" type="select" name="bike-model-' + counter + '" id="bike-model-' + counter + '">' +
-                    '<option></option><option value="1">Type 1</option><option value="2">Type 2</option><option value="3">Type 3</option>' +
+                    '<option></option>' +
                     '</select>' +
                     '</div>' +
                     '<div class="form-group col-lg-2">' +
@@ -170,7 +228,7 @@
                     '</div>' +
                     '<div class="row col-lg-12">' +
                     '<h6 class="col-lg-1">VINs</h6>' +
-                    '<div id="input-vin-' + counter + '" class="col-lg row"></div>' +
+                    '<div id="input-vin-' + counter + '" class="col-lg"></div>' +
                     '</div>' +
                     '</div>' +
                     '</div>' +
@@ -178,39 +236,61 @@
                     '</div>'
             }
 
+            function setVINInput(counter) {
+                $("input#amount-" + counter).change(function () {
+                    const divInputVin = $("div#input-vin-" + counter);
+                    divInputVin.empty();
+                    for (var i = 0; i < this.value; i++) {
+                        divInputVin.append('<div class="row" id="div-vin-' + counter + '-' + (i + 1) + '">' +
+                            '<input type="text" name="vin-' + counter + '-' + (i + 1) + '" id="vin-' + counter + '-' + (i + 1) + '" class="form-control col-md-4">' +
+                            '<div class="col-md-2">' +
+                            '<i class="m-auto fa fa-2x mr-2" id="mark-' + counter + '-' + (i + 1) + '"></i>' +
+                            '</div>' +
+                            '</div>'
+                        );
+                        $("input#vin-" + counter + "-" + (i + 1)).change(
+                            function () {
+                                const input = $(this);
+                                const mark = $(this).next().children();
+                                $.ajax({
+                                    url: '{{ url('/inventory/validate') }}' + '/' + $('#bike-model-' + counter).val() + '/' + input.val(),
+                                    dataType: "json",
+                                    success: function (data) {
+                                        if ($.isEmptyObject(data)) {
+                                            input.removeClass("is-valid").addClass("is-invalid");
+                                            mark.removeClass("fa-check text-success").addClass("fa-times text-danger");
+                                        } else {
+                                            input.removeClass("is-invalid").addClass("is-valid");
+                                            mark.removeClass("fa-times text-danger").addClass("fa-check text-success");
+                                        }
+                                    },
+                                })
+                            }
+                        )
+                    }
+                });
+            }
+
+            var counter = 1;
+            $('#counter').val(counter);
+            setBikeModelDropdown(counter);
+            setVINInput(counter);
+
             $("a#add-detail").click(function () {
                 if (counter >= 0) {
                     counter++;
+                    $('#counter').val(counter);
                     $("div#detail-form").append(detailInputHTML(counter));
-                    $("input#amount-" + counter).change(function () {
-                        console.log(this.value);
-                    });
 
-                    $("input#amount-" + counter).change(function () {
-                        $("#input-vin-" + counter).empty();
-                        for (var i = 0; i < this.value; i++) {
-                            $("#input-vin-" + counter).append('<input type="text" name="vin-' + counter + '-' + i + '" class="form-control col-lg-3">');
-                        }
-                    });
-                    $("#bike-model-" + counter).select2({
-                        placeholder: 'Select bike model',
-                        width: '100%',
-                        theme: 'bootstrap4'
-                    });
+                    setBikeModelDropdown(counter);
+                    setVINInput(counter)
                 }
             });
-
             $("a#remove-detail").click(function () {
                 if (counter > 0) {
                     $("div#detail-" + counter).remove();
                     counter--;
-                }
-            });
-
-            $("input#amount-1").change(function () {
-                $("#input-vin-1").empty();
-                for (var i = 0; i < this.value; i++) {
-                    $("#input-vin-1").append('<input type="text" name="vin-1-' + (i + 1) + '" class="form-control col-lg-3">')
+                    $('#counter').val(counter);
                 }
             });
         });

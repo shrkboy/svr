@@ -11,21 +11,34 @@
             </li>
         @endif
     </ul>
-    <div class="form-inline my-2 my-lg-0">
-        <a class="btn btn-link my-2 my-sm-0" href="#">Logout</a>
-    </div>
 @endsection
 
 @section('content')
     <div class="container-fluid">
+        @if(Session::has('success'))
+            <div class="alert alert-success mx-auto" role="alert">
+                {{ Session::get('success') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @elseif (Session::has('failed'))
+            <div class="alert alert-danger mx-auto" role="alert">
+                {{ Session::get('failed') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
 
-        <div class="row mt-3">
+        <div class="row">
             <div class="col-md m-auto">
                 <h3 id="date"></h3>
                 <h3 id="clock">Loading clock</h3>
             </div>
             <div class="col-md text-right m-auto">
-                <a name="new-shipment" id="new-shipment" class="btn btn-primary" href="{{ url('/shipments/new') }}" role="button">New shipment</a>
+                <a name="new-shipment" id="new-shipment" class="btn btn-primary" href="{{ url('/shipments/new') }}"
+                   role="button">New shipment</a>
                 <a name="return-items" id="return-items" class="btn btn-primary" href="#" role="button">Return items</a>
             </div>
         </div>
@@ -44,21 +57,21 @@
                 </tr>
                 </thead>
                 <tbody>
-                {{ $i = 1 }}
-                @foreach($shipments as $shipment)
+                @foreach($shipments as $key=>$shipment)
                     <tr>
-                        <td scope="row">{{ $i }}</td>
+                        <td scope="row">{{ ++$key }}</td>
                         <td>{{ $shipment->depart_time }}</td>
-                        <td>{{ $shipment->dealer()->where('id', $shipment->dealer_id) }}</td>
+                        <td>{{ $shipment->dealer->dlname }}</td>
                         <td>{{ $shipment->status }}</td>
                         <td>{{ $shipment->received_time }}</td>
-                        <td><a href="#" class="btn btn-link">Details</a></td>
+                        <td><a href="{{ url('/shipments/detail/'.$shipment->id) }}" class="btn btn-link">Details</a>
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>
             </table>
 
-            <nav>
+            <nav class="align-self-center mt-3">
                 <ul class="pagination" id="pagination">
                     <li class="page-item">
                         <a class="page-link" href="#" aria-label="Previous">
@@ -75,9 +88,7 @@
                     </li>
                 </ul>
             </nav>
-
         </div>
-
     </div>
 @endsection
 

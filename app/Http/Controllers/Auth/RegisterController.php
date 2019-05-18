@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Branch;
 use App\Http\Controllers\Controller;
 use App\User;
+use App\UserRole;
+use App\Warehouse;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
@@ -66,8 +69,7 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'username' => ['required', 'string', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'role_id' => ['required', 'int'],
+            'password' => ['required', 'string', 'min:6', 'confirmed']
         ]);
     }
 
@@ -84,7 +86,16 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'username' => $data['username'],
             'password' => Hash::make($data['password']),
-            'role_id' => $data['role_id'],
+            'role_id' => $data['role'],
+            'warehouse_id' => data_get($data, 'warehouse')
         ]);
+    }
+
+    public function showRegistrationForm()
+    {
+        $roles = UserRole::all();
+        $dealers = Branch::all();
+        $warehouses = Warehouse::all();
+        return view('auth.register',compact('roles', 'dealers', 'warehouses'));
     }
 }

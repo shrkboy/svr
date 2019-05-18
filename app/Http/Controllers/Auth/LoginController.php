@@ -39,8 +39,26 @@ class LoginController extends Controller
 
     //redirect after login
     protected function authenticated($request, $user){
-        if($user->role_id == 2){
-            return redirect('users'); //redirect to admin panel
+        switch ($user->role_id) {
+            case 1:
+                break;
+            case 2:
+                return redirect('users'); //redirect to admin panel
+                break;
+            case 3:
+                break;
+            case 4:
+                $request->session()->put('warehouse_id', $user->warehouse_id);
+                return redirect('shipments');
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
+            case 8:
+                break;
         }
         return redirect('display'); //redirect to standard user homepage
     }

@@ -11,9 +11,6 @@
             </li>
         @endif
     </ul>
-    <div class="form-inline my-2 my-lg-0">
-        <a class="btn btn-link my-2 my-sm-0" href="#">Logout</a>
-    </div>
 @endsection
 
 @section('content')

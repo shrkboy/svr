@@ -12,9 +12,8 @@
 */
 
 Route::get('/', function () {
-    if ($user = auth()->user()){
-        if ($user->id_role == 2)
-        {
+    if ($user = auth()->user()) {
+        if ($user->id_role == 2) {
             return redirect()->route('users');
         }
     }
@@ -39,23 +38,30 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset')->middleware(
 //Auth::routes();
 
 //Display Route
-Route::resource('display','ReportController');
-Route::resource('branch','BranchController');
-Route::resource('role','UserRoleController');
+Route::resource('display', 'ReportController');
+Route::resource('branch', 'BranchController');
+Route::resource('role', 'UserRoleController');
+Route::resource('bike_model', 'BikeModelController');
+Route::resource('shipment', 'ShipmentController');
+Route::resource('warehouse_inventory', 'WarehouseInventoryController');
 
 //Admin Route
-Route::get('users','AdminController@user')->name('users')->middleware('is_admin');
+Route::get('users', 'AdminController@user')->name('users')->middleware('is_admin');
 
-Route::get('reports','AdminController@report')->name('reports')->middleware('is_admin');
-Route::get('reports/detail/{id}','AdminController@detail_report')->name('reports')->middleware('is_admin');
+Route::get('reports', 'AdminController@report')->name('reports')->middleware('is_admin');
+Route::get('reports/detail/{id}', 'AdminController@detail_report')->name('reports')->middleware('is_admin');
 
 //Admin Model Route
-Route::get('models','AdminController@model')->name('models')->middleware('is_admin');
-Route::get('models/add','AdminController@showInsertModel')->name('models')->middleware('is_admin');
-Route::post('models/add','AdminController@InsertModel')->name('models.add')->middleware('is_admin');
-Route::get('models/edit/{id}','AdminController@showUpdateModelForm')->name('models')->middleware('is_admin');
-Route::post('models/edit','AdminController@UpdateModel')->name('models.update')->middleware('is_admin');
+Route::get('models', 'AdminController@model')->name('models')->middleware('is_admin');
+Route::get('models/add', 'AdminController@showInsertModel')->name('models')->middleware('is_admin');
+Route::post('models/add', 'AdminController@InsertModel')->name('models.add')->middleware('is_admin');
+Route::get('models/edit/{id}', 'AdminController@showUpdateModelForm')->name('models')->middleware('is_admin');
+Route::post('models/edit', 'AdminController@UpdateModel')->name('models.update')->middleware('is_admin');
 
 //Shipments
 Route::get('shipments', 'ShipmentController@index')->middleware('is_warehouse_operator');
-Route::get('shipments/new', 'ShipmentController@create')->middleware('is_warehouse_operator');
+Route::get('shipments/new', 'ShipmentController@showShipmentForm')->middleware('is_warehouse_operator');
+Route::get('shipments/detail/{id}', 'ShipmentController@detail')->middleware('is_warehouse_operator');
+
+//Inventory
+Route::get('inventory/validate/{bike_model_id}/{vin}', 'WarehouseInventoryController@validateInventoryData');

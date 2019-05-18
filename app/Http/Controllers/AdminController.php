@@ -28,7 +28,7 @@ class AdminController extends Controller
         /*
          * Method for getting all user from database and display it in user view inside admin folder
          * */
-        $users = User::all();
+        $users = User::with(['role'])->get();
         return view('admin.user', compact('users'));
     }
 

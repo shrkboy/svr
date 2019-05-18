@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class WarehouseInventory extends Model
 {
+    public $timestamps = false;
+
     public function warehouse()
     {
         return $this->belongsTo('App/Warehouse','warehouse_id');

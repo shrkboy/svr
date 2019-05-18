@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'username', 'role_id'
+        'name', 'email', 'password', 'username', 'role_id', 'warehouse_id'
     ];
 
     /**
@@ -29,11 +29,11 @@ class User extends Authenticatable
 
     public function warehouse()
     {
-        return $this->belongsTo('App/Warehouse', 'warehouse_id');
+        return $this->belongsTo('App\Warehouse', 'warehouse_id','id');
     }
 
     public function role()
     {
-        return $this->hasOne('App/UserRole', 'role_id');
+        return $this->belongsTo('App\UserRole', 'role_id','id');
     }
 }

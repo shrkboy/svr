@@ -110,7 +110,7 @@
 
 @section('script')
     <!-- Select2 -->
-    <script src="{{ asset('js/select2.min.js') }}"></script>
+    <script src="{{ asset('js/select2.full.min.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function () {

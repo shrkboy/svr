@@ -49,11 +49,7 @@
                             <td scope="row">{{$user->name}}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->username }}</td>
-                            @if($user->is_admin)
-                                <td>{{'Admin'}}</td>
-                            @else
-                                <td>{{'User'}}</td>
-                            @endif
+                            <td>{{ $user->role->name }}</td>
                         </tr>
                     @endforeach
                     </tbody>

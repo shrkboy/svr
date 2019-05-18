@@ -11,51 +11,53 @@
             </li>
         @endif
     </ul>
-    <div class="form-inline my-2 my-lg-0">
-        <a class="btn btn-link my-2 my-sm-0" href="#">Logout</a>
-    </div>
 @endsection
 
 @section('content')
-    <div class="mt-3 card p-3">
-        <p>
-            <a href="javascript:history.go(-1)" title="Return to the previous page" class="btn btn-danger">&laquo; Go
-                back</a>
-        </p>
-        <h3>Shipment history</h3>
-        <div class="row">
-            <div class="col-lg-3">
-                Shipment ID: 123 <br>
-                Status: <span class="text-success">DONE</span> <br>
-                Destination: Manila <br>
+    <div class="container-fluid">
+        <div class="card p-3">
+            <p>
+                <a href="javascript:history.go(-1)" title="Return to the previous page" class="btn btn-danger">&laquo;
+                    Go
+                    back</a>
+            </p>
+            <h3>Shipment history</h3>
+            <div class="row">
+                <div class="col-lg-3">
+                    Shipment ID: {{ sprintf('%08d', $shipment->id) }} <br>
+                    Status: <span
+                            class="{{ $shipment->status == 'DONE' ? 'text-success' : $shipment->status == 'ONGOING' ? 'text-primary' : 'text-danger' }}">{{ $shipment->status }}</span>
+                    <br>
+                    Destination: {{ $shipment->warehouse->name }} <br>
+                </div>
+                <div class="col-lg">
+                    Departure: {{ $shipment->depart_time }} <br>
+                    Received at: {{ $shipment->received_time ? $shipment->received_time : '-' }} <br>
+                    Received by: {{ $shipment->received_by ? $shipment->received_by : '-' }}<br>
+                </div>
             </div>
-            <div class="col-lg">
-                Departure: May 01, 2019 22:00 <br>
-                Received at: May 02, 2019 03:00 <br>
-                Received by: Anthony<br>
-            </div>
-        </div>
 
-        <table class="table table-sm mt-3">
-            <thead class="thead-inverse">
-            <tr>
-                <th>No</th>
-                <th>Bike model</th>
-                <th>Qty</th>
-                <th>Engine Numbers</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td scope="row"></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            </tbody>
-        </table>
+            <table class="table table-sm mt-3">
+                <thead class="thead-inverse">
+                <tr>
+                    <th>No</th>
+                    <th>Bike model</th>
+                    <th>Qty</th>
+                    <th>Engine Numbers</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td scope="row"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 @endsection
 

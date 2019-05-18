@@ -16,7 +16,7 @@ class CheckIfWarehouseOperator
      */
     public function handle($request, Closure $next)
     {
-        if ($request->user() && $request->user()->id_role != '4')
+        if ($request->user() && $request->user()->role_id != '4')
         {
             return new Response(view('unauth'));
         }

@@ -11,7 +11,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">{{ __('Register') }}</div>
+                    <div class="card-header">{{ __('Register') . ' user account'}}</div>
 
                     <div class="card-body">
                         <form method="POST" action="{{ route('register') }}">
@@ -72,8 +72,25 @@
 
                                 <div class="col-md-6">
                                     <select id="role"
-                                            class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}"
+                                            class="select2 form-control{{ $errors->has('role') ? ' is-invalid' : '' }}"
                                             name="role" required>
+                                        @foreach($roles as $role)
+                                            <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row" id="warehouse-input">
+                                <label for="warehouse" class="col-md-4 col-form-label text-md-right">Warehouse</label>
+
+                                <div class="col-md-6">
+                                    <select id="warehouse"
+                                            class="select2 form-control{{ $errors->has('warehouse') ? ' is-invalid' : '' }}"
+                                            name="warehouse">
+                                        @foreach($warehouses as $warehouse)
+                                            <option value="{{ $warehouse->id }}">{{ $warehouse->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -122,34 +139,20 @@
 
 @section('script')
     <!-- Select2 -->
-    <script src="{{ asset('js/select2.min.js') }}"></script>
+    <script src="{{ asset('js/select2.full.min.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#role').select2({
+            $('#warehouse-input').hide();
+            $('.select2').select2({
                 theme: 'bootstrap4',
-                ajax: {
-                    url: function (params) {
-                        return '{{ url('/role') }}' + '/' + params.term;
-                    },
-                    dataType: 'json',
-                    type: 'GET',
-                    data: function (term) {
-                        return {
-                            term: term
-                        };
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: $.map(data, function (item) {
-                                return {
-                                    text: item.name,
-                                    id: item.id
-                                }
-                            })
-                        };
-                    }
-                },
             });
+            $('#role').change(function () {
+                if ($('#role option:selected').text().toLowerCase().indexOf('warehouse') >= 0){
+                    $('#warehouse-input').show()
+                } else {
+                    $('#warehouse-input').hide()
+                }
+            })
         });
     </script>
 @endsection
