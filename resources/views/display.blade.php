@@ -15,7 +15,7 @@
             <a class="nav-link" href="{{url('/display')}}">Display</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{url('/display')}}">Retail</a>
+            <a class="nav-link" href="{{url('/retailreport')}}">Retail</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{{url('/display')}}">Calendar</a>
@@ -136,7 +136,6 @@
                         };
                     }                },
             });
-
             $('#document-input').change(function () {
                 let fileList = $('#file-list');
                 let input = $('#document-input');

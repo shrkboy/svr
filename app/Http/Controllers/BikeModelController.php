@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\BikeModel;
 use Illuminate\Http\Request;
+use App\BikeModel;
 
 class BikeModelController extends Controller
 {
@@ -44,9 +44,10 @@ class BikeModelController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($code)
     {
-        return BikeModel::where('name','like','%'.$id.'%')->take(10)->get();
+        //
+        return BikeModel::where('code','like',$code.'%')->get();
     }
 
     /**
