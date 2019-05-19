@@ -1,14 +1,12 @@
 @extends('layouts.app')
 
-@section('head-script')
-    <!-- Select2 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
-    <script src="{{ asset('js/custom.js') }}"></script>
-@endsection
-
 @section('head-styles')
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet"/>
-    <link href="{{ asset('css/dropzone.css') }}" rel="stylesheet"/>
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/select2-bootstrap4.min.css') }}">
+
+    <!-- Bootstrap Date Time Picker -->
+    <link rel="stylesheet" href="{{ asset('css/bootstrap-datetimepicker.min.css') }}">
 @endsection
 
 @section('navmenu')
@@ -42,8 +40,7 @@
                 <div class="form-group">
                     <label for="branch">Branch</label>
                     <br>
-                    <select name="branch" id="branch" class="form-control" style="width: 100%;" required>
-                    </select>
+                    <input name="branch" id="branch" value="{{$dealer->dlname}}" class="form-control" readonly>
                 </div>
                 <div class="form-group">
                     <label for="date">Date</label>
@@ -54,10 +51,6 @@
                     <label for="model">Model</label>
                     <br>
                     <select name="model" id="model" class="form-control" style="width: 100%;" required>
-                        <option value="" disabled selected>Selct Model</option>
-                        @foreach ($models as $model)
-                            <option value={{$model->code}}>{{$model->code}}</option>
-                        @endforeach
                     </select>
                 </div>
                 <div class="form-group">
@@ -106,52 +99,50 @@
 @endsection
 
 @section('script')
-    <script type="text/javascript">
+    <!-- Custom -->
+    <script src="{{ asset('js/clock-and-date.js') }}"></script>
+    <!-- Select2 -->
+    <script src="{{ asset('js/select2.full.min.js') }}"></script>
+    <!-- Moment -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js" type="text/javascript"></script>
+    <!--FontAwesome-->
+    <script src="https://use.fontawesome.com/094c71b384.js"></script>
+    <!-- Bootstrap Date Time Picker -->
+    <!-- https://www.jqueryscript.net/time-clock/Date-Time-Picker-Bootstrap-4.html -->
+    <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}"></script>
+    <!-- Inline -->
+    <script>
+
         $(document).ready(function () {
-            $('#branch').select2({
-                placeholder: 'Select Branch',
+            // activate select2 to pick shipment destination
+            $('#model').select2({
+                width: '100%',
+                theme: 'bootstrap4',
+                placeholder: 'Select Model',
                 minimumInputLength: 1,
                 ajax: {
                     url: function (params) {
-                        return '{{ url('/branch') }}' + '/' + params.term;
+                        return '{{ url('/model') }}' + '/' + params.term;
                     },
-                    dataType: 'json',
-                    type: 'GET',
+                    delay: 250,
+                    cache: true,
+                    results: function (data) {
+                        return {results: data};
+                    },
                     processResults: function (data) {
                         return {
                             results: $.map(data, function (item) {
                                 return {
-                                    text: item.dlname,
-                                    id: item.id
+                                    text: item.code,
+                                    id: item.code
                                 }
                             })
                         };
-                    }                },
+                    },
+                },
             });
 
-            $('#document-input').change(function () {
-                let fileList = $('#file-list');
-                let input = $('#document-input');
-                fileList.innerHTML = '<ul>';
-                for (let i = 0; i < input.files.length; ++i) {
-                    fileList.innerHTML += '<li>' + input.files.item(i).name + '</li>';
-                }
-                fileList.innerHTML += '</ul>';
-            });
         });
 
-        $(document).ready(function(){
-
-            // Initialize select2
-            $("#model").select2();
-
-            // Read selected option
-            $('#read').click(function(){
-                var code = $('#model option:selected').text();
-                var id = $('#model option:selected').text();
-
-
-            });
-        });
     </script>
 @endsection

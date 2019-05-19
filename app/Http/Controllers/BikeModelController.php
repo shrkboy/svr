@@ -46,8 +46,8 @@ class BikeModelController extends Controller
      */
     public function show($code)
     {
-        //
-        return BikeModel::where('code','like',$code.'%')->get();
+
+        return BikeModel::distinct()->select('code')->where('code','like',$code.'%')->groupBy('code')->get();
     }
 
     /**

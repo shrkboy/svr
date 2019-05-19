@@ -75,7 +75,11 @@
                             <td scope="row">{{$retailreport->retail_amount}}</td>
                             <td scope="row">{{$retailreport->updated_inventory}}</td>
                             <td scope="row">{{$retailreport->remarks}}</td>
-                            <td scope="row"></td>
+                            <td scope="row">
+                                <div class="text-right">
+                                    <a href="{{url('/edit/'.$retailreport->id)}}" class="btn btn-primary">Edit</a>
+                                </div>
+                            </td>
 
                         </tr>
                     @endforeach
