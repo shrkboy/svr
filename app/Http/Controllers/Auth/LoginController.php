@@ -43,7 +43,6 @@ class LoginController extends Controller
             case 1:
                 break;
             case 2:
-                return redirect('users'); //redirect to admin panel
                 break;
             case 3:
                 break;
@@ -58,6 +57,7 @@ class LoginController extends Controller
             case 7:
                 break;
             case 8:
+                return redirect('users'); //redirect to admin panel
                 break;
             case 9:
                 break;

@@ -95,6 +95,21 @@
                                 </div>
                             </div>
 
+                            <div class="form-group row" id="dealer-input">
+                                <label for="dealer" class="col-md-4 col-form-label text-md-right">Dealer</label>
+
+                                <div class="col-md-6">
+                                    <select id="dealer"
+                                            class="select2 form-control{{ $errors->has('dealer') ? ' is-invalid' : '' }}"
+                                            name="dealer">
+                                        @foreach($dealers as $dealer)
+                                            <option value="{{ $dealer->id }}">{{ $dealer->dlname }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+
                             <div class="form-group row">
                                 <label for="password"
                                        class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
@@ -142,15 +157,24 @@
     <script src="{{ asset('js/select2.full.min.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#warehouse-input').hide();
+            const warehouseInput = $('#warehouse-input');
+            const dealerInput = $('#dealer-input');
+            warehouseInput.hide();
+            dealerInput.hide();
+
             $('.select2').select2({
                 theme: 'bootstrap4',
             });
+
             $('#role').change(function () {
-                if ($('#role option:selected').text().toLowerCase().indexOf('warehouse') >= 0){
-                    $('#warehouse-input').show()
-                } else {
-                    $('#warehouse-input').hide()
+                warehouseInput.hide();
+                dealerInput.hide();
+
+                const selected = $('#role option:selected');
+                if (selected.text().toLowerCase().indexOf('warehouse') >= 0 || selected.text().toLowerCase().indexOf('shipping') >= 0) {
+                    warehouseInput.show();
+                } else if (selected.text().toLowerCase().indexOf('dealer') >= 0) {
+                    dealerInput.show();
                 }
             })
         });

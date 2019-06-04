@@ -87,7 +87,8 @@ class RegisterController extends Controller
             'username' => $data['username'],
             'password' => Hash::make($data['password']),
             'role_id' => $data['role'],
-            'warehouse_id' => data_get($data, 'warehouse')
+            'warehouse_id' => data_get($data, 'warehouse'),
+            'dealer_id' => data_get($data, 'dealer')
         ]);
     }
 
