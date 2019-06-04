@@ -26,22 +26,8 @@ class ShipmentController extends Controller
     public function index()
     {
         $warehouse = session('warehouse_id', null);
-        $shipments = Shipment::where('warehouse_id', $warehouse)->paginate(50);
+        $shipments = Shipment::where('warehouse_id', $warehouse)->get();
         return view('shipment.shipments', compact('shipments', 'shipments'));
-    }
-
-    public function showShipmentForm()
-    {
-        $branches = Branch::all();
-        $bike_models = BikeModel::all();
-        return view('shipment.new_shipment', compact('branches', 'bike_models'));
-    }
-
-    public function detail($id)
-    {
-        $shipment = Shipment::with(['warehouse'])->where('id', '=', $id)->first();
-        $details = ShipmentDetail::with(['inventory'])->where('shipment_id', '=', $id)->get();
-        return view('shipment.shipment_detail', compact('shipment', 'details'));
     }
 
     /**
@@ -51,7 +37,9 @@ class ShipmentController extends Controller
      */
     public function create()
     {
-        //
+        $branches = Branch::all();
+        $bike_models = BikeModel::all();
+        return view('shipment.new_shipment', compact('branches', 'bike_models'));
     }
 
     /**
@@ -111,7 +99,9 @@ class ShipmentController extends Controller
      */
     public function show($id)
     {
-        //
+        $shipment = Shipment::with(['warehouse'])->where('id', '=', $id)->first();
+        $details = ShipmentDetail::with(['inventory'])->where('shipment_id', '=', $id)->get();
+        return view('shipment.shipment_detail', compact('shipment', 'details'));
     }
 
     /**

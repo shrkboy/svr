@@ -1,13 +1,17 @@
 @extends('layouts.app')
 
+@section('head-styles')
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+@endsection
+
 @section('navmenu')
     <ul class="navbar-nav mr-auto">
-        @if(auth()->user()->id_role == 4)
+        @if(auth()->user()->role_id == 4)
             <li class="nav-item">
                 <a href="{{ url('/shipments') }}" class="nav-link disabled">Shipments</a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">Returned Items</a>
+                <a href="{{ url('/shipments/returns') }}" class="nav-link">Returned Items</a>
             </li>
         @endif
     </ul>
@@ -39,13 +43,15 @@
             <div class="col-md text-right m-auto">
                 <a name="new-shipment" id="new-shipment" class="btn btn-primary" href="{{ url('/shipments/new') }}"
                    role="button">New shipment</a>
-                <a name="return-items" id="return-items" class="btn btn-primary" href="#" role="button">Return items</a>
+                <a name="return-items" id="return-items" class="btn btn-primary"
+                   href="{{ url('/shipments/returns/new') }}" role="button">Return items</a>
             </div>
         </div>
 
         <div class="mt-3 card p-3">
             <h3>Shipment history</h3>
-            <table class="table table-sm mt-3">
+            <table id="data-table" class="table table-sm mt-3">
+
                 <thead class="thead-inverse">
                 <tr>
                     <th>No</th>
@@ -56,6 +62,7 @@
                     <th>Action</th>
                 </tr>
                 </thead>
+
                 <tbody>
                 @foreach($shipments as $key=>$shipment)
                     <tr>
@@ -69,29 +76,41 @@
                     </tr>
                 @endforeach
                 </tbody>
+
             </table>
 
-            <nav class="align-self-center mt-3">
-                <ul class="pagination" id="pagination">
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            {{--<nav class="align-self-center mt-3">--}}
+            {{--<ul class="pagination" id="pagination">--}}
+            {{--<li class="page-item">--}}
+            {{--<a class="page-link" href="#" aria-label="Previous">--}}
+            {{--<span aria-hidden="true">&laquo;</span>--}}
+            {{--</a>--}}
+            {{--</li>--}}
+            {{--<li class="page-item"><a class="page-link" href="#">1</a></li>--}}
+            {{--<li class="page-item"><a class="page-link" href="#">2</a></li>--}}
+            {{--<li class="page-item"><a class="page-link" href="#">3</a></li>--}}
+            {{--<li class="page-item">--}}
+            {{--<a class="page-link" href="#" aria-label="Next">--}}
+            {{--<span aria-hidden="true">&raquo;</span>--}}
+            {{--</a>--}}
+            {{--</li>--}}
+            {{--</ul>--}}
+            {{--</nav>--}}
         </div>
     </div>
 @endsection
 
 @section('script')
     <script src="{{ asset('js/clock-and-date.js') }}"></script>
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#data-table").DataTable({
+                columnDefs: [
+                    {orderable: false, targets: 5}
+                ],
+            });
+        })
+    </script>
 @endsection

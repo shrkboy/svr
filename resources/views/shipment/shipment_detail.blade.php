@@ -42,19 +42,21 @@
                 <tr>
                     <th>No</th>
                     <th>Bike model</th>
-                    <th>Qty</th>
-                    <th>Engine Numbers</th>
-                    <th>Action</th>
+                    <th>Bike code</th>
+                    <th>Bike color</th>
+                    <th>VIN</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td scope="row"></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+                @foreach($details as $key=>$detail)
+                    <tr>
+                        <td scope="row">{{ ++$key }}</td>
+                        <td>{{ $detail->inventory->bike_model->name }}</td>
+                        <td>{{ $detail->inventory->bike_model->code }}</td>
+                        <td>{{ $detail->inventory->bike_model->color }}</td>
+                        <td>{{ $detail->inventory->vin }}</td>
+                    </tr>
+                @endforeach
                 </tbody>
             </table>
         </div>

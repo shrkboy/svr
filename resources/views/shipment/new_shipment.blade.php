@@ -117,8 +117,8 @@
     <!--FontAwesome-->
     <script src="https://use.fontawesome.com/094c71b384.js"></script>
     {{--<script defer src="https://use.fontawesome.com/releases/v5.8.2/js/all.js"--}}
-            {{--integrity="sha384-DJ25uNYET2XCl5ZF++U8eNxPWqcKohUUBUpKGlNLMchM7q4Wjg2CUpjHLaL8yYPH"--}}
-            {{--crossorigin="anonymous"></script>--}}
+    {{--integrity="sha384-DJ25uNYET2XCl5ZF++U8eNxPWqcKohUUBUpKGlNLMchM7q4Wjg2CUpjHLaL8yYPH"--}}
+    {{--crossorigin="anonymous"></script>--}}
     <!-- Bootstrap Date Time Picker -->
     <!-- https://www.jqueryscript.net/time-clock/Date-Time-Picker-Bootstrap-4.html -->
     <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}"></script>

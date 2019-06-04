@@ -10,16 +10,21 @@ class WarehouseInventory extends Model
 
     public function warehouse()
     {
-        return $this->belongsTo('App/Warehouse','warehouse_id');
+        return $this->belongsTo('App\Warehouse','warehouse_id');
     }
 
     public function shipment_detail()
     {
-        return $this->hasOne('App/ShipmentDetail','inventory_id');
+        return $this->hasOne('App\ShipmentDetail','inventory_id');
     }
 
     public function returned_item()
     {
-        return $this->hasOne('App/ReturnedItem','inventory_id');
+        return $this->hasOne('App\ReturnedItem','inventory_id');
+    }
+
+    public function bike_model()
+    {
+        return $this->belongsTo('App\BikeModel', 'bike_model_id');
     }
 }

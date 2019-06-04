@@ -37,17 +37,18 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset')->middleware(
 
 //Auth::routes();
 
-//Display Route
+//Resource Routes
 Route::resource('display', 'ReportController');
 Route::resource('branch', 'BranchController');
 Route::resource('role', 'UserRoleController');
 Route::resource('bike_model', 'BikeModelController');
 Route::resource('shipment', 'ShipmentController');
+Route::resource('returned_item', 'ReturnedItemController');
 Route::resource('warehouse_inventory', 'WarehouseInventoryController');
-
-//Retail Route
 Route::resource('model','BikeModelController');
 Route::resource('retail','RetailReportController');
+
+//Retail Route
 Route::get('retailreport','RetailReportController@retail_report');
 Route::get('addretailreport','RetailReportController@add_retail_report');
 
@@ -66,8 +67,11 @@ Route::post('models/edit', 'AdminController@UpdateModel')->name('models.update')
 
 //Shipments
 Route::get('shipments', 'ShipmentController@index')->middleware('is_warehouse_operator');
-Route::get('shipments/new', 'ShipmentController@showShipmentForm')->middleware('is_warehouse_operator');
-Route::get('shipments/detail/{id}', 'ShipmentController@detail')->middleware('is_warehouse_operator');
+Route::get('shipments/new', 'ShipmentController@create')->middleware('is_warehouse_operator');
+Route::get('shipments/detail/{id}', 'ShipmentController@show')->middleware('is_warehouse_operator');
+Route::get('shipments/returns', 'ReturnedItemController@index')->middleware('is_warehouse_operator');
+Route::get('shipments/returns/new', 'ReturnedItemController@create')->middleware('is_warehouse_operator');
+Route::get('shipments/returns/detail/{id}', 'ReturnedItemController@show')->middleware('is_warehouse_operator');
 
 //Inventory
 Route::get('inventory/validate/{bike_model_id}/{vin}', 'WarehouseInventoryController@validateInventoryData');

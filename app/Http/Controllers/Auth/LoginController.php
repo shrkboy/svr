@@ -59,8 +59,10 @@ class LoginController extends Controller
                 break;
             case 8:
                 break;
+            case 9:
+                break;
         }
-        return redirect('display'); //redirect to standard user homepage
+        return redirect('login'); //redirect to standard user homepage
     }
 
     //column that used for login
