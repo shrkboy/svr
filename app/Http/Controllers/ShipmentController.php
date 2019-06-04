@@ -7,8 +7,9 @@ use App\Branch;
 use App\Shipment;
 use App\ShipmentDetail;
 use App\WarehouseInventory;
+use function foo\func;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Freshbitsweb\Laratables\Laratables;
 
 class ShipmentController extends Controller
 {
@@ -26,7 +27,7 @@ class ShipmentController extends Controller
     public function index()
     {
         $warehouse = session('warehouse_id', null);
-        $shipments = Shipment::where('warehouse_id', $warehouse)->get();
+        $shipments = Shipment::where('warehouse_id', $warehouse)->orderBy('depart_time', 'asc')->get();
         return view('shipment.shipments', compact('shipments', 'shipments'));
     }
 
@@ -86,6 +87,32 @@ class ShipmentController extends Controller
             }
 
             return redirect('/shipments')->with('success', 'Report inserted successfully');
+        } catch (\Exception $e) {
+            return redirect('/shipments')->with('failed', 'Whoops, something went wrong!');
+        }
+    }
+
+    /**
+     * Finishes a shipment
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function finish(Request $request)
+    {
+        try {
+            $id = $request->input('id');
+            $number = $request->input('number');
+            $received_time = $request->input('received-time');
+            $received_by = $request->input('received-by');
+            Shipment::where('id', $id)
+                ->update([
+                    'received_time' => $received_time,
+                    'received_by' => $received_by,
+                    'status' => 'DONE',
+                ]);
+
+            return redirect('/shipments')->with('success', 'Shipment ' . $number . ' updated successfully');
         } catch (Exception $e) {
             return redirect('/shipments')->with('failed', 'Whoops, something went wrong!');
         }
@@ -136,5 +163,18 @@ class ShipmentController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * View shipment detail as report to print
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showAsReport($id)
+    {
+        $shipment = Shipment::with(['warehouse'])->where('id', '=', $id)->first();
+        $details = ShipmentDetail::with(['inventory'])->where('shipment_id', '=', $id)->get();
+        return view('shipment.shipment_detail_report', compact('shipment', 'details'));
     }
 }

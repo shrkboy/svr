@@ -171,7 +171,8 @@
                 dealerInput.hide();
 
                 const selected = $('#role option:selected');
-                if (selected.text().toLowerCase().indexOf('warehouse') >= 0 || selected.text().toLowerCase().indexOf('shipping') >= 0) {
+                if (selected.text().toLowerCase().indexOf('warehouse') >= 0
+                    || selected.text().toLowerCase().indexOf('shipping') >= 0) {
                     warehouseInput.show();
                 } else if (selected.text().toLowerCase().indexOf('dealer') >= 0) {
                     dealerInput.show();

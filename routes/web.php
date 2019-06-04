@@ -71,9 +71,17 @@ Route::post('models/edit', 'AdminController@UpdateModel')->name('models.update')
 Route::get('shipments', 'ShipmentController@index')->middleware('is_warehouse_operator');
 Route::get('shipments/new', 'ShipmentController@create')->middleware('is_warehouse_operator');
 Route::get('shipments/detail/{id}', 'ShipmentController@show')->middleware('is_warehouse_operator');
+Route::get('shipments/report/{id}', 'ShipmentController@showAsReport')->middleware('is_warehouse_operator');
 Route::get('shipments/returns', 'ReturnedItemController@index')->middleware('is_warehouse_operator');
 Route::get('shipments/returns/new', 'ReturnedItemController@create')->middleware('is_warehouse_operator');
 Route::get('shipments/returns/detail/{id}', 'ReturnedItemController@show')->middleware('is_warehouse_operator');
+Route::post('shipments/finish', 'ShipmentController@finish')->middleware('is_warehouse_operator');
+
+//Datatable data
+Route::get('datatable/shipment', 'DataTableController@getShipment')->name('get_shipment');
+
+Route::get('bike_model/get/{code}', 'BikeModelController@get');
+Route::get('inv/yolo', 'WarehouseInventoryController@yolo');
 
 //Inventory
 Route::get('inventory/validate/{bike_model_id}/{vin}', 'WarehouseInventoryController@validateInventoryData');

@@ -97,6 +97,6 @@ class RegisterController extends Controller
         $roles = UserRole::all();
         $dealers = Branch::all();
         $warehouses = Warehouse::all();
-        return view('auth.register',compact('roles', 'dealers', 'warehouses'));
+        return view('auth.register', compact('roles', 'dealers', 'warehouses'));
     }
 }

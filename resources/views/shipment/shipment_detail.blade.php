@@ -2,7 +2,7 @@
 
 @section('navmenu')
     <ul class="navbar-nav mr-auto">
-        @if(auth()->user()->id_role == 4)
+        @if(auth()->user()->role_id == 4)
             <li class="nav-item">
                 <a href="{{ url('/shipments') }}" class="nav-link">Shipments</a>
             </li>
@@ -16,24 +16,45 @@
 @section('content')
     <div class="container-fluid">
         <div class="card p-3">
-            <p>
-                <a href="javascript:history.go(-1)" title="Return to the previous page" class="btn btn-danger">&laquo;
-                    Go
-                    back</a>
-            </p>
+            <div class="row">
+                <div class="col-sm-6">
+                    <p><a href="javascript:history.go(-1)" title="Return to the previous page" class="btn btn-danger">&laquo;
+                            Go
+                            back</a></p>
+                </div>
+                <div class="col-sm-6">
+                    <div class="dropdown text-right">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="options">
+                            <a class="dropdown-item" href="{{ url('/shipments/report/'.$shipment->id) }}"
+                               target="_blank">Print report</a>
+                            <div class="dropdown-divider"></div>
+                            @if($shipment->status != 'DONE')
+                                <a class="dropdown-item" href="#">Mark as Delayed</a>
+                                <a class="dropdown-item" href="#">Mark as Cancelled</a>
+                            @endif
+                            <a class="dropdown-item text-danger" href="#">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <h3>Shipment history</h3>
             <div class="row">
                 <div class="col-lg-3">
-                    Shipment ID: {{ sprintf('%08d', $shipment->id) }} <br>
+                    Shipment ID: {{ sprintf('SHP%08d', $shipment->id) }} <br>
                     Status: <span
-                            class="{{ $shipment->status == 'DONE' ? 'text-success' : $shipment->status == 'ONGOING' ? 'text-primary' : 'text-danger' }}">{{ $shipment->status }}</span>
+                            class="font-weight-bold text-{{ $shipment->status == 'DONE' ? 'success' : ($shipment->status == 'ONGOING' ? 'primary' : ($shipment->status == 'CANCELLED' ? 'warning' : 'danger')) }}">{{ $shipment->status }}</span>
                     <br>
-                    Destination: {{ $shipment->warehouse->name }} <br>
+                    Destination: {{ $shipment->dealer->dlname }} <br>
                 </div>
-                <div class="col-lg">
-                    Departure: {{ $shipment->depart_time }} <br>
-                    Received at: {{ $shipment->received_time ? $shipment->received_time : '-' }} <br>
-                    Received by: {{ $shipment->received_by ? $shipment->received_by : '-' }}<br>
+                <div class=" col-lg">
+                    Departure: {{ \Carbon\Carbon::parse($shipment->depart_time)->format('M d Y, H:i:s') }} <br>
+                    Received at: {{ $shipment->received_time != null ? \Carbon\Carbon::parse($shipment->received_time)->format('M d Y, H:i:s') : '-' }} <br>
+                    Received by: {{ $shipment->received_by != null ? $shipment->received_by : '-' }}<br>
                 </div>
             </div>
 
@@ -65,4 +86,6 @@
 
 @section('script')
     <script src="clock-and-date.js"></script>
+    <!--FontAwesome-->
+    <script src="https://use.fontawesome.com/094c71b384.js"></script>
 @endsection

@@ -64,7 +64,7 @@
                                 <div class="row">
                                     <h5 class="col-lg-1">1</h5>
                                     <div id="input-bike-1" class="col-lg row">
-                                        <div class="form-group col-lg-3">
+                                        <div class="form-group col-lg-4">
                                             <label for="bike-model-1">Bike model</label>
                                             <select class="form-control detail-input" type="select" name="bike-model-1"
                                                     id="bike-model-1">
@@ -162,7 +162,7 @@
                     minimumInputLength: 1,
                     ajax: {
                         url: function (params) {
-                            return '{{ url('/bike_model') }}' + '/' + params.term;
+                            return '{{ url('/bike_model/get') }}' + '/' + params.term;
                         },
                         delay: 250,
                         cache: true,
@@ -216,7 +216,7 @@
                     '<div class="row">' +
                     '<h5 class="col-lg-1">' + counter + '</h5>' +
                     '<div id="input-bike-' + counter + '" class="row col-lg">' +
-                    '<div class="form-group col-lg-3">' +
+                    '<div class="form-group col-lg-4">' +
                     '<label for="bike-model-' + counter + '">Bike model</label>' +
                     '<select class="form-control detail-input" type="select" name="bike-model-' + counter + '" id="bike-model-' + counter + '">' +
                     '<option></option>' +
@@ -248,7 +248,7 @@
                             '</div>' +
                             '</div>'
                         );
-                        $("input#vin-" + counter + "-" + (i + 1)).change(
+                        $("input#vin-" + counter + "-" + (i + 1)).on('input',
                             function () {
                                 const input = $(this);
                                 const mark = $(this).next().children();
@@ -256,12 +256,12 @@
                                     url: '{{ url('/inventory/validate') }}' + '/' + $('#bike-model-' + counter).val() + '/' + input.val(),
                                     dataType: "json",
                                     success: function (data) {
-                                        if ($.isEmptyObject(data)) {
-                                            input.removeClass("is-valid").addClass("is-invalid");
-                                            mark.removeClass("fa-check text-success").addClass("fa-times text-danger");
-                                        } else {
+                                        if (!$.isEmptyObject(data) && data[0].status === 'IN') {
                                             input.removeClass("is-invalid").addClass("is-valid");
                                             mark.removeClass("fa-times text-danger").addClass("fa-check text-success");
+                                        } else {
+                                            input.removeClass("is-valid").addClass("is-invalid");
+                                            mark.removeClass("fa-check text-success").addClass("fa-times text-danger");
                                         }
                                     },
                                 })
