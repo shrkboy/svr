@@ -12,7 +12,7 @@
 @section('content')
     <div class="container-fluid">
         <div class="card p-3">
-            <form method="POST" action="{{ url('/shipment') }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('shipments.store') }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <h3 class="mmc-title">New shipment</h3>
 

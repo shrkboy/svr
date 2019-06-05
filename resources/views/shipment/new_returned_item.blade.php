@@ -12,7 +12,7 @@
 @section('content')
     <div class="container-fluid">
         <div class="card p-3">
-            <form method="POST" action="{{ url('/returned_item') }}">
+            <form method="POST" action="{{ route('returned_items.store') }}">
                 {{  csrf_field() }}
                 <h3>Return items</h3>
 
@@ -21,8 +21,9 @@
                     <div class="form-group row">
                         <label for="bike-model" class="col-sm-2 col-form-label">Bike Model</label>
                         <div class="col-lg-4">
-                            <input type="text" class="form-control" name="bike-model" id="bike-model" required
-                                   placeholder="Bike model">
+                            <select class="form-control" name="bike-model" id="bike-model" required>
+                                <option></option>
+                            </select>
                         </div>
                     </div>
 
@@ -68,8 +69,8 @@
                 </div>
 
                 <div class="text-right mt-3">
-                    <input type="submit" class="btn btn-success" value="Submit one">
-                    <input type="submit" class="btn btn-primary" value="Submit and enter another">
+                    <input type="submit" class="btn btn-success" value="Submit">
+                    {{--<input type="submit" class="btn btn-primary" value="Submit and enter another">--}}
                 </div>
 
             </form>
@@ -115,6 +116,49 @@
                             })
                         };
                     },
+                },
+            });
+
+            $("select#bike-model").select2({
+                width: '100%',
+                theme: 'bootstrap4',
+                placeholder: 'Select bike model',
+                minimumInputLength: 1,
+                ajax: {
+                    url: function (params) {
+                        return '{{ url('/bike_model/get') }}' + '/' + params.term;
+                    },
+                    delay: 250,
+                    cache: true,
+                    results: function (data) {
+                        return {results: data};
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data, function (item) {
+                                return {
+                                    id: item.id,
+                                    text: item.name,
+                                    code: item.code,
+                                    color: item.color,
+                                    spec: item.spec
+                                }
+                            })
+                        };
+                    },
+                },
+                escapeMarkup: function (markup) {
+                    return markup
+                },
+                templateResult: function (data) {
+                    console.log(data);
+                    if (!data.id) {
+                        return data.text;
+                    }
+                    return $('<h5>' + data.text + '</h5>' +
+                        '<p>' + data.code +
+                        ' || ' + data.color +
+                        ' || ' + data.spec + '</p>');
                 },
             });
 

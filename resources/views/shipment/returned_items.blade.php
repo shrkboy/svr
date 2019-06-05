@@ -8,10 +8,10 @@
     <ul class="navbar-nav mr-auto">
         @if(auth()->user()->role_id == 4)
             <li class="nav-item">
-                <a href="{{ url('/shipments') }}" class="nav-link">Shipments</a>
+                <a href="{{ route('shipments.index') }}" class="nav-link">Shipments</a>
             </li>
             <li class="nav-item">
-                <a href="{{ url('/shipments/returns') }}" class="nav-link disabled">Returned Items</a>
+                <a href="{{ route('returned_items.index') }}" class="nav-link disabled">Returned Items</a>
             </li>
         @endif
     </ul>
@@ -37,12 +37,16 @@
 
         <div class="row">
             <div class="col-md m-auto">
-                <h3 id="date"></h3>
+                <h3 id="date">Loading date</h3>
                 <h3 id="clock">Loading clock</h3>
+                <h3>Logged in to {{ auth()->user()->warehouse->name }} as {{ auth()->user()->name }}</h3>
             </div>
             <div class="col-md text-right m-auto">
-                <a name="new-shipment" id="new-shipment" class="btn btn-primary" href="{{ url('/shipments/new') }}" role="button">New shipment</a>
-                <a name="return-items" id="return-items" class="btn btn-primary" href="{{ url('/shipments/returns/new') }}" role="button">Return items</a>
+                <a name="new-shipment" id="new-shipment" class="btn btn-lg btn-primary"
+                   href="{{ route('shipments.create') }}"
+                   role="button">New shipment</a>
+                <a name="return-items" id="return-items" class="btn btn-lg btn-primary"
+                   href="{{ route('returned_items.create') }}" role="button">Return items</a>
             </div>
         </div>
 
@@ -57,7 +61,7 @@
                     <th>From</th>
                     <th>Return Time</th>
                     <th>Info</th>
-                    <th>Action</th>
+                    {{--<th>Action</th>--}}
                 </tr>
                 </thead>
                 <tbody>
@@ -69,7 +73,7 @@
                         <td>{{ $item->dealer->dlname }}</td>
                         <td>{{ $item->time }}</td>
                         <td>{{ $item->info }}</td>
-                        <td></td>
+                        {{--<td></td>--}}
                     </tr>
                 @endforeach
                 </tbody>
@@ -87,7 +91,7 @@
         $(document).ready(function () {
             $("#data-table").DataTable({
                 columnDefs: [
-                    {orderable: false, targets: 6}
+                    // {orderable: false, targets: 6}
                 ],
             });
         });

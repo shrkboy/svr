@@ -2,7 +2,7 @@
 
 @section('navmenu')
     <ul class="navbar-nav mr-auto">
-        @if(auth()->user()->id_role == 2)
+        @if(auth()->user()->role_id == 8)
             <li class="nav-item">
                 <a class="nav-link" href="{{url('/users')}}">Users</a>
             </li>
@@ -10,7 +10,10 @@
                 <a class="nav-link" href="{{url('/reports')}}">Reports</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="{{url('/models')}}">MC Models</a>
+                <a class="nav-link active" href="{{url('/models')}}">MC Models</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{url('/warehouses')}}">Warehouses</a>
             </li>
         @endif
     </ul>
@@ -62,7 +65,7 @@
                             <td scope="row">{{ $bike_model->spec }}</td>
                             {{-- TODO: Add EDIT Url --}}
                             <td scope="row">
-                                <a href="{{url('/models/edit/'. $bike_model->id)}}" class="btn btn-outline-primary">Edit</a>
+                                <a href="{{url('/models/edit/'. $bike_model->id)}}" class="btn btn-outline-secondary">Edit</a>
                             </td>
                         </tr>
                     @endforeach

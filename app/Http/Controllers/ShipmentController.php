@@ -6,10 +6,11 @@ use App\BikeModel;
 use App\Branch;
 use App\Shipment;
 use App\ShipmentDetail;
+use App\ShipmentLog;
+use App\Warehouse;
 use App\WarehouseInventory;
-use function foo\func;
 use Illuminate\Http\Request;
-use Freshbitsweb\Laratables\Laratables;
+use Illuminate\Support\Facades\Hash;
 
 class ShipmentController extends Controller
 {
@@ -26,8 +27,11 @@ class ShipmentController extends Controller
 
     public function index()
     {
-        $warehouse = session('warehouse_id', null);
-        $shipments = Shipment::where('warehouse_id', $warehouse)->orderBy('depart_time', 'asc')->get();
+        $warehouse_id = auth()->user()->warehouse_id;
+        $shipments = Shipment::where([
+            ['warehouse_id', '=', $warehouse_id],
+            ['deleted', '<>', 1],
+        ])->orderBy('depart_time', 'asc')->get();
         return view('shipment.shipments', compact('shipments', 'shipments'));
     }
 
@@ -60,6 +64,7 @@ class ShipmentController extends Controller
             $shipment->warehouse_id = $request->session()->get('warehouse_id', null);
             $shipment->dealer_id = $request->input('destination');
             $shipment->status = 'ONGOING';
+            $shipment->deleted = 0;
             $shipment->save();
 
             $last_shipment = Shipment::latest('id')->first();
@@ -86,9 +91,9 @@ class ShipmentController extends Controller
                 }
             }
 
-            return redirect('/shipments')->with('success', 'Report inserted successfully');
+            return redirect(route('shipments.index'))->with('success', 'Report inserted successfully');
         } catch (\Exception $e) {
-            return redirect('/shipments')->with('failed', 'Whoops, something went wrong!');
+            return redirect(route('shipments.index'))->with('failed', 'Failed. something went wrong');
         }
     }
 
@@ -112,9 +117,9 @@ class ShipmentController extends Controller
                     'status' => 'DONE',
                 ]);
 
-            return redirect('/shipments')->with('success', 'Shipment ' . $number . ' updated successfully');
+            return redirect(route('shipments.index'))->with('success', 'Shipment ' . $number . ' updated successfully');
         } catch (Exception $e) {
-            return redirect('/shipments')->with('failed', 'Whoops, something went wrong!');
+            return redirect(route('shipments.index'))->with('failed', 'Failed. Something went wrong');
         }
     }
 
@@ -157,12 +162,41 @@ class ShipmentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param Request $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return array
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $match_key = $request->input('key');
+        $key = Warehouse::where('id', auth()->user()->warehouse_id)->get()[0]->auth_key;
+        if (Hash::check($match_key, $key)) {
+            try {
+                $log = new ShipmentLog;
+                $log->shipment_id = $id;
+                $log->action = 'DELETE';
+                $log->warehouse_id = auth()->user()->warehouse_id;
+                $log->by = auth()->user()->id;
+                $log->save();
+
+                Shipment::where('id', $id)->update([
+                    'deleted' => 1
+                ]);
+
+                $details = ShipmentDetail::where('shipment_id', $id)->get();
+                foreach ($details as $detail) {
+                    WarehouseInventory::where('id', $detail->inventory_id)->update([
+                        'status' => 'IN'
+                    ]);
+                }
+
+                return redirect(route('shipments.index'))->with('success', 'Delete success');
+            } catch (\Exception $e) {
+                return redirect(route('shipments.index'))->with('failed', 'Delete failed. Something went wrong: ' . $e);
+            }
+        } else {
+            return redirect(route('shipments.index'))->with('failed', 'Delete failed. Auth key might be incorrect');
+        }
     }
 
     /**

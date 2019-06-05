@@ -2,15 +2,18 @@
 
 @section('navmenu')
     <ul class="navbar-nav mr-auto">
-        @if(auth()->user()->id_role == 2)
+        @if(auth()->user()->role_id == 8)
             <li class="nav-item">
                 <a class="nav-link" href="{{url('/users')}}">Users</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="{{url('/reports')}}">Reports</a>
+                <a class="nav-link active" href="{{url('/reports')}}">Reports</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{url('/models')}}">MC Models</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{url('/warehouses')}}">Warehouses</a>
             </li>
         @endif
     </ul>

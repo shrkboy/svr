@@ -63,9 +63,9 @@ class ReturnedItemController extends Controller
                     'warehouse_id' => $request->session()->get('warehouse_id', null)
                 ]);
 
-            return redirect('/shipments/returns')->with('success', 'Data inserted successfully');
+            return redirect(route('returned_items.index'))->with('success', 'Data inserted successfully');
         } catch (\Exception $e) {
-            return redirect('/shipments/returns')->with('failed', 'Whoops, something went wrong!');
+            return redirect(route('returned_items.index'))->with('failed', 'Whoops, something went wrong!');
         }
     }
 

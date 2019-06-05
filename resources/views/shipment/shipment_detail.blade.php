@@ -36,7 +36,9 @@
                                 <a class="dropdown-item" href="#">Mark as Delayed</a>
                                 <a class="dropdown-item" href="#">Mark as Cancelled</a>
                             @endif
-                            <a class="dropdown-item text-danger" href="#">Delete</a>
+                            <button type="button" class="dropdown-item text-danger" data-toggle="modal"
+                                    data-target="#confirmationModal">Delete
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -53,7 +55,9 @@
                 </div>
                 <div class=" col-lg">
                     Departure: {{ \Carbon\Carbon::parse($shipment->depart_time)->format('M d Y, H:i:s') }} <br>
-                    Received at: {{ $shipment->received_time != null ? \Carbon\Carbon::parse($shipment->received_time)->format('M d Y, H:i:s') : '-' }} <br>
+                    Received
+                    at: {{ $shipment->received_time != null ? \Carbon\Carbon::parse($shipment->received_time)->format('M d Y, H:i:s') : '-' }}
+                    <br>
                     Received by: {{ $shipment->received_by != null ? $shipment->received_by : '-' }}<br>
                 </div>
             </div>
@@ -81,6 +85,38 @@
                 </tbody>
             </table>
         </div>
+
+
+        {{--Modal to confirm shipment deletion--}}
+        <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel">Confirm shipment deletion</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="post" action="{{ url('/shipments/delete') . '/' . $shipment->id }}">
+                        {{ csrf_field() }}
+                        <div class="modal-body">
+                            <h6>Request the authorization key from your warehouse's manager</h6>
+                            <div class="form-group">
+                                <label for="key" class="col-form-label">Key:</label>
+                                <input type="text" class="form-control" id="key" name="key">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Confirm</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 @endsection
 
