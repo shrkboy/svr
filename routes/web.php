@@ -43,7 +43,7 @@ Route::resource('display', 'ReportController');
 Route::resource('branch', 'BranchController');
 Route::resource('role', 'UserRoleController');
 Route::resource('bike_model', 'BikeModelController');
-Route::resource('shipments', 'ShipmentController');
+Route::resource('shipments', 'ShipmentController')->middleware('is_warehouse_operator');
 Route::resource('returned_items', 'ReturnedItemController');
 Route::resource('warehouse_inventory', 'WarehouseInventoryController');
 Route::resource('warehouses', 'WarehouseController');

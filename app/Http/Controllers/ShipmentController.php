@@ -17,7 +17,6 @@ class ShipmentController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
      */
 
     public function __construct()
@@ -25,33 +24,40 @@ class ShipmentController extends Controller
         $this->middleware('auth');
     }
 
+    /**
+     * Views the main page of shipments
+     * Shows all shipment data
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
     public function index()
     {
         $warehouse_id = auth()->user()->warehouse_id;
-        $shipments = Shipment::where([
+        $shipments = Shipment::query()->where([
             ['warehouse_id', '=', $warehouse_id],
             ['deleted', '<>', 1],
         ])->orderBy('depart_time', 'asc')->get();
-        return view('shipment.shipments', compact('shipments', 'shipments'));
+
+        return \View::make('shipment.shipments', compact('shipments', 'shipments'));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function create()
     {
         $branches = Branch::all();
         $bike_models = BikeModel::all();
-        return view('shipment.new_shipment', compact('branches', 'bike_models'));
+        return \View::make('shipment.new_shipment', compact('branches', 'bike_models'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -67,7 +73,7 @@ class ShipmentController extends Controller
             $shipment->deleted = 0;
             $shipment->save();
 
-            $last_shipment = Shipment::latest('id')->first();
+            $last_shipment = Shipment::query()->latest('id')->first();
             $counter = $request->input('counter');
 
             for ($i = 1; $i <= $counter; $i++) {
@@ -75,7 +81,7 @@ class ShipmentController extends Controller
                 $bike_model_amount = $request->input('amount-' . $i);
                 for ($j = 1; $j <= $bike_model_amount; $j++) {
                     $vin = $request->input('vin-' . $i . '-' . $j);
-                    $inventory = WarehouseInventory::where([
+                    $inventory = WarehouseInventory::query()->where([
                         ['bike_model_id', '=', $bike_model_id],
                         ['vin', '=', $vin],
                         ['status', '=', 'IN']])->first();
@@ -86,14 +92,14 @@ class ShipmentController extends Controller
                         $shipment_detail->inventory_id = $inventory->id;
                         $shipment_detail->save();
 
-                        WarehouseInventory::where('id', $inventory->id)->update(['status' => 'SHIPPED']);
+                        WarehouseInventory::query()->where('id', $inventory->id)->update(['status' => 'SHIPPED']);
                     }
                 }
             }
 
-            return redirect(route('shipments.index'))->with('success', 'Report inserted successfully');
+            return \Redirect::route('shipments.index')->with('success', 'Report inserted successfully');
         } catch (\Exception $e) {
-            return redirect(route('shipments.index'))->with('failed', 'Failed. something went wrong');
+            return \Redirect::route('shipments.index')->with('failed', 'Failed. something went wrong');
         }
     }
 
@@ -101,7 +107,7 @@ class ShipmentController extends Controller
      * Finishes a shipment
      *
      * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function finish(Request $request)
     {
@@ -110,16 +116,16 @@ class ShipmentController extends Controller
             $number = $request->input('number');
             $received_time = $request->input('received-time');
             $received_by = $request->input('received-by');
-            Shipment::where('id', $id)
+            Shipment::query()->where('id', $id)
                 ->update([
                     'received_time' => $received_time,
                     'received_by' => $received_by,
                     'status' => 'DONE',
                 ]);
 
-            return redirect(route('shipments.index'))->with('success', 'Shipment ' . $number . ' updated successfully');
-        } catch (Exception $e) {
-            return redirect(route('shipments.index'))->with('failed', 'Failed. Something went wrong');
+            return \Redirect::route('shipments.index')->with('success', 'Shipment ' . $number . ' updated successfully');
+        } catch (\Exception $e) {
+            return \Redirect::route('shipments.index')->with('failed', 'Failed. Something went wrong');
         }
     }
 
@@ -127,13 +133,13 @@ class ShipmentController extends Controller
      * Display the specified resource.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function show($id)
     {
         $shipment = Shipment::with(['warehouse'])->where('id', '=', $id)->first();
         $details = ShipmentDetail::with(['inventory'])->where('shipment_id', '=', $id)->get();
-        return view('shipment.shipment_detail', compact('shipment', 'details'));
+        return \View::make('shipment.shipment_detail', compact('shipment', 'details'));
     }
 
     /**
@@ -164,12 +170,12 @@ class ShipmentController extends Controller
      *
      * @param Request $request
      * @param  int $id
-     * @return array
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Request $request, $id)
     {
         $match_key = $request->input('key');
-        $key = Warehouse::where('id', auth()->user()->warehouse_id)->get()[0]->auth_key;
+        $key = Warehouse::query()->where('id', auth()->user()->warehouse_id)->get()[0]->auth_key;
         if (Hash::check($match_key, $key)) {
             try {
                 $log = new ShipmentLog;
@@ -179,23 +185,23 @@ class ShipmentController extends Controller
                 $log->by = auth()->user()->id;
                 $log->save();
 
-                Shipment::where('id', $id)->update([
+                Shipment::query()->where('id', $id)->update([
                     'deleted' => 1
                 ]);
 
-                $details = ShipmentDetail::where('shipment_id', $id)->get();
+                $details = ShipmentDetail::query()->where('shipment_id', $id)->get();
                 foreach ($details as $detail) {
-                    WarehouseInventory::where('id', $detail->inventory_id)->update([
+                    WarehouseInventory::query()->where('id', $detail->inventory_id)->update([
                         'status' => 'IN'
                     ]);
                 }
 
-                return redirect(route('shipments.index'))->with('success', 'Delete success');
+                return \Redirect::route('shipments.index')->with('success', 'Delete success');
             } catch (\Exception $e) {
-                return redirect(route('shipments.index'))->with('failed', 'Delete failed. Something went wrong: ' . $e);
+                return \Redirect::route('shipments.index')->with('failed', 'Delete failed. Something went wrong: ' . $e);
             }
         } else {
-            return redirect(route('shipments.index'))->with('failed', 'Delete failed. Auth key might be incorrect');
+            return \Redirect::route('shipments.index')->with('failed', 'Delete failed. Auth key is incorrect');
         }
     }
 
@@ -203,12 +209,12 @@ class ShipmentController extends Controller
      * View shipment detail as report to print
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function showAsReport($id)
     {
         $shipment = Shipment::with(['warehouse'])->where('id', '=', $id)->first();
         $details = ShipmentDetail::with(['inventory'])->where('shipment_id', '=', $id)->get();
-        return view('shipment.shipment_detail_report', compact('shipment', 'details'));
+        return \View::make('shipment.shipment_detail_report', compact('shipment', 'details'));
     }
 }
