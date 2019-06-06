@@ -10,71 +10,69 @@
 @endsection
 
 @section('content')
-    <div class="container-fluid">
-        <div class="card p-3">
-            <form method="POST" action="{{ route('returned_items.store') }}">
-                {{  csrf_field() }}
-                <h3>Return items</h3>
+    <div class="card p-3">
+        <form method="POST" action="{{ route('returned_items.store') }}">
+            {{  csrf_field() }}
+            <h3>Return items</h3>
 
-                <div class="p-2">
+            <div class="p-2">
 
-                    <div class="form-group row">
-                        <label for="bike-model" class="col-sm-2 col-form-label">Bike Model</label>
-                        <div class="col-lg-4">
-                            <select class="form-control" name="bike-model" id="bike-model" required>
-                                <option></option>
-                            </select>
-                        </div>
+                <div class="form-group row">
+                    <label for="bike-model" class="col-sm-2 col-form-label">Bike Model</label>
+                    <div class="col-lg-4">
+                        <select class="form-control" name="bike-model" id="bike-model" required>
+                            <option></option>
+                        </select>
                     </div>
-
-                    <div class="form-group row">
-                        <label for="vin" class="col-sm-2 col-form-label">VIN</label>
-                        <div class="col-lg-4">
-                            <input type="text" class="form-control" name="vin" id="vin" required placeholder="VIN">
-                        </div>
-                        <i class="m-auto fa fa-2x mr-2" id="mark"></i>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="dealer" class="col-sm-2 col-form-label">Origin dealer</label>
-                        <div class="col-lg-4">
-                            <select class="form-control" name="dealer" id="dealer" required>
-                                <option></option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="time" class="col-sm-2 col-form-label">Time</label>
-                        <div class="col-lg-4">
-                            <input type="text" class="form-control" name="time" id="time" required
-                                   placeholder="Click to select date and time">
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="info" class="col-sm-2 col-form-label">Info</label>
-                        <div class="col-lg-4">
-                            <textarea class="form-control" name="info" id="info" rows="3" required></textarea>
-                        </div>
-                    </div>
-
-
-                    <!-- <div id="add-remove" class=" text-right mt-3">
-                        <a id="add-detail" class="mr-2 text-primary " title="Add bike model"><i
-                                class="fa fa-plus-square fa-2x" aria-hidden="true"></i></a>
-                        <a id="remove-detail" class="text-danger" title="Remove bike model"><i
-                                class="fa fa-minus-square fa-2x" aria-hidden="true"></i></a>
-                    </div> -->
                 </div>
 
-                <div class="text-right mt-3">
-                    <input type="submit" class="btn btn-success" value="Submit">
-                    {{--<input type="submit" class="btn btn-primary" value="Submit and enter another">--}}
+                <div class="form-group row">
+                    <label for="vin" class="col-sm-2 col-form-label">VIN</label>
+                    <div class="col-lg-4">
+                        <input type="text" class="form-control" name="vin" id="vin" required placeholder="VIN">
+                    </div>
+                    <i class="m-auto fa fa-2x mr-2" id="mark"></i>
                 </div>
 
-            </form>
-        </div>
+                <div class="form-group row">
+                    <label for="dealer" class="col-sm-2 col-form-label">Origin dealer</label>
+                    <div class="col-lg-4">
+                        <select class="form-control" name="dealer" id="dealer" required>
+                            <option></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="time" class="col-sm-2 col-form-label">Time</label>
+                    <div class="col-lg-4">
+                        <input type="text" class="form-control" name="time" id="time" required
+                               placeholder="Click to select date and time">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="info" class="col-sm-2 col-form-label">Info</label>
+                    <div class="col-lg-4">
+                        <textarea class="form-control" name="info" id="info" rows="3" required></textarea>
+                    </div>
+                </div>
+
+
+                <!-- <div id="add-remove" class=" text-right mt-3">
+                    <a id="add-detail" class="mr-2 text-primary " title="Add bike model"><i
+                            class="fa fa-plus-square fa-2x" aria-hidden="true"></i></a>
+                    <a id="remove-detail" class="text-danger" title="Remove bike model"><i
+                            class="fa fa-minus-square fa-2x" aria-hidden="true"></i></a>
+                </div> -->
+            </div>
+
+            <div class="text-right mt-3">
+                <input type="submit" class="btn btn-success" value="Submit">
+                {{--<input type="submit" class="btn btn-primary" value="Submit and enter another">--}}
+            </div>
+
+        </form>
     </div>
 @endsection
 

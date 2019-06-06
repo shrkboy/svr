@@ -28,53 +28,51 @@
 @stop
 
 @section('content')
-    <div class="container-fluid">
-        <div class="col-md-auto">
-            <h4>Report Detail</h4>
-            <ul>
-                <li class="h6">ID Report: {{ $reports->id }}</li>
-                <li class="h6">Branch: {{ $reports->branches->dlname }}</li>
-                <li class="h6">Submitted by: {{ $reports->users->name }}</li>
-                <li class="h6">On: {{ \Carbon\Carbon::parse($reports->record_date)->format('M d, Y H:i:s') }}</li>
-            </ul>
-            <div class="table-responsive">
-                <table class="table table-sm table-striped">
-                    <thead>
+    <div class="card p-3">
+        <h4>Report Detail</h4>
+        <ul>
+            <li class="h6">ID Report: {{ $reports->id }}</li>
+            <li class="h6">Branch: {{ $reports->branches->dlname }}</li>
+            <li class="h6">Submitted by: {{ $reports->users->name }}</li>
+            <li class="h6">On: {{ \Carbon\Carbon::parse($reports->record_date)->format('M d, Y H:i:s') }}</li>
+        </ul>
+        <div class="table-responsive">
+            <table class="table table-sm table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">MC Models</th>
+                    <th scope="col">Display Qty</th>
+                    <th scope="col">Talker</th>
+                    <th scope="col">Flayer</th>
+                    <th scope="col">Streamer</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($reports->details as $detail)
                     <tr>
-                        <th scope="col">MC Models</th>
-                        <th scope="col">Display Qty</th>
-                        <th scope="col">Talker</th>
-                        <th scope="col">Flayer</th>
-                        <th scope="col">Streamer</th>
+                        <td scope="row">{{$detail->code_model}}</td>
+                        <td>{{ $detail->dsp_qty }}</td>
+                        <td>{{ $detail->talker }}</td>
+                        <td>{{ $detail->flayer }}</td>
+                        <td>{{ $detail->streamer }}</td>
                     </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($reports->details as $detail)
-                        <tr>
-                            <td scope="row">{{$detail->code_model}}</td>
-                            <td>{{ $detail->dsp_qty }}</td>
-                            <td>{{ $detail->talker }}</td>
-                            <td>{{ $detail->flayer }}</td>
-                            <td>{{ $detail->streamer }}</td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
-            <h4 class="mt-3">Document Photos</h4>
-            <div class="row">
-                @foreach($reports->documents as $document)
-                    <div class="col-md-3">
-                        <a href="{{ asset('/images/reports/'.$document->pic_path) }}"
-                           data-title="{{ $document->pic_path }}"
-                           data-lightbox="document">
-                            <img class="img-thumbnail"
-                                 src="{{ asset('/images/reports/'.$document->pic_path) }}"
-                                 alt="File {{ asset('/images/reports/'.$document->pic_path) }}">
-                        </a>
-                    </div>
                 @endforeach
-            </div>
+                </tbody>
+            </table>
+        </div>
+        <h4 class="mt-3">Document Photos</h4>
+        <div class="row">
+            @foreach($reports->documents as $document)
+                <div class="col-md-3">
+                    <a href="{{ asset('/images/reports/'.$document->pic_path) }}"
+                       data-title="{{ $document->pic_path }}"
+                       data-lightbox="document">
+                        <img class="img-thumbnail"
+                             src="{{ asset('/images/reports/'.$document->pic_path) }}"
+                             alt="File {{ asset('/images/reports/'.$document->pic_path) }}">
+                    </a>
+                </div>
+            @endforeach
         </div>
     </div>
 @endsection

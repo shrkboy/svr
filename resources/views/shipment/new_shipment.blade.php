@@ -10,100 +10,98 @@
 @endsection
 
 @section('content')
-    <div class="container-fluid">
-        <div class="card p-3">
-            <form method="POST" action="{{ route('shipments.store') }}" enctype="multipart/form-data">
-                {{ csrf_field() }}
-                <h3 class="mmc-title">New shipment</h3>
+    <div class="card p-3">
+        <form method="POST" action="{{ route('shipments.store') }}" enctype="multipart/form-data">
+            {{ csrf_field() }}
+            <h3 class="mmc-title">New shipment</h3>
 
-                <div class="p-2">
-                    <div class="form-group row">
-                        <label for="destination" class="col-sm-2 col-form-label">Destination</label>
-                        <div class="col-lg-4">
-                            <select class="form-control" name="destination" id="destination" required>
-                                <option></option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="departure" class="col-sm-2 col-form-label">Departure time</label>
-                        <div class="col-lg-4">
-                            <input type="text" class="form-control" name="departure" id="departure" required
-                                   placeholder="Click to select date and time">
-                        </div>
-                    </div>
-
-                    <h5>Shipment detail data</h5>
-
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="use-spreadsheet" id="use-spreadsheet"
-                               name="use-spreadsheet">
-                        <label class="form-check-label" for="use-spreadsheet">
-                            Use spreadsheet file
-                        </label>
-                    </div>
-
-                    <div class="form-group row" id="spreadsheet-upload">
-                        <label for="spreadsheet-input" class="col-sm-2 col-form-label">File</label>
-                        <div class="col-lg-4">
-                            <div class="custom-file">
-                                <input type="file" id="spreadsheet" class="custom-file-input" name="spreadsheet"
-                                       accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-                                <label for="spreadsheet" class="custom-file-label">
-                                    Choose shipment spreadsheet file (.csv, .xls, or .xlsx)
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="detail" class="mt-3">
-                        <div id="detail-form">
-                            <hr>
-                            <div id="detail-1">
-                                <div class="row">
-                                    <h5 class="col-lg-1">1</h5>
-                                    <div id="input-bike-1" class="col-lg row">
-                                        <div class="form-group col-lg-4">
-                                            <label for="bike-model-1">Bike model</label>
-                                            <select class="form-control detail-input" type="select" name="bike-model-1"
-                                                    id="bike-model-1">
-                                                <option></option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-lg-2">
-                                            <label for="amount-1">Amount</label>
-                                            <input class="form-control" type="number" name="amount-1" id="amount-1"
-                                                   min="0" value="0">
-                                        </div>
-                                        <div id="input-vin" class="col-lg-12 row">
-                                            <h6 class="col-lg-1">VINs</h6>
-                                            <div id="input-vin-1" class="col-lg"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr>
-                            </div>
-                        </div>
-
-                        <div id="add-remove" class=" text-right mt-3">
-                            <a id="add-detail" class="mr-2 text-primary " title="Add bike model"><i
-                                        class="fa fa-plus-square fa-2x"
-                                        aria-hidden="true"></i></a>
-                            <a id="remove-detail" class="text-danger" title="Remove bike model"><i
-                                        class="fa fa-minus-square fa-2x"
-                                        aria-hidden="true"></i></a>
-                        </div>
-                    </div>
-
-                    <input type="text" name="counter" id="counter" readonly hidden>
-
-                    <div class="text-right mt-3">
-                        <button type="submit" class="btn btn-lg btn-success">Submit</button>
+            <div class="p-2">
+                <div class="form-group row">
+                    <label for="destination" class="col-sm-2 col-form-label">Destination</label>
+                    <div class="col-lg-4">
+                        <select class="form-control" name="destination" id="destination" required>
+                            <option></option>
+                        </select>
                     </div>
                 </div>
-            </form>
-        </div>
+
+                <div class="form-group row">
+                    <label for="departure" class="col-sm-2 col-form-label">Departure time</label>
+                    <div class="col-lg-4">
+                        <input type="text" class="form-control" name="departure" id="departure" required
+                               placeholder="Click to select date and time">
+                    </div>
+                </div>
+
+                <h5>Shipment detail data</h5>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="use-spreadsheet" id="use-spreadsheet"
+                           name="use-spreadsheet">
+                    <label class="form-check-label" for="use-spreadsheet">
+                        Use spreadsheet file
+                    </label>
+                </div>
+
+                <div class="form-group row" id="spreadsheet-upload">
+                    <label for="spreadsheet-input" class="col-sm-2 col-form-label">File</label>
+                    <div class="col-lg-4">
+                        <div class="custom-file">
+                            <input type="file" id="spreadsheet" class="custom-file-input" name="spreadsheet"
+                                   accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                            <label for="spreadsheet" class="custom-file-label">
+                                Choose shipment spreadsheet file (.csv, .xls, or .xlsx)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="detail" class="mt-3">
+                    <div id="detail-form">
+                        <hr>
+                        <div id="detail-1">
+                            <div class="row">
+                                <h5 class="col-lg-1">1</h5>
+                                <div id="input-bike-1" class="col-lg row">
+                                    <div class="form-group col-lg-4">
+                                        <label for="bike-model-1">Bike model</label>
+                                        <select class="form-control detail-input" type="select" name="bike-model-1"
+                                                id="bike-model-1">
+                                            <option></option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-2">
+                                        <label for="amount-1">Amount</label>
+                                        <input class="form-control" type="number" name="amount-1" id="amount-1"
+                                               min="0" value="0">
+                                    </div>
+                                    <div id="input-vin" class="col-lg-12 row">
+                                        <h6 class="col-lg-1">VINs</h6>
+                                        <div id="input-vin-1" class="col-lg"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+
+                    <div id="add-remove" class=" text-right mt-3">
+                        <a id="add-detail" class="mr-2 text-primary " title="Add bike model"><i
+                                    class="fa fa-plus-square fa-2x"
+                                    aria-hidden="true"></i></a>
+                        <a id="remove-detail" class="text-danger" title="Remove bike model"><i
+                                    class="fa fa-minus-square fa-2x"
+                                    aria-hidden="true"></i></a>
+                    </div>
+                </div>
+
+                <input type="text" name="counter" id="counter" readonly hidden>
+
+                <div class="text-right mt-3">
+                    <button type="submit" class="btn btn-lg btn-success">Submit</button>
+                </div>
+            </div>
+        </form>
     </div>
 @endsection
 

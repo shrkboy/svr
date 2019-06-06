@@ -33,105 +33,83 @@
 @stop
 
 @section('content')
-    <div class="container-fluid">
-        @if(Session::has('success'))
-            <div class="alert alert-success mx-auto" role="alert">
-                {{ Session::get('success') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+    <div class="card p-3">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <h4>Warehouses</h4>
             </div>
-        @elseif (Session::has('failed'))
-            <div class="alert alert-danger mx-auto" role="alert">
-                {{ Session::get('failed') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        @endif
-
-        <div class="card p-3">
-            <div class="col-md-auto">
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <h4>Warehouses</h4>
-                    </div>
-                    <div class="col-md-6">
-                        <a class="btn btn-primary float-right" role="button" href="{{ route('warehouses.create') }}">Add</a>
-                    </div>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-sm mt-3" id="data-table">
-
-                        <thead>
-                        <tr>
-                            <th style="width: 4%" scope="col">No</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Manager</th>
-                            <th scope="col">Phone</th>
-                            <th style="width: 17%" scope="col">Action</th>
-                        </tr>
-                        </thead>
-
-                        <tbody>
-                        @foreach($warehouses as $key=>$warehouse)
-                            <tr>
-                                <td scope="row">{{ ++$key }}</td>
-                                <td>{{ $warehouse->name }}</td>
-                                <td>{{ $warehouse->manager }}</td>
-                                <td>{{ $warehouse->phone != null ? '+63'.$warehouse->phone : '' }}</td>
-                                <td>
-                                    <button type="button" class="btn btn-primary" data-toggle="modal"
-                                            data-target="#keyModal" data-id="{{ $warehouse->id }}"
-                                            data-name="{{ $warehouse->name }}">Refresh auth key
-                                    </button>
-                                    <a class="btn btn-secondary" href="{{ route('warehouses.edit', $warehouse->id) }}">Update</a>
-                                </td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                </div>
+            <div class="col-md-6">
+                <a class="btn btn-primary float-right" role="button" href="{{ route('warehouses.create') }}">Add</a>
             </div>
         </div>
+        <div class="table-responsive">
+            <table class="table table-sm table-striped" id="data-table">
+
+                <thead>
+                <tr>
+                    <th style="width: 4%" scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Manager</th>
+                    <th scope="col">Phone</th>
+                    <th style="width: 17%" scope="col">Action</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                @foreach($warehouses as $key=>$warehouse)
+                    <tr>
+                        <td scope="row">{{ ++$key }}</td>
+                        <td>{{ $warehouse->name }}</td>
+                        <td>{{ $warehouse->manager }}</td>
+                        <td>{{ $warehouse->phone != null ? '+63'.$warehouse->phone : '' }}</td>
+                        <td>
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#keyModal" data-id="{{ $warehouse->id }}"
+                                    data-name="{{ $warehouse->name }}">Refresh auth key
+                            </button>
+                            <a class="btn btn-secondary" href="{{ route('warehouses.edit', $warehouse->id) }}">Update</a>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 
-        {{--Modal to view auth key--}}
-        <div class="modal fade" id="keyModal" tabindex="-1" role="dialog" aria-labelledby="modelLabel"
-             aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modelLabel">New message</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body text-center">
-                        <div id="result">
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="key" readonly>
-                                <div class="input-group-append">
-                                    <button type="button" class="btn btn-primary" id="copy">
-                                        <span class="fa fa-clipboard"></span>
-                                    </button>
-                                </div>
+    {{--Modal to view auth key--}}
+    <div class="modal fade" id="keyModal" tabindex="-1" role="dialog" aria-labelledby="modelLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modelLabel">New message</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <div id="result">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="key" readonly>
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-primary" id="copy">
+                                    <span class="fa fa-clipboard"></span>
+                                </button>
                             </div>
-                            <small class="form-text text-muted text-left" id="info-text"></small>
                         </div>
-                        <h5 id="error-message"></h5>
-                        <div class="spinner-border text-primary" id="spinner" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
+                        <small class="form-text text-muted text-left" id="info-text"></small>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                    <h5 id="error-message"></h5>
+                    <div class="spinner-border text-primary" id="spinner" role="status">
+                        <span class="sr-only">Loading...</span>
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
                 </div>
             </div>
         </div>
-
-
     </div>
 @endsection
 
@@ -153,7 +131,7 @@
              */
             $("#data-table").DataTable({
                 columnDefs: [
-                    {orderable: false, searchable: false, targets: 3}
+                    {orderable: false, searchable: false, targets: 4}
                 ],
                 responsive: true,
             });

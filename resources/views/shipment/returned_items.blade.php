@@ -18,68 +18,50 @@
 @endsection
 
 @section('content')
-    <div class="container-fluid">
-        @if(Session::has('success'))
-            <div class="alert alert-success mx-auto" role="alert">
-                {{ Session::get('success') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        @elseif (Session::has('failed'))
-            <div class="alert alert-danger mx-auto" role="alert">
-                {{ Session::get('failed') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        @endif
-
-        <div class="row">
-            <div class="col-md m-auto">
-                <h3 id="date">Loading date</h3>
-                <h3 id="clock">Loading clock</h3>
-                <h3>Logged in to {{ auth()->user()->warehouse->name }} as {{ auth()->user()->name }}</h3>
-            </div>
-            <div class="col-md text-right m-auto">
-                <a name="new-shipment" id="new-shipment" class="btn btn-lg btn-primary"
-                   href="{{ route('shipments.create') }}"
-                   role="button">New shipment</a>
-                <a name="return-items" id="return-items" class="btn btn-lg btn-primary"
-                   href="{{ route('returned_items.create') }}" role="button">Return items</a>
-            </div>
+    <div class="row">
+        <div class="col-md m-auto">
+            <h3 id="date">Loading date</h3>
+            <h3 id="clock">Loading clock</h3>
+            <h3>Logged in to {{ auth()->user()->warehouse->name }} as {{ auth()->user()->name }}</h3>
         </div>
+        <div class="col-md text-right m-auto">
+            <a name="new-shipment" id="new-shipment" class="btn btn-lg btn-primary"
+               href="{{ route('shipments.create') }}"
+               role="button">New shipment</a>
+            <a name="return-items" id="return-items" class="btn btn-lg btn-primary"
+               href="{{ route('returned_items.create') }}" role="button">Return items</a>
+        </div>
+    </div>
 
-        <div class="mt-3 card p-3">
-            <h3>Returned items</h3>
-            <table id="data-table" class="table table-sm mt-3">
-                <thead class="thead-inverse">
+    <div class="mt-3 card p-3">
+        <h3>Returned items</h3>
+        <table id="data-table" class="table table-sm table-striped">
+            <thead class="thead-inverse">
+            <tr>
+                <th>#</th>
+                <th>Bike Model</th>
+                <th>VIN</th>
+                <th>From</th>
+                <th>Return Time</th>
+                <th>Info</th>
+                {{--<th>Action</th>--}}
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($returned_items as $key=>$item)
                 <tr>
-                    <th>No</th>
-                    <th>Bike Model</th>
-                    <th>VIN</th>
-                    <th>From</th>
-                    <th>Return Time</th>
-                    <th>Info</th>
-                    {{--<th>Action</th>--}}
+                    <td scope="row">{{ ++$key }}</td>
+                    <td>{{ $item->inventory->bike_model->name }}</td>
+                    <td>{{ $item->inventory->vin }}</td>
+                    <td>{{ $item->dealer->dlname }}</td>
+                    <td>{{ \Carbon\Carbon::parse($item->time)->format('M d Y, H:i:s') }}</td>
+                    <td>{{ $item->info }}</td>
+                    {{--<td></td>--}}
                 </tr>
-                </thead>
-                <tbody>
-                @foreach($returned_items as $key=>$item)
-                    <tr>
-                        <td scope="row">{{ ++$key }}</td>
-                        <td>{{ $item->inventory->bike_model->name }}</td>
-                        <td>{{ $item->inventory->vin }}</td>
-                        <td>{{ $item->dealer->dlname }}</td>
-                        <td>{{ $item->time }}</td>
-                        <td>{{ $item->info }}</td>
-                        {{--<td></td>--}}
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
+            @endforeach
+            </tbody>
+        </table>
 
-        </div>
     </div>
 @endsection
 

@@ -13,12 +13,14 @@
 
 Route::get('/', function () {
     if ($user = auth()->user()) {
-        if ($user->role_id == 8) {
-            return redirect()->route('users');
+        switch ($user->role_id) {
+            case 4:
+                return Redirect::route('shipments.index');
+            case 8:
+                return Redirect::route('users');
         }
-    } else {
-        return redirect()->route('login');
     }
+    return Redirect::route('login');
 });
 
 // Authentication Routes...
@@ -47,12 +49,12 @@ Route::resource('shipments', 'ShipmentController')->middleware('is_warehouse_ope
 Route::resource('returned_items', 'ReturnedItemController');
 Route::resource('warehouse_inventory', 'WarehouseInventoryController');
 Route::resource('warehouses', 'WarehouseController');
-Route::resource('model','BikeModelController');
-Route::resource('retail','RetailReportController');
+Route::resource('model', 'BikeModelController');
+Route::resource('retail', 'RetailReportController');
 
 //Retail Route
-Route::get('retailreport','RetailReportController@retail_report');
-Route::get('addretailreport','RetailReportController@add_retail_report');
+Route::get('retailreport', 'RetailReportController@retail_report');
+Route::get('addretailreport', 'RetailReportController@add_retail_report');
 Route::get('edit/{id}', 'RetailReportController@edit_retail_report');
 Route::post('edit', 'RetailReportController@UpdateReport');
 

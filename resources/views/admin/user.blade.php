@@ -30,42 +30,40 @@
 @stop
 
 @section('content')
-    <div class="container-fluid">
-        <div class="card p-3">
-            <div class="col-md-auto">
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <h4>Users</h4>
-                    </div>
-                    <div class="col-md-6">
-                        <a class="btn btn-primary float-right" role="button" href="{{url('/register')}}">Add User</a>
-                    </div>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-sm mt-3" id="data-table">
-
-                        <thead class="thead-inverse">
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Username</th>
-                            <th scope="col">Role</th>
-                        </tr>
-                        </thead>
-
-                        <tbody>
-                        @foreach($users as $user)
-                            <tr>
-                                <td scope="row">{{$user->name}}</td>
-                                <td>{{ $user->email }}</td>
-                                <td>{{ $user->username }}</td>
-                                <td>{{ $user->role->name }}</td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                </div>
+    <div class="card p-3">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <h4>Users</h4>
             </div>
+            <div class="col-md-6">
+                <a class="btn btn-primary float-right" role="button" href="{{url('/register')}}">Add User</a>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-sm table-striped" id="data-table">
+
+                <thead class="thead-inverse">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Role</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                @foreach($users as $key=>$user)
+                    <tr>
+                        <td scope="row">{{ ++$key }}</td>
+                        <td>{{ $user->name }}</td>
+                        <td>{{ $user->email }}</td>
+                        <td>{{ $user->username }}</td>
+                        <td>{{ $user->role->name }}</td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 @endsection

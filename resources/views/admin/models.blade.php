@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('head-styles')
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+@endsection
+
 @section('navmenu')
     <ul class="navbar-nav mr-auto">
         @if(auth()->user()->role_id == 8)
@@ -20,59 +24,62 @@
 @stop
 
 @section('content')
-    <div class="container-fluid">
-        <div class="col-md-auto">
-            @if(Session::has('success'))
-                <div class="alert alert-success mx-auto" role="alert">
-                    {{ Session::get('success') }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            @elseif (Session::has('failed'))
-                <div class="alert alert-danger mx-auto" role="alert">
-                    {{ Session::get('failed') }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            @endif
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <h4>MC Models</h4>
-                </div>
-                <div class="col-md-6">
-                    <a class="btn btn-primary float-right" role="button" href="{{url('/models/add')}}">Add Model</a>
-                </div>
-            </div>
-            <div class="table-responsive">
-                <table class="table table-sm table-striped">
-                    <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Code</th>
-                        <th scope="col">Color</th>
-                        <th scope="col">Specification</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($models as $bike_model)
-                        <tr>
-                            <td scope="row">{{ $bike_model->name }}</td>
-                            <td scope="row">{{ $bike_model->code }}</td>
-                            <td scope="row">{{ $bike_model->color }}</td>
-                            <td scope="row">{{ $bike_model->spec }}</td>
-                            {{-- TODO: Add EDIT Url --}}
-                            <td scope="row">
-                                <a href="{{url('/models/edit/'. $bike_model->id)}}" class="btn btn-outline-secondary">Edit</a>
-                            </td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
+    <div class="card p-3">
 
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <h4>MC Models</h4>
+            </div>
+            <div class="col-md-6">
+                <a class="btn btn-primary float-right" role="button" href="{{url('/models/add')}}">Add</a>
+            </div>
         </div>
+
+        <div class="table-responsive">
+            <table class="table table-sm table-striped" id="data-table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Code</th>
+                    <th scope="col">Color</th>
+                    <th scope="col">Specification</th>
+                    <th scope="col">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($models as $key=>$bike_model)
+                    <tr>
+                        <td scope="row">{{ ++$key }}</td>
+                        <td>{{ $bike_model->name }}</td>
+                        <td>{{ $bike_model->code }}</td>
+                        <td>{{ $bike_model->color }}</td>
+                        <td>{{ $bike_model->spec }}</td>
+                        {{-- TODO: Add EDIT Url --}}
+                        <td>
+                            <a href="{{url('/models/edit/'. $bike_model->id)}}"
+                               class="btn btn-secondary">Edit</a>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
+
     </div>
+@endsection
+
+@section('script')
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#data-table").DataTable({
+                columnDefs: [
+                    {orderable: false, searchable: false, targets: 5}
+                ],
+                responsive: true,
+            });
+        })
+    </script>
 @endsection

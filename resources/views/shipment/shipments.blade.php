@@ -19,124 +19,106 @@
 @endsection
 
 @section('content')
-    <div class="container-fluid">
-        @if(Session::has('success'))
-            <div class="alert alert-success mx-auto" role="alert">
-                {{ Session::get('success') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        @elseif (Session::has('failed'))
-            <div class="alert alert-danger mx-auto" role="alert">
-                {{ Session::get('failed') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        @endif
-
-        <div class="row">
-            <div class="col-md m-auto">
-                <h3 id="date">Loading date</h3>
-                <h3 id="clock">Loading clock</h3>
-                <h3>Logged in to {{ auth()->user()->warehouse->name }} as {{ auth()->user()->name }}</h3>
-            </div>
-            <div class="col-md text-right m-auto">
-                <a name="new-shipment" id="new-shipment" class="btn btn-lg btn-primary"
-                   href="{{ route('shipments.create') }}"
-                   role="button">New shipment</a>
-                <a name="return-items" id="return-items" class="btn btn-lg btn-primary"
-                   href="{{ route('returned_items.create')  }}" role="button">Return items</a>
-            </div>
+    <div class="row">
+        <div class="col-md m-auto">
+            <h3 id="date">Loading date</h3>
+            <h3 id="clock">Loading clock</h3>
+            <h3>Logged in to {{ auth()->user()->warehouse->name }} as {{ auth()->user()->name }}</h3>
         </div>
+        <div class="col-md text-right m-auto">
+            <a name="new-shipment" id="new-shipment" class="btn btn-lg btn-primary"
+               href="{{ route('shipments.create') }}"
+               role="button">New shipment</a>
+            <a name="return-items" id="return-items" class="btn btn-lg btn-primary"
+               href="{{ route('returned_items.create')  }}" role="button">Return items</a>
+        </div>
+    </div>
 
-        <div class="mt-3 card p-3">
-            <h3>Shipment history</h3>
-            <div class="table-responsive">
-                <table id="data-table" class="table table-sm mt-3">
+    <div class="mt-3 card p-3">
+        <h3>Shipment history</h3>
+        <div class="table-responsive">
+            <table id="data-table" class="table table-sm table-striped">
 
-                    <thead class="thead-inverse">
+                <thead class="thead-inverse">
+                <tr>
+                    <th>#</th>
+                    <th>ID</th>
+                    <th>Departure</th>
+                    <th>Destination</th>
+                    <th>Status</th>
+                    <th>Arrival</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                @foreach($shipments as $key=>$shipment)
                     <tr>
-                        <th>No</th>
-                        <th>ID</th>
-                        <th>Departure</th>
-                        <th>Destination</th>
-                        <th>Status</th>
-                        <th>Arrival</th>
-                        <th>Action</th>
-                    </tr>
-                    </thead>
-
-                    <tbody>
-                    @foreach($shipments as $key=>$shipment)
-                        <tr>
-                            <td scope="row">{{ ++$key }}</td>
-                            <td>{{ sprintf('SHP%08d', $shipment->id) }}</td>
-                            <td>{{ \Carbon\Carbon::parse($shipment->depart_time)->format('M d Y, H:i:s') }}</td>
-                            <td>{{ $shipment->dealer->dlname }}</td>
-                            <td>
+                        <td scope="row">{{ ++$key }}</td>
+                        <td>{{ sprintf('SHP%08d', $shipment->id) }}</td>
+                        <td>{{ \Carbon\Carbon::parse($shipment->depart_time)->format('M d Y, H:i:s') }}</td>
+                        <td>{{ $shipment->dealer->dlname }}</td>
+                        <td>
                                 <span class="font-weight-bold text-{{ $shipment->status == 'DONE' ? 'success' : ($shipment->status == 'ONGOING' ? 'primary' : ($shipment->status == 'CANCELLED' ? 'warning' : 'danger')) }}">
                                     {{ $shipment->status }}
                                 </span>
-                            </td>
-                            <td>{{ $shipment->received_time == null ? '' : \Carbon\Carbon::parse($shipment->received_time)->format('M d Y, H:i:s') }}</td>
-                            <td>
-                                <a href="{{ route('shipments.show', $shipment->id) }}"
-                                   class="btn btn-primary">Details</a>
-                                @if($shipment->status == 'ONGOING')
-                                    <button type="button" class="btn btn-success" data-toggle="modal"
-                                            data-target="#finishModal" data-id="{{ $shipment->id }}"
-                                            data-number="{{ $key }}">Finish
-                                    </button>
-                                @endif
-                            </td>
-                        </tr>
-                    @endforeach
-                    </tbody>
+                        </td>
+                        <td>{{ $shipment->received_time == null ? '' : \Carbon\Carbon::parse($shipment->received_time)->format('M d Y, H:i:s') }}</td>
+                        <td>
+                            <a href="{{ route('shipments.show', $shipment->id) }}"
+                               class="btn btn-primary">Details</a>
+                            @if($shipment->status == 'ONGOING')
+                                <button type="button" class="btn btn-success" data-toggle="modal"
+                                        data-target="#finishModal" data-id="{{ $shipment->id }}"
+                                        data-number="{{ $key }}">Finish
+                                </button>
+                            @endif
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
 
-                </table>
-            </div>
+            </table>
+        </div>
 
 
-            {{--Modal to complete shipment--}}
-            <div class="modal fade" id="finishModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <form method="post" action="{{ url('/shipments/finish') }}">
-                            {{ csrf_field() }}
-                            <div class="modal-body">
-                                <input type="text" class="form-control" id="id" name="id" readonly hidden>
-                                <input type="text" class="form-control" id="number" name="number" readonly hidden>
-                                <div class="form-group">
-                                    <label for="received-time" class="col-form-label">Received time:</label>
-                                    <input type="text" class="form-control" id="received-time" name="received-time"
-                                           required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="received-by" class="col-form-label">Received by:</label>
-                                    <input type="text" class="form-control" id="received-by" name="received-by"
-                                           required>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </div>
-                        </form>
+        {{--Modal to complete shipment--}}
+        <div class="modal fade" id="finishModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
+                    <form method="post" action="{{ url('/shipments/finish') }}">
+                        {{ csrf_field() }}
+                        <div class="modal-body">
+                            <input type="text" class="form-control" id="id" name="id" readonly hidden>
+                            <input type="text" class="form-control" id="number" name="number" readonly hidden>
+                            <div class="form-group">
+                                <label for="received-time" class="col-form-label">Received time:</label>
+                                <input type="text" class="form-control" id="received-time" name="received-time"
+                                       required>
+                            </div>
+                            <div class="form-group">
+                                <label for="received-by" class="col-form-label">Received by:</label>
+                                <input type="text" class="form-control" id="received-by" name="received-by"
+                                       required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
                 </div>
             </div>
-
-
         </div>
+
+
     </div>
 @endsection
 
