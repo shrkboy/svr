@@ -32,13 +32,13 @@ class ShipmentController extends Controller
      */
     public function index()
     {
-        $warehouse_id = auth()->user()->warehouse_id;
-        $shipments = Shipment::query()->where([
-            ['warehouse_id', '=', $warehouse_id],
-            ['deleted', '<>', 1],
-        ])->orderBy('depart_time', 'asc')->get();
+//        $warehouse_id = auth()->user()->warehouse_id;
+//        $shipments = Shipment::query()->where([
+//            ['warehouse_id', '=', $warehouse_id],
+//            ['deleted', '<>', 1],
+//        ])->orderBy('depart_time', 'desc')->get();
 
-        return \View::make('shipment.shipments', compact('shipments', 'shipments'));
+        return \View::make('shipment.shipments');
     }
 
     /**
@@ -113,7 +113,6 @@ class ShipmentController extends Controller
     {
         try {
             $id = $request->input('id');
-            $number = $request->input('number');
             $received_time = $request->input('received-time');
             $received_by = $request->input('received-by');
             Shipment::query()->where('id', $id)
@@ -123,7 +122,7 @@ class ShipmentController extends Controller
                     'status' => 'DONE',
                 ]);
 
-            return \Redirect::route('shipments.index')->with('success', 'Shipment ' . $number . ' updated successfully');
+            return \Redirect::route('shipments.index')->with('success', 'Shipment ID ' . sprintf('SHP%08d', $id) . ' updated successfully');
         } catch (\Exception $e) {
             return \Redirect::route('shipments.index')->with('failed', 'Failed. Something went wrong');
         }

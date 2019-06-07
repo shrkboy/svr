@@ -111,7 +111,7 @@
     <!-- Select2 -->
     <script src="{{ asset('js/select2.full.min.js') }}"></script>
     <!-- Moment -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js" type="text/javascript"></script>
+    <script src="{{ asset('js/moment.min.js') }}" type="text/javascript"></script>
     <!--FontAwesome-->
     <script src="https://use.fontawesome.com/094c71b384.js"></script>
     {{--<script defer src="https://use.fontawesome.com/releases/v5.8.2/js/all.js"--}}

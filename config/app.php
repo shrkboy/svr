@@ -175,7 +175,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         // Laravel IDE Helper
-        'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        // Laravel Datatables
+        Yajra\DataTables\DataTablesServiceProvider::class,
 
     ],
 
@@ -225,6 +227,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+        'DataTables' => Yajra\DataTables\DataTablesServiceProvider::class,
 
     ],
 

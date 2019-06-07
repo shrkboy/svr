@@ -15,9 +15,9 @@ class ReturnedItemController extends Controller
      */
     public function index()
     {
-        $warehouse = session('warehouse_id', null);
-        $returned_items = ReturnedItem::with(['warehouse', 'dealer', 'inventory'])->where('warehouse_id', $warehouse)->get();
-        return view('shipment.returned_items', compact('returned_items'));
+//        $warehouse = session('warehouse_id', null);
+//        $returned_items = ReturnedItem::with(['warehouse', 'dealer', 'inventory'])->where('warehouse_id', $warehouse)->get();
+        return view('shipment.returned_items');
     }
 
     /**

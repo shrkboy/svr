@@ -24,20 +24,21 @@
             <div class="col-sm-6">
                 <div class="dropdown text-right">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fa fa-cog"></i>
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Options
                     </button>
                     <div class="dropdown-menu" aria-labelledby="options">
                         <a class="dropdown-item" href="{{ url('/shipments/report/'.$shipment->id) }}"
                            target="_blank">Print report</a>
-                        <div class="dropdown-divider"></div>
-                        @if($shipment->status != 'DONE')
-                            <a class="dropdown-item" href="#">Mark as Delayed</a>
-                            <a class="dropdown-item" href="#">Mark as Cancelled</a>
+                        @if(auth()->user()->role_id == 4)
+                            <div class="dropdown-divider"></div>
+                            @if($shipment->status != 'DONE')
+                                <a class="dropdown-item" href="#">Mark as Delayed</a>
+                                <a class="dropdown-item" href="#">Mark as Cancelled</a>
+                            @endif
+                            <button type="button" class="dropdown-item text-danger" data-toggle="modal"
+                                    data-target="#confirmationModal">Delete
+                            </button>
                         @endif
-                        <button type="button" class="dropdown-item text-danger" data-toggle="modal"
-                                data-target="#confirmationModal">Delete
-                        </button>
                     </div>
                 </div>
             </div>
@@ -89,33 +90,35 @@
 
 
     {{--Modal to confirm shipment deletion--}}
-    <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">Confirm shipment deletion</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form method="post" action="{{ url('/shipments/delete') . '/' . $shipment->id }}">
-                    {{ csrf_field() }}
-                    <div class="modal-body">
-                        <h6>Request the authorization key from your warehouse's manager</h6>
-                        <div class="form-group">
-                            <label for="key" class="col-form-label">Key:</label>
-                            <input type="text" class="form-control" id="key" name="key">
+    @if(auth()->user()->role_id == 4)
+        <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel">Confirm shipment deletion</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="post" action="{{ url('/shipments/delete') . '/' . $shipment->id }}">
+                        {{ csrf_field() }}
+                        <div class="modal-body">
+                            <h6>Request the authorization key from your warehouse's manager</h6>
+                            <div class="form-group">
+                                <label for="key" class="col-form-label">Key:</label>
+                                <input type="text" class="form-control" id="key" name="key">
+                            </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Confirm</button>
-                    </div>
-                </form>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Confirm</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
+    @endif
 @endsection
 
 @section('script')

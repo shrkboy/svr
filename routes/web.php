@@ -16,6 +16,8 @@ Route::get('/', function () {
         switch ($user->role_id) {
             case 4:
                 return Redirect::route('shipments.index');
+            case 5:
+                return Redirect::route('dashboard.warehouse');
             case 8:
                 return Redirect::route('users');
         }
@@ -63,6 +65,9 @@ Route::get('users', 'AdminController@user')->name('users')->middleware('is_admin
 Route::get('reports', 'AdminController@report')->name('reports')->middleware('is_admin');
 Route::get('reports/detail/{id}', 'AdminController@detail_report')->name('reports')->middleware('is_admin');
 
+//Warehouse manager
+Route::get('dashboard/warehouse', 'WarehouseDashboardController@index')->name('dashboard.warehouse');
+
 //Admin Model Route
 Route::get('models', 'AdminController@model')->name('models')->middleware('is_admin');
 Route::get('models/add', 'AdminController@showInsertModel')->name('models')->middleware('is_admin');
@@ -75,9 +80,6 @@ Route::get('shipments/report/{id}', 'ShipmentController@showAsReport')->middlewa
 Route::post('shipments/finish', 'ShipmentController@finish')->middleware('is_warehouse_operator');
 Route::post('shipments/delete/{id}', 'ShipmentController@destroy')->middleware('is_warehouse_operator');
 
-//Datatable data
-Route::get('datatable/shipment', 'DataTableController@getShipment')->name('get_shipment');
-
 //Route::get('inv/yolo', 'WarehouseInventoryController@yolo');
 
 //Ajax endpoints
@@ -85,3 +87,6 @@ Route::get('key', 'AuthKeyController@generate')->name('generateKey');
 Route::post('key/update/{id}', 'AuthKeyController@update')->name('updateKey');
 Route::get('bike_model/get/{code}', 'BikeModelController@get');
 Route::get('inventory/validate/{bike_model_id}/{vin}', 'WarehouseInventoryController@validateInventoryData');
+//Datatable Ajax endpoints
+Route::get('datatable/shipment', 'DataTableController@getShipment')->name('get_shipment');
+Route::get('datatable/returned_item', 'DataTableController@getReturnedItem')->name('get_returned_item');
