@@ -206,7 +206,7 @@
                         render: function (data) {
                             if (data != null) {
                                 const date = new Date(data);
-                                return moment(date).format('MMM DD, YYYY HH:mm:ss')
+                                return moment(date).format('MMMM DD, YYYY HH:mm:ss')
                             } else {
                                 return '-'
                             }
