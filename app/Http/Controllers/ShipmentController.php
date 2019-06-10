@@ -180,7 +180,6 @@ class ShipmentController extends Controller
                 $log = new ShipmentLog;
                 $log->shipment_id = $id;
                 $log->action = 'DELETE';
-                $log->warehouse_id = auth()->user()->warehouse_id;
                 $log->by = auth()->user()->id;
                 $log->save();
 
