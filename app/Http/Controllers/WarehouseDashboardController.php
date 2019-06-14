@@ -61,6 +61,16 @@ class WarehouseDashboardController extends Controller
     }
 
     /**
+     * Shows view to refresh and get auth key
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function showAuthKey()
+    {
+        return \View::make('shipment.manager_auth_key');
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response

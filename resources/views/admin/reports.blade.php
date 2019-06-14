@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('head-styles')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="{{ asset('css/datatables.min.css') }}">
 @endsection
 
 @section('navmenu')
@@ -69,15 +69,13 @@
 @endsection
 
 @section('script')
-    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ asset('js/datatables.min.js') }}"></script>
     <script>
         $(document).ready(function () {
             $("#data-table").DataTable({
                 columnDefs: [
                     {orderable: false, searchable: false, targets: 6}
                 ],
-                responsive: true,
             });
         })
     </script>

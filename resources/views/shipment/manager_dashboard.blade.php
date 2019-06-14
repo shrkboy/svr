@@ -1,8 +1,7 @@
 @extends('layouts.app')
 
 @section('head-styles')
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ asset('css/font-awesome.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Chart.min.css') }}">
 @endsection
 
@@ -11,6 +10,9 @@
         @if(auth()->user()->role_id == 5)
             <li class="nav-item">
                 <a href="{{ route('dashboard.warehouse') }}" class="nav-link active">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('dashboard.warehouse.auth_key') }}" class="nav-link">Auth key</a>
             </li>
         @endif
         @if(auth()->user()->role_id == 4 || auth()->user()->role_id == 5)
@@ -68,7 +70,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-3 mt-3" id="authKey">
+        <div class="col-xl-3 mt-3" id="authKey" hidden>
             <div class="card">
                 <div class="card-header">
                     Manager auth key
@@ -101,9 +103,8 @@
 @section('script')
     <script src="{{ asset('js/clock-and-date.js') }}"></script>
     <script src="{{ asset('js/Chart.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/chartjs-plugin-datalabels.min.js') }}"></script>
     <script src="{{ asset('js/moment.min.js') }}"></script>
-    <!--FontAwesome-->
-    <script src="https://use.fontawesome.com/094c71b384.js"></script>
     <script>
         // Chart data
         const shipmentAmount = @json($shipmentAmount);
@@ -113,7 +114,7 @@
 
         // Create chart
         const shipmentAmountChart = new Chart($('canvas#shipmentsLastSixMonthsChart').get(0).getContext('2d'), {
-            type: 'line',
+            type: 'bar',
             data: {
                 labels: shipmentAmount.map(x => moment(x.month, 'M').format('MMMM')),
                 datasets: [
@@ -180,10 +181,30 @@
                         'rgba(153, 102, 255)',
                         'rgba(255, 159, 64)'
                     ],
-                }]
+                }],
             },
+            // options: {
+            //     tooltips: {
+            //         enabled: false
+            //     },
+            //     plugins: {
+            //         datalabels: {
+            //             formatter: (value, ctx) => {
+            //                 let dataArr = ctx.chart.data.datasets[0].data;
+            //                 console.log(ctx.chart.data);
+            //                 let sum = 0;
+            //                 dataArr.map(data => {
+            //                     sum += data;
+            //                 });
+            //                 return (value * 100 / sum).toFixed(2) + "%";
+            //             },
+            //             color: '#fff',
+            //         }
+            //     }
+            // }
         });
 
+        // auth key card
         $(document).ready(function () {
             const result = $('div#result');
             const keyText = $('input#key');

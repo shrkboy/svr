@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\BikeModel;
-use App\Branch;
 use App\Shipment;
 use App\ShipmentDetail;
 use App\ShipmentLog;
@@ -48,9 +46,7 @@ class ShipmentController extends Controller
      */
     public function create()
     {
-        $branches = Branch::all();
-        $bike_models = BikeModel::all();
-        return \View::make('shipment.new_shipment', compact('branches', 'bike_models'));
+        return \View::make('shipment.new_shipment');
     }
 
     /**
@@ -122,9 +118,9 @@ class ShipmentController extends Controller
                     'status' => 'DONE',
                 ]);
 
-            return \Redirect::route('shipments.index')->with('success', 'Shipment ID ' . sprintf('SHP%08d', $id) . ' updated successfully');
+            return \Redirect::route('shipments.show', $id)->with('success', 'Shipment status updated successfully');
         } catch (\Exception $e) {
-            return \Redirect::route('shipments.index')->with('failed', 'Failed. Something went wrong');
+            return \Redirect::route('shipments.show', $id)->with('failed', 'Shipment status update failed. Something went wrong');
         }
     }
 
@@ -157,11 +153,44 @@ class ShipmentController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $flag = $request->input('flag');
+            $info = $request->input('info');
+            $departure_time = $request->input('departure');
+
+            if ($flag == 'cancel') {
+                Shipment::query()->where('id', $id)->update([
+                    'status' => 'CANCELLED',
+                    'info' => $info,
+                ]);
+
+                // revert inventory statuses
+                $details = ShipmentDetail::query()->where('shipment_id', $id)->get();
+                foreach ($details as $detail) {
+                    WarehouseInventory::query()->where('id', $detail->inventory_id)->update([
+                        'status' => 'IN'
+                    ]);
+                }
+            } else if ($flag == 'delay') {
+                Shipment::query()->where('id', $id)->update([
+                    'status' => 'DELAYED',
+                    'info' => $info,
+                ]);
+            } else if ($flag == 'ongoing') {
+                Shipment::query()->where('id', $id)->update([
+                    'status' => 'ONGOING',
+                    'depart_time' => $departure_time,
+                ]);
+            }
+
+            return \Redirect::route('shipments.show', $id)->with('success', 'Shipment status updated successfully');
+        } catch (\Exception $e) {
+            return \Redirect::route('shipments.show', $id)->with('failed', 'Shipment status update failed. Something went wrong');
+        }
     }
 
     /**

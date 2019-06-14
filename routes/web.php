@@ -67,6 +67,7 @@ Route::get('reports/detail/{id}', 'AdminController@detail_report')->name('report
 
 //Warehouse manager
 Route::get('dashboard/warehouse', 'WarehouseDashboardController@index')->name('dashboard.warehouse');
+Route::get('dashboard/warehouse/auth_key', 'WarehouseDashboardController@showAuthKey')->name('dashboard.warehouse.auth_key');
 
 //Admin Model Route
 Route::get('models', 'AdminController@model')->name('models')->middleware('is_admin');
@@ -78,6 +79,7 @@ Route::post('models/edit', 'AdminController@UpdateModel')->name('models.update')
 //Shipments
 Route::get('shipments/report/{id}', 'ShipmentController@showAsReport')->middleware('is_warehouse_operator');
 Route::post('shipments/finish', 'ShipmentController@finish')->middleware('is_warehouse_operator');
+Route::post('shipments/update/{id}', 'ShipmentController@update')->middleware('is_warehouse_operator');
 Route::post('shipments/delete/{id}', 'ShipmentController@destroy')->middleware('is_warehouse_operator');
 
 //Route::get('inv/yolo', 'WarehouseInventoryController@yolo');

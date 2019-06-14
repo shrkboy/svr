@@ -1,11 +1,9 @@
 @extends('layouts.app')
 
 @section('head-styles')
-    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('css/font-awesome.css') }}">
     <link rel="stylesheet" href="{{ asset('css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/select2-bootstrap4.min.css') }}">
-
-    <!-- Bootstrap Date Time Picker -->
     <link rel="stylesheet" href="{{ asset('css/bootstrap-datetimepicker.min.css') }}">
 @endsection
 
@@ -106,21 +104,10 @@
 @endsection
 
 @section('script')
-    <!-- Custom -->
     <script src="{{ asset('js/clock-and-date.js') }}"></script>
-    <!-- Select2 -->
     <script src="{{ asset('js/select2.full.min.js') }}"></script>
-    <!-- Moment -->
     <script src="{{ asset('js/moment.min.js') }}" type="text/javascript"></script>
-    <!--FontAwesome-->
-    <script src="https://use.fontawesome.com/094c71b384.js"></script>
-    {{--<script defer src="https://use.fontawesome.com/releases/v5.8.2/js/all.js"--}}
-    {{--integrity="sha384-DJ25uNYET2XCl5ZF++U8eNxPWqcKohUUBUpKGlNLMchM7q4Wjg2CUpjHLaL8yYPH"--}}
-    {{--crossorigin="anonymous"></script>--}}
-    <!-- Bootstrap Date Time Picker -->
-    <!-- https://www.jqueryscript.net/time-clock/Date-Time-Picker-Bootstrap-4.html -->
     <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}"></script>
-    <!-- Inline -->
     <script>
         $(document).ready(function () {
             // activate select2 to pick shipment destination
@@ -239,17 +226,22 @@
                     const divInputVin = $("div#input-vin-" + counter);
                     divInputVin.empty();
                     for (var i = 0; i < this.value; i++) {
-                        divInputVin.append('<div class="row" id="div-vin-' + counter + '-' + (i + 1) + '">' +
-                            '<input type="text" name="vin-' + counter + '-' + (i + 1) + '" id="vin-' + counter + '-' + (i + 1) + '" class="form-control col-md-4">' +
-                            '<div class="col-md-2">' +
+                        divInputVin.append('<div class="form-group row" id="div-vin-' + counter + '-' + (i + 1) + '">' +
+                            '<label for="vin-' + counter + '-' + (i + 1) + '" class="col-form-label">' + (i + 1) + '</label>' +
+                            '<div class="col-md-4">' +
+                            '<input type="text" name="vin-' + counter + '-' + (i + 1) + '" id="vin-' + counter + '-' + (i + 1) + '" class="form-control">' +
+                            '</div>' +
+                            '<div class="col-md-2 hint-' + counter + '-' + (i + 1) + '">' +
                             '<i class="m-auto fa fa-2x mr-2" id="mark-' + counter + '-' + (i + 1) + '"></i>' +
+                            '<small></small>' +
                             '</div>' +
                             '</div>'
                         );
                         $("input#vin-" + counter + "-" + (i + 1)).on('input',
                             function () {
                                 const input = $(this);
-                                const mark = $(this).next().children();
+                                const mark = $(this).parent().next().find('i');
+                                const hint = $(this).parent().next().find('small');
                                 $.ajax({
                                     url: '{{ url('/inventory/validate') }}' + '/' + $('#bike-model-' + counter).val() + '/' + input.val(),
                                     dataType: "json",
@@ -257,9 +249,11 @@
                                         if (!$.isEmptyObject(data) && data[0].status === 'IN') {
                                             input.removeClass("is-invalid").addClass("is-valid");
                                             mark.removeClass("fa-times text-danger").addClass("fa-check text-success");
+                                            hint.removeClass('text-danger').addClass('text-success').text('Item available');
                                         } else {
                                             input.removeClass("is-valid").addClass("is-invalid");
                                             mark.removeClass("fa-check text-success").addClass("fa-times text-danger");
+                                            hint.removeClass('text-success').addClass('text-danger').text('Item not available');
                                         }
                                     },
                                 })

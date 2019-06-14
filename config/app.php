@@ -178,7 +178,8 @@ return [
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         // Laravel Datatables
         Yajra\DataTables\DataTablesServiceProvider::class,
-
+        // Laravel Excel
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
 
     /*
@@ -229,6 +230,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'DataTables' => Yajra\DataTables\DataTablesServiceProvider::class,
+        'Excel' => Maatwebsite\Excel\ExcelServiceProvider::class,
 
     ],
 
