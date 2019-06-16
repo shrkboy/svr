@@ -3,6 +3,11 @@
 @section('head-styles')
     <link rel="stylesheet" href="{{ asset('css/font-awesome.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Chart.min.css') }}">
+    <style>
+        .chart-container{
+            height: 300px !important;
+        }
+    </style>
 @endsection
 
 @section('navmenu')
@@ -46,7 +51,9 @@
                     Shipment analytics
                 </div>
                 <div class="card-body">
-                    <canvas id="shipmentsLastSixMonthsChart" height="150"></canvas>
+                    <div class="chart-container">
+                        <canvas id="shipmentsLastSixMonthsChart" height="300"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -56,17 +63,21 @@
                     Motorcycles shipped this month
                 </div>
                 <div class="card-body">
-                    <canvas id="bikeModelShippedThisMonthChart" height="150"></canvas>
+                    <div class="chart-container">
+                        <canvas id="bikeModelShippedThisMonthChart" height="300"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-xl-3 mt-3" id="returnsLastSixMonths">
+        <div class="col-xl-6 mt-3" id="returnsLastSixMonths">
             <div class="card">
                 <div class="card-header">
                     Returns in last 6 months
                 </div>
                 <div class="card-body">
-                    <canvas id="returnsLastSixMonthsChart" height="200"></canvas>
+                    <div class="chart-container">
+                        <canvas id="returnsLastSixMonthsChart" height="300"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -130,6 +141,8 @@
                     }]
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     yAxes: [{
                         ticks: {
@@ -157,6 +170,8 @@
                 }]
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     yAxes: [{
                         ticks: {
@@ -183,25 +198,10 @@
                     ],
                 }],
             },
-            // options: {
-            //     tooltips: {
-            //         enabled: false
-            //     },
-            //     plugins: {
-            //         datalabels: {
-            //             formatter: (value, ctx) => {
-            //                 let dataArr = ctx.chart.data.datasets[0].data;
-            //                 console.log(ctx.chart.data);
-            //                 let sum = 0;
-            //                 dataArr.map(data => {
-            //                     sum += data;
-            //                 });
-            //                 return (value * 100 / sum).toFixed(2) + "%";
-            //             },
-            //             color: '#fff',
-            //         }
-            //     }
-            // }
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+            }
         });
 
         // auth key card

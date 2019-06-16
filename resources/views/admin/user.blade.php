@@ -72,7 +72,9 @@
     <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}"></script>
     <script>
         $(document).ready(function () {
-            $("#data-table").DataTable();
+            $("#data-table").DataTable({
+                responsive: true,
+            });
         })
     </script>
 @endsection

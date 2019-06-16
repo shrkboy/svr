@@ -25,7 +25,7 @@
 
                                 <div class="col-md-6">
                                     <input type="text" class="form-control" name="manager" id="manager" required
-                                           placeholder="Manager" value="{{ $warehouse->manager }}">
+                                           placeholder="Manager" value="{{ $warehouse->manager_detail['name'] }}">
                                 </div>
                             </div>
 

@@ -36,38 +36,37 @@
                 <a class="btn btn-primary float-right" role="button" href="{{ route('warehouses.create') }}">Add</a>
             </div>
         </div>
-        <div class="table-responsive">
-            <table class="table table-sm table-striped" id="data-table">
+        <table class="table table-sm table-striped" id="data-table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Manager</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
 
-                <thead>
+            <tbody>
+            @foreach($warehouses as $key=>$warehouse)
                 <tr>
-                    <th style="width: 5%" scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Manager</th>
-                    <th scope="col">Phone</th>
-                    <th style="width: 17%" scope="col">Action</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                @foreach($warehouses as $key=>$warehouse)
-                    <tr>
-                        <td scope="row">{{ ++$key }}</td>
-                        <td>{{ $warehouse->name }}</td>
-                        <td>{{ $warehouse->manager }}</td>
-                        <td>{{ $warehouse->phone != null ? '+63'.$warehouse->phone : '' }}</td>
-                        <td>
+                    <td scope="row">{{ ++$key }}</td>
+                    <td>{{ $warehouse->name }}</td>
+                    <td>{{ $warehouse->manager_detail['name'] }}</td>
+                    <td>{{ $warehouse->phone != null ? '+63'.$warehouse->phone : '' }}</td>
+                    <td>
+                        <div class="btn-group">
                             <button type="button" class="btn btn-primary" data-toggle="modal"
                                     data-target="#keyModal" data-id="{{ $warehouse->id }}"
                                     data-name="{{ $warehouse->name }}">Refresh auth key
                             </button>
                             <a class="btn btn-secondary" href="{{ route('warehouses.edit', $warehouse->id) }}">Update</a>
-                        </td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
-        </div>
+                        </div>
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
     </div>
 
 
@@ -88,7 +87,7 @@
                             <input type="text" class="form-control" id="key" readonly>
                             <div class="input-group-append">
                                 <button type="button" class="btn btn-primary" id="copy">
-                                    <span class="fa fa-clipboard"></span>
+                                    <span class="fa fa-copy"></span>
                                 </button>
                             </div>
                         </div>
@@ -161,7 +160,7 @@
                     };
                     $.ajaxSetup({
                         headers:
-                            { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+                            {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
                     });
                     $.ajax({
                         url: '{{ url('/key/update') }}' + '/' + id,

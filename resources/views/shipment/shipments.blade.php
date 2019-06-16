@@ -159,7 +159,7 @@
         $(document).ready(function () {
             $("#data-table").DataTable({
                 responsive: true,
-                ajax: "{{ route('get_shipment') }}",
+                ajax: "{{ auth()->user()->role_id == 4 ? route('get_shipment') : route('get_shipment_full') }}",
                 processing: true,
                 serverSide: true,
                 columns: [
@@ -180,8 +180,7 @@
                     {
                         data: 'depart_time',
                         render: function (data) {
-                            const date = new Date(data);
-                            return moment(date).format('MMMM DD, YYYY HH:mm:ss')
+                            return moment(data).format('MMMM DD, YYYY HH:mm')
                         }
                     },
                     {data: 'dealer.dlname'},
@@ -197,6 +196,8 @@
                                     return '<span class="text-warning font-weight-bold">' + data + '</span>';
                                 case 'CANCELLED':
                                     return '<span class="text-danger font-weight-bold">' + data + '</span>';
+                                case 'DELETED':
+                                    return '<span class="text-danger font-weight-bold">' + data + '</span>';
                             }
                         }
                     },
@@ -204,8 +205,7 @@
                         data: 'received_time',
                         render: function (data) {
                             if (data != null) {
-                                const date = new Date(data);
-                                return moment(date).format('MMMM DD, YYYY HH:mm:ss')
+                                return moment(data).format('MMMM DD, YYYY HH:mm')
                             } else {
                                 return '-'
                             }

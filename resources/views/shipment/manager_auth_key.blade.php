@@ -50,7 +50,7 @@
                             <input type="text" class="form-control" id="key" readonly>
                             <div class="input-group-append">
                                 <button type="button" class="btn btn-primary" id="copy">
-                                    <span class="fa fa-clipboard"></span>
+                                    <span class="fa fa-copy"></span>
                                 </button>
                                 <button type="button" class="btn btn-secondary" id="auth-key-btn">
                                     <span class="fa fa-redo"></span>

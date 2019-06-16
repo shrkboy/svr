@@ -8,12 +8,20 @@
 
 @section('navmenu')
     <ul class="navbar-nav mr-auto">
-        @if(auth()->user()->role_id == 4)
+        @if(auth()->user()->role_id == 5)
             <li class="nav-item">
-                <a href="{{ url('/shipments') }}" class="nav-link">Shipments</a>
+                <a href="{{ route('dashboard.warehouse') }}" class="nav-link">Dashboard</a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">Returned Items</a>
+                <a href="{{ route('dashboard.warehouse.auth_key') }}" class="nav-link">Auth key</a>
+            </li>
+        @endif
+        @if(auth()->user()->role_id == 4 || auth()->user()->role_id == 5)
+            <li class="nav-item">
+                <a href="{{ route('shipments.index') }}" class="nav-link active">Shipments</a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('returned_items.index') }}" class="nav-link">Returned Items</a>
             </li>
         @endif
     </ul>
@@ -69,9 +77,9 @@
                 @endif
             </div>
             <div class=" col-lg">
-                Departure: {{ \Carbon\Carbon::parse($shipment->depart_time)->format('M d Y, H:i:s') }} <br>
+                Departure: {{ \Carbon\Carbon::parse($shipment->depart_time)->format('M d Y, H:i') }} <br>
                 Received
-                at: {{ $shipment->received_time != null ? \Carbon\Carbon::parse($shipment->received_time)->format('M d Y, H:i:s') : '-' }}
+                at: {{ $shipment->received_time != null ? \Carbon\Carbon::parse($shipment->received_time)->format('M d Y, H:i') : '-' }}
                 <br>
                 Received by: {{ $shipment->received_by != null ? $shipment->received_by : '-' }}<br>
             </div>
@@ -81,7 +89,7 @@
             <table class="table table-sm table-striped">
                 <thead class="thead-inverse">
                 <tr>
-                    <th>No</th>
+                    <th>#</th>
                     <th>Bike model</th>
                     <th>Bike code</th>
                     <th>Bike color</th>
@@ -101,7 +109,44 @@
                 </tbody>
             </table>
         </div>
+
     </div>
+
+    @if(auth()->user()->role_id == 5)
+        <div class="card p-3 mt-3">
+            <h3>Shipment activity logs</h3>
+            <div class="table-responsive">
+                <table class="table table-sm table-striped">
+                    <thead class="thead-inverse">
+                    <tr>
+                        <th>#</th>
+                        <th>Action</th>
+                        <th>By</th>
+                        <th>Time</th>
+                        <th>Info</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @if(!empty($logs))
+                        @foreach($logs as $key=>$log)
+                            <tr>
+                                <td scope="row">{{ ++$key }}</td>
+                                <td class="font-weight-bold text-{{ $log->action == 'FINISH' ? 'success' : ($log->action == 'ONGOING' || $log->action == 'ENTRY' ? 'primary' : ($log->action == 'DELAY' ? 'warning' : 'danger')) }}">{{ $log->action }}</td>
+                                <td>{{ $log->by_detail->name }}</td>
+                                <td>{{ \Carbon\Carbon::parse($log->created_at)->format('M d Y, H:i') }}</td>
+                                <td>{{ $log->info ? $log->info : '-' }}</td>
+                            </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td colspan="4" class="text-center">Empty</td>
+                        </tr>
+                    @endif
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    @endif
 
     {{--Modal to confirm shipment deletion--}}
     @if(auth()->user()->role_id == 4)
@@ -122,6 +167,10 @@
                             <div class="form-group">
                                 <label for="key" class="col-form-label">Key:</label>
                                 <input type="text" class="form-control" id="key" name="key">
+                            </div>
+                            <div class="form-group">
+                                <label for="delete-info" class="col-form-label">Key:</label>
+                                <input type="text" class="form-control" id="delete-info" name="delete-info">
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -151,8 +200,9 @@
                         <div class="modal-body">
                             <input type="text" id="flag" name="flag" readonly hidden>
                             <div class="form-group" id="info-input">
-                                <label for="info" class="col-form-label">Enter additional info of status update:</label>
-                                <input type="text" class="form-control" id="info" name="info">
+                                <label for="update-info" class="col-form-label">Enter additional info of status
+                                    update:</label>
+                                <input type="text" class="form-control" id="update-info" name="update-info">
                             </div>
                             <div class="form-group" id="departure-input">
                                 <label for="departure" class="col-form-label">Enter new departure time:</label>

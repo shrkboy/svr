@@ -91,4 +91,5 @@ Route::get('bike_model/get/{code}', 'BikeModelController@get');
 Route::get('inventory/validate/{bike_model_id}/{vin}', 'WarehouseInventoryController@validateInventoryData');
 //Datatable Ajax endpoints
 Route::get('datatable/shipment', 'DataTableController@getShipment')->name('get_shipment');
+Route::get('datatable/shipment_full', 'DataTableController@getShipmentFull')->name('get_shipment_full');
 Route::get('datatable/returned_item', 'DataTableController@getReturnedItem')->name('get_returned_item');
