@@ -50,7 +50,7 @@ class ReturnedItemController extends Controller
                 ['status', '!=', 'IN']])->first();
 
             $returned_item = new ReturnedItem;
-            $returned_item->warehouse_id = $request->session()->get('warehouse_id', null);
+            $returned_item->warehouse_id = auth()->user()->warehouse_id;
             $returned_item->dealer_id = $request->input('dealer');
             $returned_item->info = $request->input('info');
             $returned_item->inventory_id = $inventory->id;
@@ -60,7 +60,7 @@ class ReturnedItemController extends Controller
             WarehouseInventory::where('id', $inventory->id)
                 ->update([
                     'status' => 'RETURNED',
-                    'warehouse_id' => $request->session()->get('warehouse_id', null)
+                    'warehouse_id' => auth()->user()->warehouse_id,
                 ]);
 
             return redirect(route('returned_items.index'))->with('success', 'Data inserted successfully');

@@ -63,7 +63,7 @@ class ShipmentController extends Controller
         try {
             $shipment = new Shipment;
             $shipment->depart_time = $request->input('departure');
-            $shipment->warehouse_id = $request->session()->get('warehouse_id', null);
+            $shipment->warehouse_id = auth()->user()->warehouse_id;
             $shipment->dealer_id = $request->input('destination');
             $shipment->status = 'ONGOING';
             $shipment->deleted = 0;
@@ -101,7 +101,7 @@ class ShipmentController extends Controller
 
             return \Redirect::route('shipments.index')->with('success', 'Report inserted successfully');
         } catch (\Exception $e) {
-            return \Redirect::route('shipments.index')->with('failed', 'Failed. something went wrong');
+            return \Redirect::route('shipments.index')->with('failed', 'Failed. something went wrong ' . $e);
         }
     }
 
