@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('head-styles')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="{{ asset('css/datatables.min.css') }}">
 @endsection
 
 @section('navmenu')
@@ -39,7 +39,7 @@
             <table class="table table-sm table-striped" id="data-table">
                 <thead>
                 <tr>
-                    <th scope="col">#</th>
+                    <th scope="col" style="width: 5%">#</th>
                     <th scope="col">Name</th>
                     <th scope="col">Code</th>
                     <th scope="col">Color</th>
@@ -65,13 +65,11 @@
                 </tbody>
             </table>
         </div>
-
     </div>
 @endsection
 
 @section('script')
-    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ asset('js/datatables.min.js') }}"></script>
     <script>
         $(document).ready(function () {
             $("#data-table").DataTable({

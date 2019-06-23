@@ -65,7 +65,7 @@
     <table id="data" border="1">
         <thead class="thead-inverse">
         <tr>
-            <th>No</th>
+            <th>#</th>
             <th>Bike model</th>
             <th>Bike code</th>
             <th>Bike color</th>

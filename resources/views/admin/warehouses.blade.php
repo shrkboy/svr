@@ -1,15 +1,9 @@
 @extends('layouts.app')
 
-@section('head-script')
-    <!-- Select2 -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
-@endsection
-
 @section('head-styles')
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="{{ asset('css/font-awesome.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/select2.min.css') }}">
 @endsection
 
 
@@ -42,38 +36,37 @@
                 <a class="btn btn-primary float-right" role="button" href="{{ route('warehouses.create') }}">Add</a>
             </div>
         </div>
-        <div class="table-responsive">
-            <table class="table table-sm table-striped" id="data-table">
+        <table class="table table-sm table-striped" id="data-table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Manager</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
 
-                <thead>
+            <tbody>
+            @foreach($warehouses as $key=>$warehouse)
                 <tr>
-                    <th style="width: 4%" scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Manager</th>
-                    <th scope="col">Phone</th>
-                    <th style="width: 17%" scope="col">Action</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                @foreach($warehouses as $key=>$warehouse)
-                    <tr>
-                        <td scope="row">{{ ++$key }}</td>
-                        <td>{{ $warehouse->name }}</td>
-                        <td>{{ $warehouse->manager }}</td>
-                        <td>{{ $warehouse->phone != null ? '+63'.$warehouse->phone : '' }}</td>
-                        <td>
+                    <td scope="row">{{ ++$key }}</td>
+                    <td>{{ $warehouse->name }}</td>
+                    <td>{{ $warehouse->manager_detail['name'] }}</td>
+                    <td>{{ $warehouse->phone != null ? '+63'.$warehouse->phone : '' }}</td>
+                    <td>
+                        <div class="btn-group">
                             <button type="button" class="btn btn-primary" data-toggle="modal"
                                     data-target="#keyModal" data-id="{{ $warehouse->id }}"
                                     data-name="{{ $warehouse->name }}">Refresh auth key
                             </button>
                             <a class="btn btn-secondary" href="{{ route('warehouses.edit', $warehouse->id) }}">Update</a>
-                        </td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
-        </div>
+                        </div>
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
     </div>
 
 
@@ -94,7 +87,7 @@
                             <input type="text" class="form-control" id="key" readonly>
                             <div class="input-group-append">
                                 <button type="button" class="btn btn-primary" id="copy">
-                                    <span class="fa fa-clipboard"></span>
+                                    <span class="fa fa-copy"></span>
                                 </button>
                             </div>
                         </div>
@@ -115,14 +108,9 @@
 
 @section('script')
     <script src="{{ asset('js/clock-and-date.js') }}"></script>
-    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-    <!-- Moment -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js" type="text/javascript"></script>
-    <!--FontAwesome-->
-    <script src="https://use.fontawesome.com/094c71b384.js"></script>
-    <!-- Bootstrap Date Time Picker -->
-    <!-- https://www.jqueryscript.net/time-clock/Date-Time-Picker-Bootstrap-4.html -->
+    <script src="{{ asset('js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('js/datatables.min.js') }}"></script>
+    <script src="{{ asset('js/moment.min.js') }}"></script>
     <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}"></script>
     <script>
         $(document).ready(function () {
@@ -172,7 +160,7 @@
                     };
                     $.ajaxSetup({
                         headers:
-                            { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+                            {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
                     });
                     $.ajax({
                         url: '{{ url('/key/update') }}' + '/' + id,

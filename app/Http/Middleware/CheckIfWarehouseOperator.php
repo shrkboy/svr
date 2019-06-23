@@ -20,7 +20,6 @@ class CheckIfWarehouseOperator
         {
             return new Response(view('unauth'));
         }
-        $request->session()->put('warehouse_id', $request->user()->warehouse_id);
         return $next($request);
     }
 }

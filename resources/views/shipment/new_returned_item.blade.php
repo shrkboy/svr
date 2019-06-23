@@ -1,11 +1,9 @@
 @extends('layouts.app')
 
 @section('head-styles')
-    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('css/font-awesome.css') }}">
     <link rel="stylesheet" href="{{ asset('css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/select2-bootstrap4.min.css') }}">
-
-    <!-- Bootstrap Date Time Picker -->
     <link rel="stylesheet" href="{{ asset('css/bootstrap-datetimepicker.min.css') }}">
 @endsection
 
@@ -31,7 +29,10 @@
                     <div class="col-lg-4">
                         <input type="text" class="form-control" name="vin" id="vin" required placeholder="VIN">
                     </div>
-                    <i class="m-auto fa fa-2x mr-2" id="mark"></i>
+                    <div class="col-lg-2">
+                        <i class="m-auto fa fa-2x mr-2" id="mark"></i>
+                        <small id="hint"></small>
+                    </div>
                 </div>
 
                 <div class="form-group row">
@@ -77,16 +78,9 @@
 @endsection
 
 @section('script')
-    <!-- Custom -->
     <script src="{{ asset('js/clock-and-date.js') }}"></script>
-    <!-- Select2 -->
     <script src="{{ asset('js/select2.full.min.js') }}"></script>
-    <!-- Moment -->
     <script src="{{ asset('js/moment.min.js') }}" type="text/javascript"></script>
-    <!--FontAwesome-->
-    <script src="https://use.fontawesome.com/094c71b384.js"></script>
-    <!-- Bootstrap Date Time Picker -->
-    <!-- https://www.jqueryscript.net/time-clock/Date-Time-Picker-Bootstrap-4.html -->
     <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}"></script>
     <script>
         $(document).ready(function () {
@@ -160,10 +154,11 @@
                 },
             });
 
-            $("input#vin").change(
+            $("input#vin").on('input',
                 function () {
                     const input = $(this);
-                    const mark = $(this).next().children();
+                    const mark = $('i#mark');
+                    const hint = $('small#hint');
                     $.ajax({
                         url: '{{ url('/inventory/validate') }}' + '/' + $('#bike-model').val() + '/' + input.val(),
                         dataType: "json",
@@ -172,9 +167,11 @@
                             if (!$.isEmptyObject(data) && data[0].status.localeCompare("IN") !== 0) {
                                 input.removeClass("is-invalid").addClass("is-valid");
                                 mark.removeClass("fa-times text-danger").addClass("fa-check text-success");
+                                hint.removeClass('text-danger').addClass('text-success').text('Item found');
                             } else {
                                 input.removeClass("is-valid").addClass("is-invalid");
                                 mark.removeClass("fa-check text-success").addClass("fa-times text-danger");
+                                hint.removeClass('text-success').addClass('text-danger').text('Item not found');
                             }
                         },
                     })

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Warehouse;
 use Illuminate\Http\Request;
+use function PHPSTORM_META\type;
 
 class WarehouseController extends Controller
 {
@@ -14,7 +15,7 @@ class WarehouseController extends Controller
      */
     public function index()
     {
-        $warehouses = Warehouse::all();
+        $warehouses = Warehouse::with(['manager_detail'])->get();
         return view('admin.warehouses', compact('warehouses'));
     }
 
@@ -72,7 +73,7 @@ class WarehouseController extends Controller
      */
     public function edit($id)
     {
-        $warehouse = Warehouse::where('id', $id)->first();
+        $warehouse = Warehouse::query()->with(['manager_detail'])->where('id', $id)->first();
         return view('admin.edit_warehouse', compact('warehouse'));
     }
 

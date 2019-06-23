@@ -15,6 +15,8 @@
         "freshbitsweb/laratables": "^1.1",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
+        "maatwebsite/excel": "^3.1",
+        "phpoffice/phpspreadsheet": "^1.7",
         "yajra/laravel-datatables-oracle": "~8.0"
     },
     "require-dev": {

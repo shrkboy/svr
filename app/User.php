@@ -29,11 +29,16 @@ class User extends Authenticatable
 
     public function warehouse()
     {
-        return $this->belongsTo('App\Warehouse', 'warehouse_id','id');
+        return $this->belongsTo('App\Warehouse', 'warehouse_id', 'id');
     }
 
     public function role()
     {
-        return $this->belongsTo('App\UserRole', 'role_id','id');
+        return $this->belongsTo('App\UserRole', 'role_id', 'id');
+    }
+
+    public function is_warehouse_manager()
+    {
+        return $this->hasOne('App\Warehouse', 'manager', 'id');
     }
 }

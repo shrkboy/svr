@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\BikeModel;
-use App\Branch;
 use App\Shipment;
 use App\ShipmentDetail;
 use App\ShipmentLog;
@@ -48,9 +46,7 @@ class ShipmentController extends Controller
      */
     public function create()
     {
-        $branches = Branch::all();
-        $bike_models = BikeModel::all();
-        return \View::make('shipment.new_shipment', compact('branches', 'bike_models'));
+        return \View::make('shipment.new_shipment');
     }
 
     /**
@@ -67,7 +63,7 @@ class ShipmentController extends Controller
         try {
             $shipment = new Shipment;
             $shipment->depart_time = $request->input('departure');
-            $shipment->warehouse_id = $request->session()->get('warehouse_id', null);
+            $shipment->warehouse_id = auth()->user()->warehouse_id;
             $shipment->dealer_id = $request->input('destination');
             $shipment->status = 'ONGOING';
             $shipment->deleted = 0;
@@ -96,10 +92,16 @@ class ShipmentController extends Controller
                     }
                 }
             }
+            $log = new ShipmentLog;
+            $log->shipment_id = $last_shipment->id;
+            $log->action = 'ENTRY';
+            $log->by = auth()->user()->id;
+            $log->save();
+
 
             return \Redirect::route('shipments.index')->with('success', 'Report inserted successfully');
         } catch (\Exception $e) {
-            return \Redirect::route('shipments.index')->with('failed', 'Failed. something went wrong');
+            return \Redirect::route('shipments.index')->with('failed', 'Failed. something went wrong ' . $e);
         }
     }
 
@@ -122,9 +124,15 @@ class ShipmentController extends Controller
                     'status' => 'DONE',
                 ]);
 
-            return \Redirect::route('shipments.index')->with('success', 'Shipment ID ' . sprintf('SHP%08d', $id) . ' updated successfully');
+            $log = new ShipmentLog;
+            $log->shipment_id = $id;
+            $log->action = 'FINISH';
+            $log->by = auth()->user()->id;
+            $log->save();
+
+            return \Redirect::route('shipments.show', $id)->with('success', 'Shipment status updated successfully');
         } catch (\Exception $e) {
-            return \Redirect::route('shipments.index')->with('failed', 'Failed. Something went wrong');
+            return \Redirect::route('shipments.show', $id)->with('failed', 'Shipment status update failed. Something went wrong');
         }
     }
 
@@ -138,7 +146,11 @@ class ShipmentController extends Controller
     {
         $shipment = Shipment::with(['warehouse'])->where('id', '=', $id)->first();
         $details = ShipmentDetail::with(['inventory'])->where('shipment_id', '=', $id)->get();
-        return \View::make('shipment.shipment_detail', compact('shipment', 'details'));
+        $logs = null;
+        if (auth()->user()->role_id == 5) {
+            $logs = ShipmentLog::with(['by_detail'])->where('shipment_id', $id)->get();
+        }
+        return \View::make('shipment.shipment_detail', compact('shipment', 'details', 'logs'));
     }
 
     /**
@@ -157,11 +169,55 @@ class ShipmentController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $flag = $request->input('flag');
+            $info = $request->input('update-info');
+            $departure_time = $request->input('departure');
+
+            $action = '';
+            if ($flag == 'cancel') {
+                $action = 'CANCEL';
+                Shipment::query()->where('id', $id)->update([
+                    'status' => 'CANCELLED',
+                    'info' => $info,
+                ]);
+
+                // revert inventory statuses
+                $details = ShipmentDetail::query()->where('shipment_id', $id)->get();
+                foreach ($details as $detail) {
+                    WarehouseInventory::query()->where('id', $detail->inventory_id)->update([
+                        'status' => 'IN'
+                    ]);
+                }
+            } else if ($flag == 'delay') {
+                $action = 'DELAY';
+                Shipment::query()->where('id', $id)->update([
+                    'status' => 'DELAYED',
+                    'info' => $info,
+                ]);
+            } else if ($flag == 'ongoing') {
+                $action = 'ONGOING';
+                Shipment::query()->where('id', $id)->update([
+                    'status' => 'ONGOING',
+                    'depart_time' => $departure_time,
+                ]);
+            }
+
+            $log = new ShipmentLog;
+            $log->shipment_id = $id;
+            $log->action = $action;
+            $log->by = auth()->user()->id;
+            $log->info = $info;
+            $log->save();
+
+            return \Redirect::route('shipments.show', $id)->with('success', 'Shipment status updated successfully');
+        } catch (\Exception $e) {
+            return \Redirect::route('shipments.show', $id)->with('failed', 'Shipment status update failed. Something went wrong');
+        }
     }
 
     /**
@@ -173,18 +229,21 @@ class ShipmentController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $match_key = $request->input('key');
-        $key = Warehouse::query()->where('id', auth()->user()->warehouse_id)->get()[0]->auth_key;
-        if (Hash::check($match_key, $key)) {
-            try {
+        try {
+            $match_key = $request->input('key');
+            $key = Warehouse::query()->where('id', auth()->user()->warehouse_id)->get()[0]->auth_key;
+            $info = $request->input('delete-info');
+            if (Hash::check($match_key, $key)) {
                 $log = new ShipmentLog;
                 $log->shipment_id = $id;
                 $log->action = 'DELETE';
                 $log->by = auth()->user()->id;
+                $log->info = $info;
                 $log->save();
 
                 Shipment::query()->where('id', $id)->update([
-                    'deleted' => 1
+                    'deleted' => 1,
+                    'status' => 'DELETED',
                 ]);
 
                 $details = ShipmentDetail::query()->where('shipment_id', $id)->get();
@@ -195,11 +254,11 @@ class ShipmentController extends Controller
                 }
 
                 return \Redirect::route('shipments.index')->with('success', 'Delete success');
-            } catch (\Exception $e) {
-                return \Redirect::route('shipments.index')->with('failed', 'Delete failed. Something went wrong: ' . $e);
+            } else {
+                return \Redirect::route('shipments.index')->with('failed', 'Delete failed. Auth key is incorrect');
             }
-        } else {
-            return \Redirect::route('shipments.index')->with('failed', 'Delete failed. Auth key is incorrect');
+        } catch (\Exception $e) {
+            return \Redirect::route('shipments.index')->with('failed', 'Delete failed. Something went wrong: ' . $e);
         }
     }
 

@@ -1,9 +1,13 @@
 @extends('layouts.app')
 
 @section('head-styles')
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ asset('css/font-awesome.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Chart.min.css') }}">
+    <style>
+        .chart-container{
+            height: 300px !important;
+        }
+    </style>
 @endsection
 
 @section('navmenu')
@@ -11,6 +15,9 @@
         @if(auth()->user()->role_id == 5)
             <li class="nav-item">
                 <a href="{{ route('dashboard.warehouse') }}" class="nav-link active">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('dashboard.warehouse.auth_key') }}" class="nav-link">Auth key</a>
             </li>
         @endif
         @if(auth()->user()->role_id == 4 || auth()->user()->role_id == 5)
@@ -44,7 +51,9 @@
                     Shipment analytics
                 </div>
                 <div class="card-body">
-                    <canvas id="shipmentsLastSixMonthsChart" height="150"></canvas>
+                    <div class="chart-container">
+                        <canvas id="shipmentsLastSixMonthsChart" height="300"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -54,21 +63,25 @@
                     Motorcycles shipped this month
                 </div>
                 <div class="card-body">
-                    <canvas id="bikeModelShippedThisMonthChart" height="150"></canvas>
+                    <div class="chart-container">
+                        <canvas id="bikeModelShippedThisMonthChart" height="300"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-xl-3 mt-3" id="returnsLastSixMonths">
+        <div class="col-xl-6 mt-3" id="returnsLastSixMonths">
             <div class="card">
                 <div class="card-header">
                     Returns in last 6 months
                 </div>
                 <div class="card-body">
-                    <canvas id="returnsLastSixMonthsChart" height="200"></canvas>
+                    <div class="chart-container">
+                        <canvas id="returnsLastSixMonthsChart" height="300"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-xl-3 mt-3" id="authKey">
+        <div class="col-xl-3 mt-3" id="authKey" hidden>
             <div class="card">
                 <div class="card-header">
                     Manager auth key
@@ -101,9 +114,8 @@
 @section('script')
     <script src="{{ asset('js/clock-and-date.js') }}"></script>
     <script src="{{ asset('js/Chart.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/chartjs-plugin-datalabels.min.js') }}"></script>
     <script src="{{ asset('js/moment.min.js') }}"></script>
-    <!--FontAwesome-->
-    <script src="https://use.fontawesome.com/094c71b384.js"></script>
     <script>
         // Chart data
         const shipmentAmount = @json($shipmentAmount);
@@ -113,7 +125,7 @@
 
         // Create chart
         const shipmentAmountChart = new Chart($('canvas#shipmentsLastSixMonthsChart').get(0).getContext('2d'), {
-            type: 'line',
+            type: 'bar',
             data: {
                 labels: shipmentAmount.map(x => moment(x.month, 'M').format('MMMM')),
                 datasets: [
@@ -129,6 +141,8 @@
                     }]
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     yAxes: [{
                         ticks: {
@@ -156,6 +170,8 @@
                 }]
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     yAxes: [{
                         ticks: {
@@ -180,10 +196,15 @@
                         'rgba(153, 102, 255)',
                         'rgba(255, 159, 64)'
                     ],
-                }]
+                }],
             },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+            }
         });
 
+        // auth key card
         $(document).ready(function () {
             const result = $('div#result');
             const keyText = $('input#key');
