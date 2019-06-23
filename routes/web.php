@@ -59,6 +59,7 @@ Route::get('retailreport', 'RetailReportController@retail_report');
 Route::get('addretailreport', 'RetailReportController@add_retail_report');
 Route::get('edit/{id}', 'RetailReportController@edit_retail_report');
 Route::post('edit', 'RetailReportController@UpdateReport');
+Route::get('retaildashboard', 'RetailDashboardController@dashboard');
 
 //Admin Route
 Route::get('users', 'AdminController@user')->name('users')->middleware('is_admin');

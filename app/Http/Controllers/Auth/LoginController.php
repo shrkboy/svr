@@ -60,7 +60,7 @@ class LoginController extends Controller
             case 1:
                 break;
             case 2:
-                break;
+                return redirect('retaildashboard');
             case 3:
                 break;
             case 4:
