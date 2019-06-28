@@ -41,6 +41,7 @@ class LoginController extends Controller
     protected function authenticated($request, $user){
         switch ($user->role_id) {
             case 1:
+                return redirect('reports'); //redirect to admin panel
                 break;
             case 2:
                 return redirect('users'); //redirect to admin panel

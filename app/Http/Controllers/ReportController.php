@@ -30,7 +30,7 @@ class ReportController extends Controller
     {
         /*Showing table model and getting all branch for display view*/
         $branches = Branch::all();
-        $models = BikeModel::distinct()->get(['code']);
+        $models = BikeModel::all();
         return view('display', compact('branches','models'));
     }
 

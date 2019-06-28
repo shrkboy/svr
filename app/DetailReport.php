@@ -12,4 +12,8 @@ class DetailReport extends Model
     public function reports(){
         return $this->belongsTo('App\Report','id_report');
     }
+
+    public function model(){
+        return $this->belongsTo('App\BikeModel', 'code_model');
+    }
 }

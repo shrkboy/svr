@@ -56,8 +56,8 @@ Route::post('edit', 'RetailReportController@UpdateReport');
 //Admin Route
 Route::get('users', 'AdminController@user')->name('users')->middleware('is_admin');
 
-Route::get('reports', 'AdminController@report')->name('reports')->middleware('is_admin');
-Route::get('reports/detail/{id}', 'AdminController@detail_report')->name('reports')->middleware('is_admin');
+//Route::get('reports', 'AdminController@report')->name('reports')->middleware('is_admin');
+//Route::get('reports/detail/{id}', 'AdminController@detail_report')->name('reports')->middleware('is_admin');
 
 //Admin Model Route
 Route::get('models', 'AdminController@model')->name('models')->middleware('is_admin');
@@ -73,3 +73,10 @@ Route::get('shipments/detail/{id}', 'ShipmentController@detail')->middleware('is
 
 //Inventory
 Route::get('inventory/validate/{bike_model_id}/{vin}', 'WarehouseInventoryController@validateInventoryData');
+
+//Eis
+Route::get('/reports','EisController@all');
+Route::get('reports/detail/{id}', 'EisController@detail')->name('reports');
+Route::get('reports/detaildealer/{id}', 'EisController@detailDealer');
+
+Route::get('testShip', 'EisController@ship');
