@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\BikeModel;
+use App\User;
 use Illuminate\Http\Request;
 use App\Color;
 use App\Spec;
 use App\RetailReport;
 use App\Branch;
+use App\UserRole;
 
 class RetailReportController extends Controller
 {
@@ -19,14 +21,20 @@ class RetailReportController extends Controller
     public function retail_report()
     {
         $user = auth()->user()->dealer_id;
+
+        $role = UserRole::where('id', '=', auth()->user()->role_id)->first();
+        $dealer = Branch::where('id', '=', $user)->first();
         $retailreports = RetailReport::
             join('TS_DEALERLIST','retail_reports.dealer_id', '=', 'TS_DEALERLIST.id')
             ->join('colors', 'retail_reports.color_id', '=', 'colors.id')
             ->join('specs', 'retail_reports.spec_id', '=', 'specs.id')
             ->select('retail_reports.id', 'retail_reports.input_date','retail_reports.bikemodel_code','retail_reports.last_inventory', 'retail_reports.restock_amount', 'retail_reports.retail_amount', 'retail_reports.updated_inventory', 'retail_reports.remarks', 'colors.name as cname', 'specs.name as sname', 'TS_DEALERLIST.dlname')
             ->where('dealer_id', '=', $user)
+            ->orderBy('input_date', 'DESC')
             ->get();
-        return view('retail_reports', compact('retailreports'));
+
+        $num = 1;
+        return view('retail_reports', compact('retailreports', 'dealer','num', 'role'));
     }
 
     public function add_retail_report()
@@ -34,7 +42,7 @@ class RetailReportController extends Controller
         $dealer = Branch::where('id', auth()->user()->dealer_id)->first();
         $colors = Color::all();
         $specs = Spec::all();
-        $date = date("Y-m-d");
+        $date = date("m/d/Y");
         return view('add_retail_report', compact('colors', 'specs', 'date', 'dealer'));
     }
 
@@ -79,6 +87,8 @@ class RetailReportController extends Controller
     {
         try {
 
+
+
             $dealer = Branch::where('dlname',$request->input('branch'))->first();
             $retail_report = new RetailReport;
             $retail_report->user_id = auth()->user()->id;
@@ -87,10 +97,13 @@ class RetailReportController extends Controller
             $retail_report->bikemodel_code = $request->input('model');
             $retail_report->color_id = $request->input('color');
             $retail_report->spec_id = $request->input('spec');
+
+            $last_amount = RetailReport::select('updated_inventory')->where('bikemodel_code','=', $retail_report->bikemodel_code)->where('user_id', '=', $retail_report->user_id)->where('color_id','=', $retail_report->color_id)->orderBy('input_date', 'DESC')->first();
+
             $retail_report->restock_amount = 0 + $request->input('in');
             $retail_report->retail_amount = 0 + $request->input('retail');
-            $retail_report->last_inventory = 0;
-            $retail_report->updated_inventory = 0 + $retail_report->restock_amount - $retail_report->retail_amount;
+            $retail_report->last_inventory = 0 + $last_amount;
+            $retail_report->updated_inventory = 0 + $last_amount + $retail_report->restock_amount - $retail_report->retail_amount;
             $retail_report->remarks = $request->input('remarks');
 
             $retail_report->save();

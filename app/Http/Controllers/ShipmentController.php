@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\BikeModel;
-use App\Branch;
 use App\Shipment;
 use App\ShipmentDetail;
+use App\ShipmentLog;
+use App\Warehouse;
 use App\WarehouseInventory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class ShipmentController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
      */
 
     public function __construct()
@@ -23,42 +22,38 @@ class ShipmentController extends Controller
         $this->middleware('auth');
     }
 
+    /**
+     * Views the main page of shipments
+     * Shows all shipment data
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
     public function index()
     {
-        $warehouse = session('warehouse_id', null);
-        $shipments = Shipment::where('warehouse_id', $warehouse)->paginate(50);
-        return view('shipment.shipments', compact('shipments', 'shipments'));
-    }
+//        $warehouse_id = auth()->user()->warehouse_id;
+//        $shipments = Shipment::query()->where([
+//            ['warehouse_id', '=', $warehouse_id],
+//            ['deleted', '<>', 1],
+//        ])->orderBy('depart_time', 'desc')->get();
 
-    public function showShipmentForm()
-    {
-        $branches = Branch::all();
-        $bike_models = BikeModel::all();
-        return view('shipment.new_shipment', compact('branches', 'bike_models'));
-    }
-
-    public function detail($id)
-    {
-        $shipment = Shipment::with(['warehouse'])->where('id', '=', $id)->first();
-        $details = ShipmentDetail::with(['inventory'])->where('shipment_id', '=', $id)->get();
-        return view('shipment.shipment_detail', compact('shipment', 'details'));
+        return \View::make('shipment.shipments');
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function create()
     {
-        //
+        return \View::make('shipment.new_shipment');
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -68,12 +63,13 @@ class ShipmentController extends Controller
         try {
             $shipment = new Shipment;
             $shipment->depart_time = $request->input('departure');
-            $shipment->warehouse_id = $request->session()->get('warehouse_id', null);
+            $shipment->warehouse_id = auth()->user()->warehouse_id;
             $shipment->dealer_id = $request->input('destination');
             $shipment->status = 'ONGOING';
+            $shipment->deleted = 0;
             $shipment->save();
 
-            $last_shipment = Shipment::latest('id')->first();
+            $last_shipment = Shipment::query()->latest('id')->first();
             $counter = $request->input('counter');
 
             for ($i = 1; $i <= $counter; $i++) {
@@ -81,7 +77,7 @@ class ShipmentController extends Controller
                 $bike_model_amount = $request->input('amount-' . $i);
                 for ($j = 1; $j <= $bike_model_amount; $j++) {
                     $vin = $request->input('vin-' . $i . '-' . $j);
-                    $inventory = WarehouseInventory::where([
+                    $inventory = WarehouseInventory::query()->where([
                         ['bike_model_id', '=', $bike_model_id],
                         ['vin', '=', $vin],
                         ['status', '=', 'IN']])->first();
@@ -92,14 +88,51 @@ class ShipmentController extends Controller
                         $shipment_detail->inventory_id = $inventory->id;
                         $shipment_detail->save();
 
-                        WarehouseInventory::where('id', $inventory->id)->update(['status' => 'SHIPPED']);
+                        WarehouseInventory::query()->where('id', $inventory->id)->update(['status' => 'SHIPPED']);
                     }
                 }
             }
+            $log = new ShipmentLog;
+            $log->shipment_id = $last_shipment->id;
+            $log->action = 'ENTRY';
+            $log->by = auth()->user()->id;
+            $log->save();
 
-            return redirect('/shipments')->with('success', 'Report inserted successfully');
-        } catch (Exception $e) {
-            return redirect('/shipments')->with('failed', 'Whoops, something went wrong!');
+
+            return \Redirect::route('shipments.index')->with('success', 'Report inserted successfully');
+        } catch (\Exception $e) {
+            return \Redirect::route('shipments.index')->with('failed', 'Failed. something went wrong ' . $e);
+        }
+    }
+
+    /**
+     * Finishes a shipment
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function finish(Request $request)
+    {
+        try {
+            $id = $request->input('id');
+            $received_time = $request->input('received-time');
+            $received_by = $request->input('received-by');
+            Shipment::query()->where('id', $id)
+                ->update([
+                    'received_time' => $received_time,
+                    'received_by' => $received_by,
+                    'status' => 'DONE',
+                ]);
+
+            $log = new ShipmentLog;
+            $log->shipment_id = $id;
+            $log->action = 'FINISH';
+            $log->by = auth()->user()->id;
+            $log->save();
+
+            return \Redirect::route('shipments.show', $id)->with('success', 'Shipment status updated successfully');
+        } catch (\Exception $e) {
+            return \Redirect::route('shipments.show', $id)->with('failed', 'Shipment status update failed. Something went wrong');
         }
     }
 
@@ -107,11 +140,17 @@ class ShipmentController extends Controller
      * Display the specified resource.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function show($id)
     {
-        //
+        $shipment = Shipment::with(['warehouse'])->where('id', '=', $id)->first();
+        $details = ShipmentDetail::with(['inventory'])->where('shipment_id', '=', $id)->get();
+        $logs = null;
+        if (auth()->user()->role_id == 5) {
+            $logs = ShipmentLog::with(['by_detail'])->where('shipment_id', $id)->get();
+        }
+        return \View::make('shipment.shipment_detail', compact('shipment', 'details', 'logs'));
     }
 
     /**
@@ -130,21 +169,109 @@ class ShipmentController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $flag = $request->input('flag');
+            $info = $request->input('update-info');
+            $departure_time = $request->input('departure');
+
+            $action = '';
+            if ($flag == 'cancel') {
+                $action = 'CANCEL';
+                Shipment::query()->where('id', $id)->update([
+                    'status' => 'CANCELLED',
+                    'info' => $info,
+                ]);
+
+                // revert inventory statuses
+                $details = ShipmentDetail::query()->where('shipment_id', $id)->get();
+                foreach ($details as $detail) {
+                    WarehouseInventory::query()->where('id', $detail->inventory_id)->update([
+                        'status' => 'IN'
+                    ]);
+                }
+            } else if ($flag == 'delay') {
+                $action = 'DELAY';
+                Shipment::query()->where('id', $id)->update([
+                    'status' => 'DELAYED',
+                    'info' => $info,
+                ]);
+            } else if ($flag == 'ongoing') {
+                $action = 'ONGOING';
+                Shipment::query()->where('id', $id)->update([
+                    'status' => 'ONGOING',
+                    'depart_time' => $departure_time,
+                ]);
+            }
+
+            $log = new ShipmentLog;
+            $log->shipment_id = $id;
+            $log->action = $action;
+            $log->by = auth()->user()->id;
+            $log->info = $info;
+            $log->save();
+
+            return \Redirect::route('shipments.show', $id)->with('success', 'Shipment status updated successfully');
+        } catch (\Exception $e) {
+            return \Redirect::route('shipments.show', $id)->with('failed', 'Shipment status update failed. Something went wrong');
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
+     * @param Request $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        try {
+            $match_key = $request->input('key');
+            $key = Warehouse::query()->where('id', auth()->user()->warehouse_id)->get()[0]->auth_key;
+            $info = $request->input('delete-info');
+            if (Hash::check($match_key, $key)) {
+                $log = new ShipmentLog;
+                $log->shipment_id = $id;
+                $log->action = 'DELETE';
+                $log->by = auth()->user()->id;
+                $log->info = $info;
+                $log->save();
+
+                Shipment::query()->where('id', $id)->update([
+                    'deleted' => 1,
+                    'status' => 'DELETED',
+                ]);
+
+                $details = ShipmentDetail::query()->where('shipment_id', $id)->get();
+                foreach ($details as $detail) {
+                    WarehouseInventory::query()->where('id', $detail->inventory_id)->update([
+                        'status' => 'IN'
+                    ]);
+                }
+
+                return \Redirect::route('shipments.index')->with('success', 'Delete success');
+            } else {
+                return \Redirect::route('shipments.index')->with('failed', 'Delete failed. Auth key is incorrect');
+            }
+        } catch (\Exception $e) {
+            return \Redirect::route('shipments.index')->with('failed', 'Delete failed. Something went wrong: ' . $e);
+        }
+    }
+
+    /**
+     * View shipment detail as report to print
+     *
+     * @param int $id
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function showAsReport($id)
+    {
+        $shipment = Shipment::with(['warehouse'])->where('id', '=', $id)->first();
+        $details = ShipmentDetail::with(['inventory'])->where('shipment_id', '=', $id)->get();
+        return \View::make('shipment.shipment_detail_report', compact('shipment', 'details'));
     }
 }

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -26,7 +25,8 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/display';
+    protected $redirectTo = '/';
+
     /**
      * Create a new controller instance.
      *
@@ -37,36 +37,46 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    //redirect after login
-    protected function authenticated($request, $user){
+    /**
+     * Returns the column name used for login
+     *
+     * @return string
+     */
+    public function username()
+    {
+        return 'username';
+    }
+
+    /**
+     * Handles redirection after login based on user role
+     *
+     * @param \Request $request
+     * @param object $user
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    protected function authenticated($request, $user)
+    {
         switch ($user->role_id) {
             case 1:
                 return redirect('reports'); //redirect to admin panel
                 break;
             case 2:
-                return redirect('users'); //redirect to admin panel
-                break;
+                return redirect('retaildashboard');
             case 3:
                 break;
             case 4:
-                $request->session()->put('warehouse_id', $user->warehouse_id);
-                return redirect('shipments');
-                break;
+                return \Redirect::route('shipments.index');
             case 5:
-                break;
+                return \Redirect::route('dashboard.warehouse');
             case 6:
                 break;
             case 7:
                 break;
             case 8:
+                return redirect('users'); //redirect to admin panel
+            case 9:
                 break;
         }
-        return redirect('display'); //redirect to standard user homepage
-    }
-
-    //column that used for login
-    public function username()
-    {
-        return 'username';
+        return redirect('login'); //redirect to standard user homepage
     }
 }

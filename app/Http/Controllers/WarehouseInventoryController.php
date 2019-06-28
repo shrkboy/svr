@@ -86,4 +86,18 @@ class WarehouseInventoryController extends Controller
     {
         //
     }
+
+    public function yolo()
+    {
+        for ($i = 129; $i <= 187; $i++) {
+            for ($j = 1; $j <= 10; $j++) {
+                $inventory = new WarehouseInventory;
+                $inventory->bike_model_id = $i;
+                $inventory->vin = $j;
+                $inventory->status = 'IN';
+                $inventory->warehouse_id = 1;
+                $inventory->save();
+            }
+        }
+    }
 }

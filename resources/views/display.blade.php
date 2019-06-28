@@ -17,9 +17,6 @@
         <li class="nav-item">
             <a class="nav-link" href="{{url('/retailreport')}}">Retail</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{url('/display')}}">Calendar</a>
-        </li>
         @if(auth()->user()->is_admin)
             <li class="nav-item">
                 <a class="nav-link" href="{{url('/users')}}">Users</a>

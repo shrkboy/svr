@@ -87,7 +87,8 @@ class RegisterController extends Controller
             'username' => $data['username'],
             'password' => Hash::make($data['password']),
             'role_id' => $data['role'],
-            'warehouse_id' => data_get($data, 'warehouse')
+            'warehouse_id' => data_get($data, 'warehouse'),
+            'dealer_id' => data_get($data, 'dealer')
         ]);
     }
 
@@ -96,6 +97,6 @@ class RegisterController extends Controller
         $roles = UserRole::all();
         $dealers = Branch::all();
         $warehouses = Warehouse::all();
-        return view('auth.register',compact('roles', 'dealers', 'warehouses'));
+        return view('auth.register', compact('roles', 'dealers', 'warehouses'));
     }
 }

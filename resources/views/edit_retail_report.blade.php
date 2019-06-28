@@ -32,12 +32,18 @@
 @stop
 
 @section('content')
-    <div class="container">
+    <div class="mt-3 card p-3">
         <div class="col-md-auto">
             <h4>Edit Retail Report</h4>
             <form method="post" action="{{ url('/edit') }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <div class="form-group row">
+                    <div class="col-md-4">
+                        <label for="branch">ID</label>
+                        <br>
+                        <input value="{{sprintf('REP%08d', $report->id)}}" class="form-control" readonly>
+                        <input type="hidden" name="id" id="id" value="{{$report->id}}" class="form-control" readonly>
+                    </div>
                     <div class="col-md-4">
                         <label for="branch">Branch</label>
                         <br>
@@ -48,13 +54,13 @@
                         <br>
                         <input name="date" id="date" value="{{$report->input_date}}" class="form-control" readonly>
                     </div>
+                </div>
+                <div class="form-group row">
                     <div class="col-md-4">
                         <label for="model">Bike Model</label>
                         <br>
                         <input name="model" id="model" value="{{$report->bikemodel_code}}" class="form-control" readonly>
                     </div>
-                </div>
-                <div class="form-group row">
                     <div class="col-md-4">
                         <label for="color">Color</label>
                         <br>
@@ -64,9 +70,6 @@
                         <label for="spec">Specification</label>
                         <br>
                         <input name="spec" id="spec" value="{{$report->sname}}" class="form-control" readonly>
-                    </div>
-                    <div class="col-md-4">
-                        <input type="hidden" name="id" id="id" value="{{$report->id}}" class="form-control" readonly>
                     </div>
                 </div>
                 <input type="hidden" name="last_in" id="last_in" value="{{$report->last_inventory}}" class="form-control" readonly>

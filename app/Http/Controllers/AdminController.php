@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\BikeModel;
-use App\DetailReport;
 use App\Report;
 use App\User;
+use App\Warehouse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
@@ -39,32 +39,31 @@ class AdminController extends Controller
          * */
 
         /*Checking if there is alredy filter for the reports table*/
-        if ( $filter = Input::get('month'))
-        {
+        if ($filter = Input::get('month')) {
             /*sub setting filter to year and month variable*/
             $year = new Carbon($filter);
             $month = new Carbon($filter);
 
             /*Get reports data filtered by month*/
-            $reports = Report::with(['users','branches','documents'])->whereMonth('record_date','=',
-                $month->format('m'))->whereYear('record_date','=',$year->format('Y'))->get();
-            return view('admin.reports', compact('reports','filter'));
+            $reports = Report::with(['users', 'branches', 'documents'])->whereMonth('record_date', '=',
+                $month->format('m'))->whereYear('record_date', '=', $year->format('Y'))->get();
+            return view('admin.reports', compact('reports', 'filter'));
         }
         /*if there isn't any filter variable yet*/
         $year = Carbon::now()->format('Y');
         $month = Carbon::now()->format('m');
 
         /*Get reports data filtered by this month*/
-        $reports = Report::with(['users','branches','documents'])->whereMonth('record_date',
-            '=',$month)->whereYear('record_date','=',$year)->get();
+        $reports = Report::with(['users', 'branches', 'documents'])->whereMonth('record_date',
+            '=', $month)->whereYear('record_date', '=', $year)->get();
         $filter = Carbon::now()->format('Y-m');
-        return view('admin.reports', compact('reports','filter'));
+        return view('admin.reports', compact('reports', 'filter'));
     }
 
     public function detail_report($id)
     {
         /*Getting the detail for selected reports*/
-        $reports = Report::where('id',$id)->with(['users','branches','documents','details'])->first();
+        $reports = Report::where('id', $id)->with(['users', 'branches', 'documents', 'details'])->first();
         return view('admin.report_detail', compact('reports'));
     }
 
@@ -86,7 +85,7 @@ class AdminController extends Controller
         /*
          * Inserting new records to model table
          * */
-        try{
+        try {
             /*Getting data from posted value*/
             $newModel = new BikeModel;
             $newModel->name = $request->name;
@@ -97,35 +96,34 @@ class AdminController extends Controller
             /*save to db*/
             $newModel->save();
             return redirect('/models')->with('success', 'New model inserted successfully');
-        }
-        catch (Exception $e){
+        } catch (Exception $e) {
             return redirect('/models')->with('failed', 'Woops, something is wrong!');
         }
     }
 
 
     /* Update Model Methode */
-    public function showUpdateModelForm($id){
+    public function showUpdateModelForm($id)
+    {
         $models = BikeModel::find($id);
         return view('admin.update_model', compact('models'));
     }
 
-    public function UpdateModel(Request $request){
+    public function UpdateModel(Request $request)
+    {
 
-        try{
+        try {
             $model = BikeModel::find($request->id);
 
             $model->name = $request->name;
             $model->code = $request->code;
             $model->color = $request->color;
             $model->spec = $request->specification;
-
             $model->save();
+
             return redirect('/models')->with('success', 'Model updated successfully');
-        }
-        catch (Exception $e){
+        } catch (Exception $e) {
             return redirect('/models')->with('failed', 'Woops, something is wrong!');
         }
     }
-
 }

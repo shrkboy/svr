@@ -16,7 +16,7 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if ($request->user() && $request->user()->role_id != '2')
+        if ($request->user() && $request->user()->role_id != '8')
         {
             return new Response(view('unauth'));
         }

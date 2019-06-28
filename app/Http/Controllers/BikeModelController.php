@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\BikeModel;
+use App\WarehouseInventory;
+use Illuminate\Http\Request;
 
 class BikeModelController extends Controller
 {
@@ -30,7 +31,7 @@ class BikeModelController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -41,19 +42,32 @@ class BikeModelController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string $code
      * @return \Illuminate\Http\Response
      */
     public function show($code)
     {
+        return BikeModel::distinct()->select('code')->where('code', 'like', $code . '%')->groupBy('code')->get();
+    }
 
-        return BikeModel::distinct()->select('code')->where('code','like',$code.'%')->groupBy('code')->get();
+    /**
+     * Display full data of resource for shipment entry ajax
+     *
+     * @param string param
+     * @return \Illuminate\Http\Response
+     */
+    public function get($param)
+    {
+        return BikeModel::where('name', 'like', $param . '%')
+            ->orWhere('code', 'like', $param . '%')
+            ->orWhere('color', 'like', $param . '%')
+            ->get();
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -64,8 +78,8 @@ class BikeModelController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -76,7 +90,7 @@ class BikeModelController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

@@ -13,11 +13,16 @@
 
 Route::get('/', function () {
     if ($user = auth()->user()) {
-        if ($user->id_role == 2) {
-            return redirect()->route('users');
+        switch ($user->role_id) {
+            case 4:
+                return Redirect::route('shipments.index');
+            case 5:
+                return Redirect::route('dashboard.warehouse');
+            case 8:
+                return Redirect::route('users');
         }
     }
-    return redirect()->route('display.index');
+    return Redirect::route('login');
 });
 
 // Authentication Routes...
@@ -37,27 +42,34 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset')->middleware(
 
 //Auth::routes();
 
-//Display Route
+//Resource Routes
 Route::resource('display', 'ReportController');
 Route::resource('branch', 'BranchController');
 Route::resource('role', 'UserRoleController');
 Route::resource('bike_model', 'BikeModelController');
-Route::resource('shipment', 'ShipmentController');
+Route::resource('shipments', 'ShipmentController')->middleware('is_warehouse_operator');
+Route::resource('returned_items', 'ReturnedItemController');
 Route::resource('warehouse_inventory', 'WarehouseInventoryController');
+Route::resource('warehouses', 'WarehouseController');
+Route::resource('model', 'BikeModelController');
+Route::resource('retail', 'RetailReportController');
 
 //Retail Route
-Route::resource('model','BikeModelController');
-Route::resource('retail','RetailReportController');
-Route::get('retailreport','RetailReportController@retail_report');
-Route::get('addretailreport','RetailReportController@add_retail_report');
+Route::get('retailreport', 'RetailReportController@retail_report');
+Route::get('addretailreport', 'RetailReportController@add_retail_report');
 Route::get('edit/{id}', 'RetailReportController@edit_retail_report');
 Route::post('edit', 'RetailReportController@UpdateReport');
+Route::get('retaildashboard', 'RetailDashboardController@dashboard');
 
 //Admin Route
 Route::get('users', 'AdminController@user')->name('users')->middleware('is_admin');
 
 //Route::get('reports', 'AdminController@report')->name('reports')->middleware('is_admin');
 //Route::get('reports/detail/{id}', 'AdminController@detail_report')->name('reports')->middleware('is_admin');
+
+//Warehouse manager
+Route::get('dashboard/warehouse', 'WarehouseDashboardController@index')->name('dashboard.warehouse');
+Route::get('dashboard/warehouse/auth_key', 'WarehouseDashboardController@showAuthKey')->name('dashboard.warehouse.auth_key');
 
 //Admin Model Route
 Route::get('models', 'AdminController@model')->name('models')->middleware('is_admin');
@@ -67,9 +79,12 @@ Route::get('models/edit/{id}', 'AdminController@showUpdateModelForm')->name('mod
 Route::post('models/edit', 'AdminController@UpdateModel')->name('models.update')->middleware('is_admin');
 
 //Shipments
-Route::get('shipments', 'ShipmentController@index')->middleware('is_warehouse_operator');
-Route::get('shipments/new', 'ShipmentController@showShipmentForm')->middleware('is_warehouse_operator');
-Route::get('shipments/detail/{id}', 'ShipmentController@detail')->middleware('is_warehouse_operator');
+Route::get('shipments/report/{id}', 'ShipmentController@showAsReport')->middleware('is_warehouse_operator');
+Route::post('shipments/finish', 'ShipmentController@finish')->middleware('is_warehouse_operator');
+Route::post('shipments/update/{id}', 'ShipmentController@update')->middleware('is_warehouse_operator');
+Route::post('shipments/delete/{id}', 'ShipmentController@destroy')->middleware('is_warehouse_operator');
+
+//Route::get('inv/yolo', 'WarehouseInventoryController@yolo');
 
 //Inventory
 Route::get('inventory/validate/{bike_model_id}/{vin}', 'WarehouseInventoryController@validateInventoryData');
@@ -80,3 +95,12 @@ Route::get('reports/detail/{id}', 'EisController@detail')->name('reports');
 Route::get('reports/detaildealer/{id}', 'EisController@detailDealer');
 
 Route::get('testShip', 'EisController@ship');
+//Ajax endpoints
+Route::get('key', 'AuthKeyController@generate')->name('generateKey');
+Route::post('key/update/{id}', 'AuthKeyController@update')->name('updateKey');
+Route::get('bike_model/get/{code}', 'BikeModelController@get');
+Route::get('inventory/validate/{bike_model_id}/{vin}', 'WarehouseInventoryController@validateInventoryData');
+//Datatable Ajax endpoints
+Route::get('datatable/shipment', 'DataTableController@getShipment')->name('get_shipment');
+Route::get('datatable/shipment_full', 'DataTableController@getShipmentFull')->name('get_shipment_full');
+Route::get('datatable/returned_item', 'DataTableController@getReturnedItem')->name('get_returned_item');

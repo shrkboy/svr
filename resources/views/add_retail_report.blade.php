@@ -20,9 +20,6 @@
         <li class="nav-item active">
             <a class="nav-link" href="{{url('/retailreport')}}">Retail</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{url('/display')}}">Calendar</a>
-        </li>
         @if(auth()->user()->is_admin)
             <li class="nav-item">
                 <a class="nav-link" href="{{url('/users')}}">Users</a>
@@ -57,7 +54,7 @@
                     <label for="color">Color</label>
                     <br>
                     <select name="color" id="color" class="form-control" style="width: 100%;" required>
-                        <option value="" disabled selected>Selct Color</option>
+                        <option value="" disabled selected>Select Color</option>
                         @foreach ($colors as $color)
                             <option value="{{$color->id}}">{{$color->name}}</option>
                         @endforeach
@@ -67,7 +64,7 @@
                     <label for="spec">Specification</label>
                     <br>
                     <select name="spec" id="spec" class="form-control" style="width: 100%;" required>
-                        <option value="" disabled selected>Selct Specification</option>
+                        <option value="" disabled selected>Select Specification</option>
                         @foreach ($specs as $spec)
                             <option value="{{$spec->id}}">{{$spec->name}}</option>
                         @endforeach
