@@ -4,11 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Report;
 use App\Shipment;
-use App\ShipmentDetail;
-use App\WarehouseInventory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\BikeModel;
 use App\Branch;
 use Illuminate\Support\Facades\Input;
 
@@ -31,9 +28,13 @@ class EisController extends Controller
 
         $newDealer = array();
         $dealerStatus = array();
+        $year = Carbon::now()->format('Y');
+        $month = Carbon::now()->format('m');
+
         foreach ($dealers as $dealer){
             $newDealer[] = $dealer;
-            $dealerStatus[] = Report::with('users')->where('id_branch','=',$dealer->id)->orderBy('record_date', 'desc')->first();
+            $dealerStatus[] = Report::with('users')->where('id_branch','=',$dealer->id)->whereMonth('record_date','=',
+                $month)->whereYear('record_date','=',$year)->orderBy('record_date', 'desc')->first();
         }
 
         if ( $filter = Input::get('month'))
@@ -59,6 +60,13 @@ class EisController extends Controller
         return view('Eis.salesreport', compact('reports','filter','newDealer','dealerStatus'));
     }
 
+    public function chartPerMonth()
+    {
+        //Get Data Sales Report Each Month
+        $result = Branch::all();
+        return response()->json($result);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -75,25 +83,6 @@ class EisController extends Controller
         $reports = Report::where('id',$id)->with(['users','branches','documents','details.model'])->first();
 //        return $reports;
         return view('Eis.details', compact('reports'));
-    }
-
-    public function ship(){
-        $datas = Shipment::with(['details' => function($query){
-            $query->rightJoin('warehouse_inventories', 'shipment_details.inventory_id', '=', 'warehouse_inventories.id');
-        }])->whereMonth('depart_time',Carbon::now()->format('m'))
-            ->whereYear('depart_time',Carbon::now()->format('Y'))
-            ->get()
-            ->groupBy('dealer_id');
-
-        return $datas;
-        foreach ($datas as $data => $shipments){
-            foreach ($shipments as $shipment){
-                foreach ($shipment->details as $detail){
-
-                }
-            }
-        }
-
     }
 
     public function create()

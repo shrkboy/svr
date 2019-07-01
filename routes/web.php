@@ -93,6 +93,7 @@ Route::get('inventory/validate/{bike_model_id}/{vin}', 'WarehouseInventoryContro
 Route::get('/reports','EisController@all');
 Route::get('reports/detail/{id}', 'EisController@detail')->name('reports');
 Route::get('reports/detaildealer/{id}', 'EisController@detailDealer');
+Route::get('reports/permonth', 'EisController@chartPerMonth');
 
 Route::get('testShip', 'EisController@ship');
 //Ajax endpoints
